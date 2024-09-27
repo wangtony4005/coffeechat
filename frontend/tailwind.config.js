@@ -7,7 +7,8 @@ export default {
         "5vw": "5vw",
       },
       colors: {
-        "base-color": "#f5f5f5",
+        "base-color": "#ffeddb",
+        "mocha-color": "#FFEDDB",
       },
     },
   },
