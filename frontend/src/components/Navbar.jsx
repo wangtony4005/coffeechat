@@ -16,7 +16,9 @@ function Navbar() {
   return (
     <>
       <header className="absolute w-screen z-10 flex items-center justify-between bg-white py-6 px-6 font-semibold stroke-stone-400">
-        <h1 className="md:text-2xl sm:text-sm">Mocha Mentors</h1>
+        <Link to="/" className="md:text-2xl sm:text-sm">
+          Mocha Mentors
+        </Link>
         <div className="flex space-between space-x-4">
           <Link to="/resources">Resources</Link>
           <Link to="/faqs">FAQS</Link>

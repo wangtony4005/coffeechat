@@ -26,7 +26,7 @@ function Login({ onClose }) {
 
   return (
     <div className="fixed inset-0 z-30 flex items-center justify-center">
-      <div className="bg-base-color p-8 rounded-md shadow-lg">
+      <div className="bg-base-color p-8 rounded-md shadow-lg w-[500px]">
         {login && (
           <>
             <h2 className="text-2xl mb-4">Login</h2>
