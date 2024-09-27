@@ -1,0 +1,11 @@
+/* Add this custom CSS */
+.triangle-left {
+    border-width: 0 8px 8px 0;
+    border-color: transparent transparent #1a202c transparent;
+  }
+  
+  .triangle-right {
+    border-width: 0 0 8px 8px;
+    border-color: transparent transparent #1a202c transparent;
+  }
+  
