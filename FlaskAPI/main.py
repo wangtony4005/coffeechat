@@ -1,7 +1,8 @@
 import os
 import psycopg2
 from dotenv import load_dotenv
-from flask import Flask
+from flask import Flask, request
+from UserTableInfo import add_user
 
 CREATE_USERS_TABLE = ("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, firstname TEXT, lastname TEXT, email text, password text);")
 
@@ -24,6 +25,20 @@ def createUserTable():
         with connection.cursor() as cursor:
             cursor.execute(CREATE_USERS_TABLE)
     return {"Response": "Table Created Successfully"}, 201
+
+@app.post("/users/add_user")
+def addUser():
+    data = request.get_json()
+    firstname = data["firstname"]
+    lastname = data["lastname"]
+    email = data["email"]
+    password = data["password"]
+    createUserTable()
+    newUser = add_user(firstname, lastname, email, password)
+    if newUser == False:
+        return {"Response": "User was not added successfully"}, 500
+    return {"Response": "User was added successfully"}, 201
+
 
 if __name__ == "__main__":
     app.run()
