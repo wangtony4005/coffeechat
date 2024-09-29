@@ -24,12 +24,12 @@ function Home() {
           </h1>
         </div>
       </div>
-      <div className="w-screen min-h-screen h-auto overflow-auto flex md:flex-row flex-col  items-center gap-4 bg-base-color">
+      <div className="w-screen min-h-screen h-auto overflow-auto flex md:flex-row flex-col  items-center bg-base-color">
         <div className="flex-1 h-full flex items-center justify-center">
           <img
             src={faqimg}
             alt="homeimg"
-            className="h-full w-full object-cover"
+            className=" h-full w-full object-cover"
           />
         </div>
         <div className="flex-1 h-full flex flex-col  items-center justify-center">
