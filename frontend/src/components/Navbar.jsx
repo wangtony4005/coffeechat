@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Hamburger from "hamburger-react";
+import { motion } from "framer-motion";
 
 import Login from "./Login";
 
@@ -15,9 +16,21 @@ function Navbar() {
       document.body.style.overflow = "auto";
     }
   }, [login]);
+
+  const headerVariants = {
+    hidden: { opacity: 0, y: 0 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
     <>
-      <header className="absolute w-screen z-10 flex items-center justify-between bg-nav-color py-6 px-6 font-semibold stroke-stone-400">
+      <motion.header
+        initial="hidden"
+        animate="visible"
+        variants={headerVariants}
+        transition={{ duration: 2.5, ease: "easeOut" }}
+        className="absolute w-screen z-10 flex items-center justify-between bg-nav-color py-6 px-6 font-semibold stroke-stone-400"
+      >
         <Link to="/" className="lg:text-2xl sm:text-sm">
           Mocha Mentors
         </Link>
@@ -28,26 +41,13 @@ function Navbar() {
         <div className="hidden lg:flex space-x-4">
           <button onClick={() => setLogin(true)}>Login</button>
         </div>
-        <div className="lg:hidden flex items-center">
+        <div className="lg:hidden flex items-center z-auto">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h16m-7 6h7"
-              ></path>
-            </svg>
+            <Hamburger />
           </button>
         </div>
         {isMenuOpen && (
-          <div className="absolute top-16 right-0 w-full bg-nav-color flex flex-col items-center lg:hidden">
+          <div className="absolute top-16 right-0 w-full z-40 bg-nav-color flex flex-col items-center lg:hidden">
             <Link
               to="/resources"
               className="py-2"
@@ -67,7 +67,20 @@ function Navbar() {
             </button>
           </div>
         )}
-      </header>
+      </motion.header>
+      {login && (
+        <>
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-20"></div>
+          <Login onClose={() => setLogin(false)} />
+        </>
+      )}
+      <style>
+        {`
+          body.blur-background {
+            filter: blur(5px);
+          }
+        `}
+      </style>
     </>
   );
 }
