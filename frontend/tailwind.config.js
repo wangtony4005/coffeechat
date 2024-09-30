@@ -7,8 +7,11 @@ export default {
         "5vw": "5vw",
       },
       colors: {
-        "base-color": "#ffeddb",
-        "mocha-color": "#FFEDDB",
+        "base-color": "#F6F3EC",
+        "mocha-color": "#574C3F",
+        "footer-color": "#36302A",
+        "nav-color": "#F6F3EC",
+        "darker-nav-color": "#ECE4DA",
       },
     },
   },
