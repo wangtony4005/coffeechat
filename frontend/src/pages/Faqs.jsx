@@ -40,15 +40,15 @@ function Faqs() {
     <main className="h-auto w-auto">
       <Navbar />
       <div className="w-screen h-screen overflow-auto">
-        <div className="flex items-center justify-center w-full h-1/2 relative bg-base-color">
-          <h1 className="text-4xl text-black font-bold">
+        <div className="flex items-center justify-center w-full h-1/2 relative bg-darker-nav-color">
+          <h1 className="text-4xl text-black font-bold text-center">
             Frequently Asked Questions
           </h1>
         </div>
-        <div className="w-full min-h-1/2 bg-white flex-grow ">
+        <div className="w-full min-h-1/2 bg-nav-color flex-grow h-auto ">
           <div className="container mx-auto py-10 flex items-center justify-center flex-col ">
             {faqs.questions.map((faq, index) => (
-              <div key={index} className="mb-4 h-48 w-3/5">
+              <div key={index} className="mb-4 lg:h-48 h-auto gap-2 w-3/5">
                 <h2 className="text-2xl font-bold">{faq.question}</h2>
                 <p className="text-lg ">{faq.answer}</p>
               </div>
