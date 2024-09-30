@@ -15,7 +15,7 @@ function Navbar() {
   }, [login]);
   return (
     <>
-      <header className="absolute w-screen z-10 flex items-center justify-between bg-white py-6 px-6 font-semibold stroke-stone-400">
+      <header className="absolute w-screen z-10 flex items-center justify-between bg-nav-color py-6 px-6 font-semibold stroke-stone-400">
         <Link to="/" className="md:text-2xl sm:text-sm">
           Mocha Mentors
         </Link>

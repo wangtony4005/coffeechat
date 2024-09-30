@@ -39,7 +39,7 @@ function Footer() {
       </div>
 
       <div className="relative">
-        <footer className="relative bg-gray-800 text-white py-6 block">
+        <footer className="relative bg-footer-color text-white py-6 block">
           <div className="container mx-auto text-center">
             © 2024 MochaMentors. All rights reserved.
           </div>
