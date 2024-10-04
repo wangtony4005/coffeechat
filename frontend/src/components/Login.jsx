@@ -117,7 +117,7 @@ function Login({ onClose }) {
           if (data.condition === "success") {
             // localStorage.setItem("token", res.data.token);
             onClose();
-            navigate("/dashboard");
+            navigate("/homepage");
             return;
           } else {
             setError("Invalid credentials");
