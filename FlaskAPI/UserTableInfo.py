@@ -23,3 +23,13 @@ def add_user(firstname, lastname, email, password):
             cursor.execute(addUser, (firstname, lastname, email, password))
             return True
     return False
+
+
+def get_user(username, password):
+    print(username, password)
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM users WHERE firstname = %s AND password = %s", (username, password))
+            users = cursor.fetchone()
+            return users
+    return False

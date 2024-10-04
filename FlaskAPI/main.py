@@ -3,7 +3,9 @@ import psycopg2
 from dotenv import load_dotenv
 from flask import Flask, request
 import base64
-from UserTableInfo import add_user
+from UserTableInfo import add_user, get_user
+# from flask_jwt_extended import create_access_token
+
 
 from flask_cors import CORS
 
@@ -48,20 +50,16 @@ def addUser():
         return {"Response": "User was not added successfully"}, 500
     return {"Response": "User was added successfully"}, 201
 
-@app.route("/users/signin", methods=["GET"])
+@app.post("/users/signin")
 def signin():
-    return {"condition": "success"}, 200
     try:
-        username = request.args.get("userName")
-        password = request.args.get("password")
-        encoded_password = base64.b64encode(password.encode("utf-8"))
-        with connection:
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM users WHERE email = %s AND password = %s", (username, encoded_password))
-                users = cursor.fetchone()
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
 
-                if len(users) == 0:
-                    return {"error": "User not found"}, 404
+        user = get_user(username, password)
+        if user is None:
+            return {"error": "Invalid username or password"}, 401
 
         return {"condition": "success"}, 200
 
