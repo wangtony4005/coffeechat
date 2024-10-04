@@ -14,6 +14,7 @@ function Login({ onClose }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [firstName, setFirstName] = useState("");
@@ -106,15 +107,18 @@ function Login({ onClose }) {
 
     try {
       const response = await axios
-        .post("http://localhost:5000/users/signin", {
+        .post("http://127.0.0.1:5000/users/signin", {
           username: userName,
           password: password,
         })
         .then((res) => {
           console.log(res.data);
-          if (res.data.success) {
-            localStorage.setItem("token", res.data.token);
+          const data = res.data;
+          if (data.condition === "success") {
+            // localStorage.setItem("token", res.data.token);
             onClose();
+            navigate("/dashboard");
+            return;
           } else {
             setError("Invalid credentials");
           }
@@ -232,6 +236,16 @@ function Login({ onClose }) {
               className="border border-gray-300 p-2 rounded w-full mt-4"
               onChange={(e) => setEmail(e.target.value)}
             />
+
+            <select
+              placeholder="Role"
+              className="border border-gray-300 p-2 rounded w-full mt-4"
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="">select a role</option>
+              <option value="mentor">Mentor</option>
+              <option value="mentee">Mentee</option>
+            </select>
 
             <input
               type="password"
