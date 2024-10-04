@@ -47,12 +47,15 @@ function Login({ onClose }) {
     }
 
     try {
-      const response = await axios.post("http://localhost:5000/users/signup", {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password,
-      });
+      const response = await axios.post(
+        "http://127.0.0.1:5000/users/add_user",
+        {
+          firstname: firstName,
+          lastname: lastName,
+          email: email,
+          password: password,
+        }
+      );
       console.log("here");
       setMessage("Account created successfully");
     } catch (err) {
@@ -67,7 +70,7 @@ function Login({ onClose }) {
 
     console.log("here");
     try {
-      const response = await axios.get("http://localhost:5000/users/reset", {
+      const response = await axios.get("http://127.0.0.1:5000/users/reset", {
         email: email,
       });
       setMessage(
@@ -90,12 +93,9 @@ function Login({ onClose }) {
   const handleSignIn = async (e) => {
     resetValues();
 
-    navigate("/homepage");
     // setError("");
     // setMessage("");
     // e.preventDefault();
-
-    return;
 
     console.log(userName, password);
 
