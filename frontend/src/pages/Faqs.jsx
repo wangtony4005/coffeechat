@@ -7,12 +7,12 @@ const faqs = {
     {
       question: "What is MochaMentors?",
       answer:
-        "MochaMentors is an online platform that lets students connect with professionals.",
+        "MochaMentors is an online platform that connects students with industry professionals to facilitate meaningful coffee chats.",
     },
     {
       question: "What is the goal of MochaMentors?",
       answer:
-        "To create an inclusive and engaging platform where students can connect with industry professionals over causal meaningful conversations. We aim to foster mentorship, exchange knowledge and build networks that empower students to explore career opportunities and personal growth.",
+        "Our goal is to create an inclusive and engaging platform where students can connect with industry professionals over causal meaningful conversations. We aim to foster mentorship, exchange knowledge and build networks that empower students to explore career opportunities and personal growth.",
     },
     {
       question: "How can I get involved?",
@@ -22,16 +22,16 @@ const faqs = {
     {
       question: "How can I become a mentor?",
       answer:
-        "You can become a mentor by signing up on our platform and creating a profile. You can then connect with students and start mentoring them.",
+        "You can become a mentor by signing up on our platform and creating a profile. From there, you can then connect with eager students and begin guiding them on their professional journey. Start mentoring today, and make an impact that lasts! ",
     },
     {
       question: "How can I become a mentee?",
       answer:
-        "You can become a mentee by signing up on our platform and creating a profile. You can then connect with mentors and start receiving mentorship.",
+        "Join our platform as a mentee by signing up and creating your profile. Once you're set up, you can connect with mentors and start receiving valuable guidance.",
     },
     {
       question: "How can I contact MochaMentors?",
-      answer: "You can contact MochaMentors by sending us an email at",
+      answer: "You can contact MochaMentors by sending us an email at mochamentors@example.com.",
     },
   ],
 };
