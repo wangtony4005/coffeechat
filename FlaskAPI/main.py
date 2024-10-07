@@ -3,14 +3,19 @@ import psycopg2
 from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit, join_room, leave_room
+import base64
 from UserTableInfo import add_user
+
+from flask_cors import CORS
+
+
 
 CREATE_USERS_TABLE = ("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, firstname TEXT, lastname TEXT, email text, password text);")
 
 load_dotenv()
 
 app = Flask(__name__)
-
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 socketio = SocketIO(app, cors_allowed_origins='*')
 
 
@@ -83,6 +88,32 @@ def handle_new_message(message):
         if users[user] == request.sid:
             username = user
     emit("chat", {"message": message['message'], "username": message['username']}, broadcast=True)
+@app.get("/users/signin", methods=["GET"])
+def signin():
+    return {"condition": "success"}, 200
+    try:
+        username = request.args.get("userName")
+        password = request.args.get("password")
+        encoded_password = base64.b64encode(password.encode("utf-8"))
+        with connection:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM users WHERE email = %s AND password = %s", (username, encoded_password))
+                users = cursor.fetchone()
+
+                if len(users) == 0:
+                    return {"error": "User not found"}, 404
+
+        return {"condition": "success"}, 200
+
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+@app.get("/users/reset_password", methods=["GET"])
+def reset_password():
+    pass
+
+
+
 
 
 if __name__ == "__main__":

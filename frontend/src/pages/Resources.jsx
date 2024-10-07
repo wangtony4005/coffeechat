@@ -6,13 +6,13 @@ import growit from "../assets/growit.jpg";
 
 function Resources() {
   return (
-    <main className="h-auto w-auto">
+    <main className="h-auto w-auto bg-darker-nav-color">
       <Navbar />
-      <div className="w-screen h-screen overflow-auto ">
+      <div className="w-screen h-screen overflow-auto bg-darker-nav-color ">
         <div className="flex items-center justify-center w-full h-1/2 relative ">
           <h1 className="text-4xl text-black font-bold">Our Services</h1>
         </div>
-        <div className="w-full min-h-1/2 bg-white flex-grow h-auto  ">
+        <div className="w-full min-h-1/2 bg-nav-color  flex-grow h-auto  ">
           <div className="container mx-auto py-10 flex items-center justify-center lg:flex-row mb-4 flex-col gap-32 ">
             <div className="mb-4 h-auto w-3/5">
               <img

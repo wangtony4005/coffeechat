@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Resources from "./pages/Resources";
 import Faqs from "./pages/Faqs";
 import ChatPage from "./pages/ChatPage"
+import Homepage from "./pages/Homepage";
 
 import "./App.css";
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/resources" element={<Resources />} />
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/chatpage" element={<ChatPage />} />
+        <Route path="/homepage" element={<Homepage />} />
       </Routes>
     </BrowserRouter>
   );
