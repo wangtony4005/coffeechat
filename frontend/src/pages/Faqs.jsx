@@ -40,12 +40,12 @@ function Faqs() {
     <main className="h-auto w-auto">
       <Navbar />
       <div className="w-screen h-screen overflow-auto">
-        <div className="flex items-center justify-center w-full h-1/2 relative bg-base-color">
+        <div className="flex items-center justify-center w-full h-1/2 relative bg-darker-nav-color">
           <h1 className="text-4xl text-black font-bold">
             Frequently Asked Questions
           </h1>
         </div>
-        <div className="w-full min-h-1/2 bg-white flex-grow ">
+        <div className="w-full min-h-1/2 bg-nav-color flex-grow ">
           <div className="container mx-auto py-10 flex items-center justify-center flex-col ">
             {faqs.questions.map((faq, index) => (
               <div key={index} className="mb-4 h-48 w-3/5">
