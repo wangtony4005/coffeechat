@@ -1,7 +1,8 @@
 import os
 import psycopg2
 from dotenv import load_dotenv
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from flask_socketio import SocketIO, emit, join_room, leave_room
 from UserTableInfo import add_user
 
 CREATE_USERS_TABLE = ("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, firstname TEXT, lastname TEXT, email text, password text);")
@@ -9,6 +10,9 @@ CREATE_USERS_TABLE = ("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, 
 load_dotenv()
 
 app = Flask(__name__)
+
+socketio = SocketIO(app, cors_allowed_origins='*')
+
 
 dbname = os.getenv("DATABASE_NAME")
 user = os.getenv("DATABASE_USER")
@@ -39,6 +43,48 @@ def addUser():
         return {"Response": "User was not added successfully"}, 500
     return {"Response": "User was added successfully"}, 201
 
+users = {}
+
+# Handle user joining a unique room
+@socketio.on('join_room')
+def on_join(data):
+    username = data['username']
+    room = data['room']
+    
+    join_room(room)
+    emit('chat', {'message': f'{username} has entered the room {room}.'}, room=room)
+    print(f'{username} joined room: {room}')
+
+# Handle user leaving the room
+@socketio.on('leave_room')
+def on_leave(data):
+    username = data['username']
+    room = data['room']
+    
+    leave_room(room)
+    emit('chat', {'message': f'{username} has left the room {room}.'}, room=room)
+    print(f'{username} left room: {room}')
+
+
+@socketio.on("connect")
+def handle_connect():
+    print("Client connected!")
+
+@socketio.on("user_join")
+def handle_user_join(username):
+    print(f"User {username} joined!")
+    users[username] = request.sid
+
+@socketio.on("new_message")
+def handle_new_message(message):
+    print(f"New message: {message}")
+    username = None 
+    for user in users:
+        if users[user] == request.sid:
+            username = user
+    emit("chat", {"message": message['message'], "username": message['username']}, broadcast=True)
+
 
 if __name__ == "__main__":
-    app.run()
+    socketio.run(app, debug=True)
+    
