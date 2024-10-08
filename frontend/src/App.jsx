@@ -4,6 +4,7 @@ import Home from "./pages/Home";
 import Resources from "./pages/Resources";
 import Faqs from "./pages/Faqs";
 import Homepage from "./pages/Homepage";
+import Find from "./pages/Find";
 
 import "./App.css";
 
@@ -16,7 +17,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/faqs" element={<Faqs />} />
+
         <Route path="/homepage" element={<Homepage />} />
+        <Route path="/find" element={<Find />} />
       </Routes>
     </BrowserRouter>
   );

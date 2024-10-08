@@ -1,13 +1,15 @@
 import { useEffect } from "react";
+import LogggedNavbar from "../components/LogggedNavbar";
 
 function Homepage() {
   useEffect(() => {
     console.log("Homepage");
   }, []);
   return (
-    <div className="bg-black blur-md w-screen h-screen flex justify-center items-center">
-      Homepage
-    </div>
+    <main className="h-auto w-auto bg-stone-700">
+      <LogggedNavbar />
+      <div className="w-screen h-screen relative bg-stone-700">Homepage</div>
+    </main>
   );
 }
 
