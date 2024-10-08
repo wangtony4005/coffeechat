@@ -47,6 +47,17 @@ function Login({ onClose }) {
       return;
     }
 
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (role === "" || role === "select a role") {
+      setError("Please select a role");
+      return;
+    }
+    console.log(firstName, lastName, email, userName, password, role);
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:5000/users/add_user",
@@ -55,9 +66,12 @@ function Login({ onClose }) {
           lastname: lastName,
           email: email,
           password: password,
+          username: userName,
+          role: role,
         }
       );
       console.log("here");
+
       setMessage("Account created successfully");
     } catch (err) {
       setError(
@@ -115,9 +129,11 @@ function Login({ onClose }) {
           console.log(res.data);
           const data = res.data;
           if (data.condition === "success") {
-            // localStorage.setItem("token", res.data.token);
+            localStorage.setItem("token", data.token);
             onClose();
-            navigate("/homepage");
+            navigate("/homepage", {
+              user_data: data.user_data,
+            });
             return;
           } else {
             setError("Invalid credentials");
