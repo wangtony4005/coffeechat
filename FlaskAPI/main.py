@@ -4,7 +4,9 @@ from dotenv import load_dotenv
 from flask import Flask, request
 import base64
 from UserTableInfo import add_user, get_user
-# from flask_jwt_extended import create_access_token
+from cryptography.fernet import Fernet
+import jwt
+
 
 
 from flask_cors import CORS
@@ -14,6 +16,7 @@ from flask_cors import CORS
 CREATE_USERS_TABLE = ("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, firstname TEXT, lastname TEXT, email text, password text);")
 
 load_dotenv()
+
 
 app = Flask(__name__)
 
@@ -26,6 +29,11 @@ user = os.getenv("DATABASE_USER")
 password = os.getenv("DATABASE_PASS")
 port = os.getenv("DATABASE_PORT")
 host = os.getenv("DATABASE_HOST")
+encrypt_key = os.getenv("ENCRYPT_KEY")
+token_key = os.getenv("TOKEN_KEY")
+
+cipher_suite = Fernet(encrypt_key)
+
 connection = psycopg2.connect(
     dbname=dbname, user=user, password=password, host=host, port=port
 )
@@ -42,10 +50,18 @@ def addUser():
     data = request.get_json()
     firstname = data["firstname"]
     lastname = data["lastname"]
+    username = data["username"]
     email = data["email"]
+    role = data["role"]
     password = data["password"]
-    createUserTable()
-    newUser = add_user(firstname, lastname, email, password)
+
+    encrypted_password = cipher_suite.encrypt(password.encode())
+    
+
+
+
+
+    newUser = add_user(firstname, lastname, username,  email, encrypted_password , role)
     if newUser == False:
         return {"Response": "User was not added successfully"}, 500
     return {"Response": "User was added successfully"}, 201
@@ -56,12 +72,16 @@ def signin():
         data = request.get_json()
         username = data['username']
         password = data['password']
+        
 
         user = get_user(username, password)
+        print(user)
+
+        token = jwt.encode({"username": username}, token_key, algorithm="HS256")
         if user is None:
             return {"error": "Invalid username or password"}, 401
 
-        return {"condition": "success"}, 200
+        return {"condition": "success", "token" : token, "user_data" : user}, 200
 
     except Exception as e:
         return {"error": str(e)}, 500

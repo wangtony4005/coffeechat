@@ -1,6 +1,11 @@
 import os
 import psycopg2
 from dotenv import load_dotenv
+from cryptography.fernet import Fernet
+import binascii
+
+
+
 
 load_dotenv()
 
@@ -13,23 +18,39 @@ connection = psycopg2.connect(
     dbname=dbname, user=user, password=password, host=host, port=port
 )
 
-def add_user(firstname, lastname, email, password):
+
+encrypt_key = os.getenv("ENCRYPT_KEY")
+
+cipher_suite = Fernet(encrypt_key)
+
+def add_user(firstname, lastname, username,  email, password, role):
+    print("users info: "  , firstname, lastname, username, email, password, role)
     addUser = ("""
-            INSERT INTO users (firstname, lastname, email, password)
-            VALUES (%s, %s, %s, %s)
+            INSERT INTO users (firstname, lastname, username, password, email, userrole)
+            VALUES (%s, %s, %s, %s, %s, %s)
         """)
     with connection:
         with connection.cursor() as cursor:
-            cursor.execute(addUser, (firstname, lastname, email, password))
+            cursor.execute(addUser, (firstname, lastname, username, password,  email, role))
             return True
     return False
 
 
 def get_user(username, password):
-    print(username, password)
+    print("users info:", username, password)
     with connection:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT * FROM users WHERE firstname = %s AND password = %s", (username, password))
+            cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
             users = cursor.fetchone()
-            return users
-    return False
+            if users:
+                encrypt_password_hex = users[4]
+                
+                encrypt_password_bytes = binascii.unhexlify(encrypt_password_hex[2:])
+                
+                decrypted_password = cipher_suite.decrypt(encrypt_password_bytes).decode()
+                
+                if password == decrypted_password:
+                    print("passwords are the same")
+                    return users
+    
+    return None
