@@ -5,8 +5,8 @@ import Resources from "./pages/Resources";
 import Faqs from "./pages/Faqs";
 import Homepage from "./pages/Homepage";
 import Find from "./pages/Find";
-import MentorProfile from "./pages/MentorProfile"; 
-import MenteeProfile from "./pages/MenteeProfile"; 
+import MentorProfile from "./pages/MentorProfile";
+import MenteeProfile from "./pages/MenteeProfile";
 
 import "./App.css";
 
@@ -51,8 +51,22 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/mentor-profile" element={<MentorProfile />} />
-        <Route path="/mentee-profile" element={<MenteeProfile />} />
+        <Route
+          path="/mentor-profile"
+          element={
+            <ProtectedRoute>
+              <MentorProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mentee-profile"
+          element={
+            <ProtectedRoute>
+              <MenteeProfile />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );
