@@ -293,12 +293,12 @@ function Login({ onClose }) {
           </>
         )}
         {(login || createAccount) && (
-          <div className="flex justify-center items-center space-x-2 mt-4">
+          <div className="flex flex-col justify-center items-center space-x-2 mt-5">
             <p onClick={decideRender} className="cursor-pointer">
               Forgot your password?
             </p>
             <p onClick={decideRender} className="cursor-pointer">
-              Create account
+              Don't have an account? Sign up
             </p>
           </div>
         )}
