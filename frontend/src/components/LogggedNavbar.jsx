@@ -6,6 +6,11 @@ import { motion } from "framer-motion";
 function LogggedNavbar() {
   const [login, setLogin] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+
+  const openProfile = () => {
+    setIsProfileOpen(!isProfileOpen);
+  };
 
   const logout = () => {
     localStorage.removeItem("token");
@@ -43,7 +48,22 @@ function LogggedNavbar() {
           <Link to="/chats">Chats</Link>
         </div>
         <div className="hidden lg:flex space-x-4">
-          <button onClick={() => logout()}>Logout</button>
+          <img
+            src="https://via.placeholder.com/150"
+            alt="Profile Pic"
+            className="rounded-full h-10 w-10"
+            onClick={() => openProfile()}
+          />
+          {isProfileOpen && (
+            <div className="absolute top-16 right-0 w-32 z-40 bg-nav-color flex flex-col items-center">
+              <Link to="/mentor-profile" className="py-2">
+                Profile
+              </Link>
+              <button onClick={() => logout()} className="py-2">
+                Logout
+              </button>
+            </div>
+          )}
         </div>
         <div className="lg:hidden flex items-center z-auto">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -66,6 +86,11 @@ function LogggedNavbar() {
             >
               Chats
             </Link>
+
+            <Link to="/mentor-profile " className="py-2">
+              Profile
+            </Link>
+
             <button onClick={() => logout()} className="py-2">
               Logout
             </button>
