@@ -75,7 +75,6 @@ def signin():
         
 
         user = get_user(username, password)
-        print(user)
 
         token = jwt.encode({"username": username}, token_key, algorithm="HS256")
         if user is None:
