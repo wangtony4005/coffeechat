@@ -1,10 +1,10 @@
 import React from 'react';
-import TestMentor from './pages/TestMentor'; // Adjust path as necessary
+import TestMentee from './pages/TestMentee'; // Adjust path as necessary
 
 const App = () => {
     return (
         <div>
-            <TestMentor />
+            <TestMentee />
         </div>
     );
 };
