@@ -2,7 +2,7 @@ import React from 'react';
 
 const MenteeProfile = () => {
   return (
-    <div className="p-5 bg-base-color"> {/* Using your custom color */}
+    <div className="min-h-screen p-5 bg-base-color"> 
       <h1>MochaMentors</h1>
       <nav className="mb-5 bg-nav-color p-3">
         <a href="#mentors" className="mr-5 text-mocha-color">Mentors</a>
