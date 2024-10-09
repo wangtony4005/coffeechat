@@ -1,11 +1,19 @@
-import React from "react";
+import { useEffect } from "react";
 import Navbar from "../components/navbar";
 import buildit from "../assets/buildit.jpg";
 import dreamit from "../assets/dreamit.jpg";
 import growit from "../assets/growit.jpg";
 import Fade from "../components/Fade";
+import { useNavigate } from "react-router-dom";
 
 function Resources() {
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      Navigate("/homepage");
+    }
+  }, []);
+
   return (
     <main className="h-auto w-auto bg-darker-nav-color">
       <Navbar />

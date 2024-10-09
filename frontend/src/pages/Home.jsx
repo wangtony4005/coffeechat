@@ -7,16 +7,25 @@ import homeimg2 from "../assets/homeimg2.jpg";
 import homeimg3 from "../assets/homeimg3.jpg";
 import { motion, useInView, useAnimation } from "framer-motion";
 import Fade from "../components/Fade";
+import { useNavigate } from "react-router-dom";
 
 function Home() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
+  const Navigate = useNavigate();
 
   const controls = useAnimation();
   const headerVariants = {
     hidden: { opacity: 0, y: 0 },
     visible: { opacity: 1, y: 0 },
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      Navigate("/homepage");
+    }
+  }, []);
 
   useEffect(() => {
     if (inView) {
