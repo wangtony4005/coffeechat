@@ -2,67 +2,38 @@ import React from 'react';
 
 const MentorProfile = () => {
   return (
-    <div style={{ padding: '20px', backgroundColor: '#cbae90' }}>
+    <div className="p-5 bg-base-color"> {/* Using your custom color */}
       <h1>MochaMentors</h1>
-      <nav>
-        <a href="#chat" style={{ marginRight: '20px' }}>Chat</a>
-        <a href="#profile" style={{ marginRight: '20px' }}>Profile</a>
-        <a href="#logout">Logout</a>
+      <nav className="mb-5 bg-nav-color p-3">
+        <a href="#chat" className="mr-5 text-mocha-color">Chat</a>
+        <a href="#profile" className="mr-5 text-mocha-color">Profile</a>
+        <a href="#logout" className="text-mocha-color">Logout</a>
       </nav>
-      <hr />
+      <hr className="border-mocha-color"/>
 
-      <div style={{
-        display: 'flex', 
-        justifyContent: 'space-between', 
-        marginTop: '50px', 
-        padding: '0 50px' 
-      }}>
-        <div style={{ 
-            width: '25%', 
-            padding: '20px', 
-            backgroundColor: '#eae3d2',
-            display: 'flex', // Flexbox for centering
-            flexDirection: 'column', // Arrange content in a column
-            alignItems: 'center', // Center items horizontally
-            justifyContent: 'center', // Center items vertically
-            height: '500px' // Optional: Set a fixed height for vertical centering 
-        }}>
-            <h1>Profile Card View</h1>
+      <div className="flex justify-between mt-12 px-12">
+        <div className="w-1/4 p-5 bg-darker-nav-color flex flex-col items-center justify-center h-128">
+          <h1 className="text-mocha-color">Profile Card View</h1>
           <img src="https://via.placeholder.com/150" alt="Profile Pic" />
-          <h2>Name:</h2>
+          <h2 className="text-mocha-color">Name:</h2>
           <p>Status: Mentor</p>
-          <p>Job Title: </p>
+          <p>Job Title:</p>
           <p>Bio:</p>
         </div>
 
-        <div 
-            style={{ 
-                width: '45%', 
-                padding: '20px', 
-                backgroundColor: '#eae3d2',
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'center' 
-            }}>
-          <h1>Edit Profile</h1>  
-          <img src="https://via.placeholder.com/150" alt="Profile Pic" style={{ marginBottom: '20px' }}/>
-          <h2>Name:</h2>
+        <div className="w-2/5 p-5 bg-darker-nav-color flex flex-col items-center">
+          <h1 className="text-mocha-color">Edit Profile</h1>  
+          <img src="https://via.placeholder.com/150" alt="Profile Pic" className="mb-5"/>
+          <h2 className="text-mocha-color">Name:</h2>
           <p>Status:</p>
           <p>Job Title:</p>
           <p>Company:</p>
           <p>Bio:</p>
           <p>Career Interest:</p>
 
-          <button style={{
-            marginTop: '20px', // Add some space above the button
-            padding: '10px 20px', // Button padding
-            backgroundColor: '#4CAF50', // Green background color
-            color: 'white', // White text color
-            border: 'none', // No border
-            borderRadius: '5px', // Rounded corners
-            cursor: 'pointer' // Pointer cursor on hover
-          }}
-          onClick={() => alert('Profile saved!')} // Placeholder click handler
+          <button 
+            className="mt-5 px-5 py-2 bg-green-500 text-white rounded cursor-pointer"
+            onClick={() => alert('Profile saved!')}
           >
             Save
           </button>
