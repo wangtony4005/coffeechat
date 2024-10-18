@@ -5,8 +5,9 @@ import Resources from "./pages/Resources";
 import Faqs from "./pages/Faqs";
 import Homepage from "./pages/Homepage";
 import Find from "./pages/Find";
-import MentorProfile from "./pages/MentorProfile";
+import MentorProfile from "./pages/MentorProfile"; 
 import MenteeProfile from "./pages/MenteeProfile";
+import MenteeDashboard from "./pages/MenteeDashboard";
 
 import "./App.css";
 
@@ -65,6 +66,12 @@ function App() {
             <ProtectedRoute>
               <MenteeProfile />
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mentee-dashboard"
+          element={
+              <MenteeDashboard />
           }
         />
       </Routes>
