@@ -55,17 +55,17 @@ function App() {
         <Route
           path="/mentor-profile"
           element={
-            <ProtectedRoute>
+            
               <MentorProfile />
-            </ProtectedRoute>
+            
           }
         />
         <Route
           path="/mentee-profile"
           element={
-            <ProtectedRoute>
+            
               <MenteeProfile />
-            </ProtectedRoute>
+            
           }
         />
         <Route
