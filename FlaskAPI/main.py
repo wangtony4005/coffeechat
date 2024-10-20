@@ -88,7 +88,7 @@ def handle_new_message(message):
         if users[user] == request.sid:
             username = user
     emit("chat", {"message": message['message'], "username": message['username']}, broadcast=True)
-@app.get("/users/signin", methods=["GET"])
+@app.get("/users/signin")
 def signin():
     return {"condition": "success"}, 200
     try:
@@ -108,7 +108,7 @@ def signin():
     except Exception as e:
         return {"error": str(e)}, 500
 
-@app.get("/users/reset_password", methods=["GET"])
+@app.get("/users/reset_password")
 def reset_password():
     pass
 
