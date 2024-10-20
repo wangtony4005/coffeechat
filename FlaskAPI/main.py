@@ -4,7 +4,11 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import base64
-from UserTableInfo import add_user
+from UserTableInfo import add_user, get_user
+from cryptography.fernet import Fernet
+import jwt
+
+
 
 from flask_cors import CORS
 
@@ -14,16 +18,26 @@ CREATE_USERS_TABLE = ("CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, 
 
 load_dotenv()
 
+
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 socketio = SocketIO(app, cors_allowed_origins='*')
 
+
+CORS(app, resources={r"/users/*": {"origins": "*"}},
+     methods=["GET", "POST"],
+     allow_headers=["Content-Type"])
 
 dbname = os.getenv("DATABASE_NAME")
 user = os.getenv("DATABASE_USER")
 password = os.getenv("DATABASE_PASS")
 port = os.getenv("DATABASE_PORT")
 host = os.getenv("DATABASE_HOST")
+encrypt_key = os.getenv("ENCRYPT_KEY")
+token_key = os.getenv("TOKEN_KEY")
+
+cipher_suite = Fernet(encrypt_key)
+
 connection = psycopg2.connect(
     dbname=dbname, user=user, password=password, host=host, port=port
 )
@@ -40,10 +54,18 @@ def addUser():
     data = request.get_json()
     firstname = data["firstname"]
     lastname = data["lastname"]
+    username = data["username"]
     email = data["email"]
+    role = data["role"]
     password = data["password"]
-    createUserTable()
-    newUser = add_user(firstname, lastname, email, password)
+
+    encrypted_password = cipher_suite.encrypt(password.encode())
+    
+
+
+
+
+    newUser = add_user(firstname, lastname, username,  email, encrypted_password , role)
     if newUser == False:
         return {"Response": "User was not added successfully"}, 500
     return {"Response": "User was added successfully"}, 201
@@ -88,27 +110,27 @@ def handle_new_message(message):
         if users[user] == request.sid:
             username = user
     emit("chat", {"message": message['message'], "username": message['username']}, broadcast=True)
-@app.get("/users/signin")
+
+@app.post("/users/signin")
 def signin():
-    return {"condition": "success"}, 200
     try:
-        username = request.args.get("userName")
-        password = request.args.get("password")
-        encoded_password = base64.b64encode(password.encode("utf-8"))
-        with connection:
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM users WHERE email = %s AND password = %s", (username, encoded_password))
-                users = cursor.fetchone()
+        data = request.get_json()
+        username = data['username']
+        password = data['password']
+        
 
-                if len(users) == 0:
-                    return {"error": "User not found"}, 404
+        user = get_user(username, password)
 
-        return {"condition": "success"}, 200
+        token = jwt.encode({"username": username}, token_key, algorithm="HS256")
+        if user is None:
+            return {"error": "Invalid username or password"}, 401
+
+        return {"condition": "success", "token" : token, "user_data" : user}, 200
 
     except Exception as e:
         return {"error": str(e)}, 500
 
-@app.get("/users/reset_password")
+@app.route("/users/reset_password", methods=["GET"])
 def reset_password():
     pass
 
@@ -119,3 +141,5 @@ def reset_password():
 if __name__ == "__main__":
     socketio.run(app, debug=True)
     
+    app.run()
+   
