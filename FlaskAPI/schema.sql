@@ -34,3 +34,11 @@ CREATE TABLE match{
     matchID INT NOT NULL,
     matchStatus status,
 }
+
+CREATE TABLE messages {
+    message_id SERIAL PRIMARY KEY,
+    user_email VARCHAR(255) UNIQUE,
+    messages TEXT[] DEFAULT ARRAY[]::TEXT[],
+    timestamps TIMESTAMP[] DEFAULT ARRAY[]::TIMESTAMP[], 
+    FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE
+};
