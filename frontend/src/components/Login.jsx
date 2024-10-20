@@ -14,6 +14,7 @@ function Login({ onClose }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [firstName, setFirstName] = useState("");
@@ -46,14 +47,31 @@ function Login({ onClose }) {
       return;
     }
 
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    if (role === "" || role === "select a role") {
+      setError("Please select a role");
+      return;
+    }
+    console.log(firstName, lastName, email, userName, password, role);
+
     try {
-      const response = await axios.post("http://localhost:5000/users/signup", {
-        firstName: firstName,
-        lastName: lastName,
-        email: email,
-        password: password,
-      });
+      const response = await axios.post(
+        "http://127.0.0.1:5000/users/add_user",
+        {
+          firstname: firstName,
+          lastname: lastName,
+          email: email,
+          password: password,
+          username: userName,
+          role: role,
+        }
+      );
       console.log("here");
+
       setMessage("Account created successfully");
     } catch (err) {
       setError(
@@ -67,7 +85,7 @@ function Login({ onClose }) {
 
     console.log("here");
     try {
-      const response = await axios.get("http://localhost:5000/users/reset", {
+      const response = await axios.get("http://127.0.0.1:5000/users/reset", {
         email: email,
       });
       setMessage(
@@ -90,12 +108,9 @@ function Login({ onClose }) {
   const handleSignIn = async (e) => {
     resetValues();
 
-    navigate("/homepage");
     // setError("");
     // setMessage("");
     // e.preventDefault();
-
-    return;
 
     console.log(userName, password);
 
@@ -106,15 +121,20 @@ function Login({ onClose }) {
 
     try {
       const response = await axios
-        .post("http://localhost:5000/users/signin", {
+        .post("http://127.0.0.1:5000/users/signin", {
           username: userName,
           password: password,
         })
         .then((res) => {
           console.log(res.data);
-          if (res.data.success) {
-            localStorage.setItem("token", res.data.token);
+          const data = res.data;
+          if (data.condition === "success") {
+            localStorage.setItem("token", data.token);
             onClose();
+            navigate("/homepage", {
+              user_data: data.user_data,
+            });
+            return;
           } else {
             setError("Invalid credentials");
           }
@@ -233,6 +253,16 @@ function Login({ onClose }) {
               onChange={(e) => setEmail(e.target.value)}
             />
 
+            <select
+              placeholder="Role"
+              className="border border-gray-300 p-2 rounded w-full mt-4"
+              onChange={(e) => setRole(e.target.value)}
+            >
+              <option value="">select a role</option>
+              <option value="mentor">Mentor</option>
+              <option value="mentee">Mentee</option>
+            </select>
+
             <input
               type="password"
               placeholder="Password"
@@ -263,12 +293,12 @@ function Login({ onClose }) {
           </>
         )}
         {(login || createAccount) && (
-          <div className="flex justify-center items-center space-x-2 mt-4">
+          <div className="flex flex-col justify-center items-center space-x-2 mt-5">
             <p onClick={decideRender} className="cursor-pointer">
               Forgot your password?
             </p>
             <p onClick={decideRender} className="cursor-pointer">
-              Create account
+              Don't have an account? Sign up
             </p>
           </div>
         )}

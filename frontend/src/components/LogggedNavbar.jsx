@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Hamburger from "hamburger-react";
 import { motion } from "framer-motion";
 
-import Login from "./Login";
-
-function Navbar() {
+function LogggedNavbar() {
   const [login, setLogin] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  };
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (login) {
@@ -21,7 +26,6 @@ function Navbar() {
     hidden: { opacity: 0, y: 0 },
     visible: { opacity: 1, y: 0 },
   };
-
   return (
     <>
       <motion.header
@@ -31,15 +35,15 @@ function Navbar() {
         transition={{ duration: 2.5, ease: "easeOut" }}
         className="absolute w-screen z-10 flex items-center justify-between bg-nav-color py-6 px-6 font-semibold stroke-stone-400"
       >
-        <Link to="/" className="lg:text-2xl sm:text-sm">
+        <Link to="/homepage" className="lg:text-2xl sm:text-sm">
           Mocha Mentors
         </Link>
         <div className="hidden lg:flex space-x-2">
-          <Link to="/resources">Resources</Link>
-          <Link to="/faqs">FAQS</Link>
+          <Link to="/find">Find</Link>
+          <Link to="/chats">Chats</Link>
         </div>
         <div className="hidden lg:flex space-x-4">
-          <button onClick={() => setLogin(true)}>Login</button>
+          <button onClick={() => logout()}>Logout</button>
         </div>
         <div className="lg:hidden flex items-center z-auto">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -49,40 +53,40 @@ function Navbar() {
         {isMenuOpen && (
           <div className="absolute top-16 right-0 w-full z-40 bg-nav-color flex flex-col items-center lg:hidden">
             <Link
-              to="/resources"
+              to="/find"
               className="py-2"
               onClick={() => setIsMenuOpen(false)}
             >
-              Resources
+              Find
             </Link>
             <Link
-              to="/faqs"
+              to="/chats"
               className="py-2"
               onClick={() => setIsMenuOpen(false)}
             >
-              FAQS
+              Chats
             </Link>
-            <button onClick={() => setLogin(true)} className="py-2">
-              Login
+            <button onClick={() => logout()} className="py-2">
+              Logout
             </button>
           </div>
         )}
       </motion.header>
-      {login && (
+      {/* {login && (
         <>
           <div className="fixed inset-0 bg-black bg-opacity-50 z-20"></div>
           <Login onClose={() => setLogin(false)} />
         </>
-      )}
-      <style>
+      )} */}
+      {/* <style>
         {`
-          body.blur-background {
-            filter: blur(5px);
-          }
-        `}
-      </style>
+        body.blur-background {
+          filter: blur(5px);
+        }
+      `}
+      </style> */}
     </>
   );
 }
 
-export default Navbar;
+export default LogggedNavbar;
