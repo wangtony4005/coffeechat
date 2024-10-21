@@ -45,7 +45,7 @@ function LogggedNavbar() {
         </Link>
         <div className="hidden lg:flex space-x-2">
           <Link to="/find">Find</Link>
-          <Link to="/chats">Chats</Link>
+          <Link to="/chatpage">Chats</Link>
         </div>
         <div className="hidden lg:flex space-x-4">
           <img
@@ -80,7 +80,7 @@ function LogggedNavbar() {
               Find
             </Link>
             <Link
-              to="/chats"
+              to="/chatpage"
               className="py-2"
               onClick={() => setIsMenuOpen(false)}
             >
