@@ -1,7 +1,8 @@
 import os
 import psycopg2
 from dotenv import load_dotenv
-from flask import Flask, request
+from flask import Flask, request, jsonify
+from flask_socketio import SocketIO, emit, join_room, leave_room
 import base64
 from UserTableInfo import add_user, get_user
 from cryptography.fernet import Fernet
@@ -19,6 +20,9 @@ load_dotenv()
 
 
 app = Flask(__name__)
+cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+socketio = SocketIO(app, cors_allowed_origins='*')
+
 
 CORS(app, resources={r"/users/*": {"origins": "*"}},
      methods=["GET", "POST"],
@@ -66,6 +70,47 @@ def addUser():
         return {"Response": "User was not added successfully"}, 500
     return {"Response": "User was added successfully"}, 201
 
+users = {}
+
+# Handle user joining a unique room
+@socketio.on('join_room')
+def on_join(data):
+    username = data['username']
+    room = data['room']
+    
+    join_room(room)
+    emit('chat', {'message': f'{username} has entered the room {room}.'}, room=room)
+    print(f'{username} joined room: {room}')
+
+# Handle user leaving the room
+@socketio.on('leave_room')
+def on_leave(data):
+    username = data['username']
+    room = data['room']
+    
+    leave_room(room)
+    emit('chat', {'message': f'{username} has left the room {room}.'}, room=room)
+    print(f'{username} left room: {room}')
+
+
+@socketio.on("connect")
+def handle_connect():
+    print("Client connected!")
+
+@socketio.on("user_join")
+def handle_user_join(username):
+    print(f"User {username} joined!")
+    users[username] = request.sid
+
+@socketio.on("new_message")
+def handle_new_message(message):
+    print(f"New message: {message}")
+    username = None 
+    for user in users:
+        if users[user] == request.sid:
+            username = user
+    emit("chat", {"message": message['message'], "username": message['username']}, broadcast=True)
+
 @app.post("/users/signin")
 def signin():
     try:
@@ -94,5 +139,7 @@ def reset_password():
 
 
 if __name__ == "__main__":
+    socketio.run(app, debug=True)
+    
     app.run()
    
