@@ -1,6 +1,7 @@
-import React from "react";
+import { useEffect } from "react";
 import Navbar from "../components/navbar";
 import Fade from "../components/Fade";
+import { useNavigate } from "react-router-dom";
 
 const faqs = {
   questions: [
@@ -37,6 +38,14 @@ const faqs = {
 };
 
 function Faqs() {
+  const Navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      Navigate("/homepage");
+    }
+  }, []);
   return (
     <main className="h-auto w-auto">
       <Navbar />
