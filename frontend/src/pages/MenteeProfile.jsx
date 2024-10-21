@@ -98,6 +98,7 @@ const MenteeProfile = () => {
           </button>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
