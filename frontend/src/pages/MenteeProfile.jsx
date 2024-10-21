@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LogggedNavbar from "../components/LogggedNavbar";
 import Footer from "../components/Footer";
+import MenteeProfileCard from "../components/MenteeProfileCard";
 
 const MenteeProfile = () => {
   // State for form inputs (used for editing)
@@ -35,7 +36,11 @@ const MenteeProfile = () => {
 
       <div className="flex justify-between mt-12 px-12">
         {/* Profile Card View */}
+        
         <div className="w-1/4 p-5 bg-darker-nav-color flex flex-col items-center justify-center h-128">
+          <MenteeProfileCard name={name} jobTitle={jobTitle} bio={bio} careerInterest={careerInterest}/>
+        </div>
+        {/*  
           <h1 className="text-mocha-color">Profile Card View</h1>
           <img src="https://via.placeholder.com/150" alt="Profile Pic" />
           <h2 className="text-mocha-color">Name: {name || "N/A"}</h2>
@@ -44,6 +49,7 @@ const MenteeProfile = () => {
           <p>Bio: {bio || "N/A"}</p>
           <p>Career Interest: {careerInterest || "N/A"}</p>
         </div>
+        */}
 
         {/* Edit Profile Section */}
         <div className="w-2/5 p-5 bg-darker-nav-color flex flex-col items-center">
