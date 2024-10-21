@@ -7,12 +7,12 @@ function LogggedNavbar() {
   const [login, setLogin] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const navigate = useNavigate();
-
   const logout = () => {
+    localStorage.removeItem("token");
     navigate("/");
-    return;
   };
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (login) {
@@ -40,7 +40,7 @@ function LogggedNavbar() {
         </Link>
         <div className="hidden lg:flex space-x-2">
           <Link to="/find">Find</Link>
-          <Link to="/homepage">Chats</Link>
+          <Link to="/chatpage">Chats</Link>
         </div>
         <div className="hidden lg:flex space-x-4">
           <button onClick={() => logout()}>Logout</button>
@@ -53,20 +53,20 @@ function LogggedNavbar() {
         {isMenuOpen && (
           <div className="absolute top-16 right-0 w-full z-40 bg-nav-color flex flex-col items-center lg:hidden">
             <Link
-              to="/resources"
+              to="/find"
               className="py-2"
               onClick={() => setIsMenuOpen(false)}
             >
-              Resources
+              Find
             </Link>
             <Link
-              to="/faqs"
+              to="/chatpage"
               className="py-2"
               onClick={() => setIsMenuOpen(false)}
             >
-              FAQS
+              Chats
             </Link>
-            <button onClick={() => setLogin(true)} className="py-2">
+            <button onClick={() => logout()} className="py-2">
               Logout
             </button>
           </div>
