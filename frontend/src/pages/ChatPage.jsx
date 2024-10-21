@@ -35,6 +35,36 @@ const chooseChat = [
     description: "This is chat 5",
     user: true,
   },
+  {
+    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+    name: "Person 6",
+    description: "This is chat 6",
+    user: true,
+  },
+  {
+    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+    name: "Person 7",
+    description: "This is chat 7",
+    user: true,
+  },
+  {
+    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+    name: "Person 8",
+    description: "This is chat 8",
+    user: true,
+  },
+  {
+    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+    name: "Person 9",
+    description: "This is chat 9",
+    user: true,
+  },
+  {
+    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+    name: "Person 10",
+    description: "This is chat 10",
+    user: true,
+  },
 ];
 
 const ChatApp = () => {
@@ -97,11 +127,14 @@ const ChatApp = () => {
       <LoggedNavBar />
 
       <div className="w-screen min-h-screen h-auto overflow-auto flex flex-col md:flex-row items-start bg-base-color">
-        <div className="flex-[1] flex-col relative h-full flex pt-24 ">
+        <div
+          className="flex-[1] flex-col relative h-full flex pt-24"
+          style={{ height: "100vh", overflowY: "scroll" }}
+        >
           {chooseChat.map((chat, index) => (
             <div
               key={index}
-              className="flex items-center border-2 p-4 w-full h-24 rounded-lg hover:   m-0 right-0 left-0 relative"
+              className="flex items-center border-2 p-4 w-full h-24 rounded-lg m-0 right-0 left-0 relative hover:bg-gray-200 cursor-pointer"
               onClick={(e) => handleRoomChange(e, chat.name, index)}
             >
               <img
@@ -117,14 +150,14 @@ const ChatApp = () => {
           ))}
         </div>
 
-        <div className="flex-[2] h-full flex flex-col items-center justify-center lg:relative lg:translate-y-20 p-5  ">
+        <div className="flex-[2] h-full  w-full flex flex-col items-center justify-center lg:relative lg:translate-y-24 p-2">
           {isChatActive && (
             <div id="chat" className="h-full w-full">
               <div
                 id="chat-messages"
                 className="flex flex-col w-full h-full"
                 style={{
-                  height: "500px",
+                  height: "620px",
                   backgroundColor: "white",
                   overflowY: "scroll",
                 }}
