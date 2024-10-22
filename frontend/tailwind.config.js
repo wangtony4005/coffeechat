@@ -13,6 +13,15 @@ export default {
         "nav-color": "#F6F3EC",
         "darker-nav-color": "#ECE4DA",
       },
+      animation: {
+        "fade-in": "fadeIn 0.3s ease-in-out",
+      },
+      keyframes: {
+        fadeIn: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
+      },
     },
   },
   plugins: [],

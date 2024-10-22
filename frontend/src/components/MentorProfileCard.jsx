@@ -1,9 +1,9 @@
 import React from "react";
 import profile_icon from "../assets/anonprofile.jpg";
 
-const MenteeProfileCard = ({ name, jobTitle, bio, careerInterest }) => {
+const MentorProfileCard = ({ name, jobTitle, bio, careerInterest }) => {
   return (
-    <div className="w-[350px] m-[20px] rounded-[4px] pb-[20px] bg-white">
+    <div className="w-[350px] m-[20px] rounded-[4px] pb-[20px] bg-white shadow-lg">
       <div className="bg-gradient-to-b from-[#F6F3EC] to-[#36302A] h-[125px] rounded-t-[4px]"></div>
       <div className="flex flex-col items-center">
         <img
@@ -12,7 +12,7 @@ const MenteeProfileCard = ({ name, jobTitle, bio, careerInterest }) => {
           className="h-[150px] rounded-full mt-[-75px] p-[5px] bg-white"
         />
         <div className="text-[36px] font-semibold">
-          {name || "Mentee Name"}
+          {name || "Mentor Name"}
         </div>
         <div className="text-center">
           <p>Status: Mentor</p>
@@ -30,4 +30,4 @@ const MenteeProfileCard = ({ name, jobTitle, bio, careerInterest }) => {
   );
 };
 
-export default MenteeProfileCard;
+export default MentorProfileCard;
