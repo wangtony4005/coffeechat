@@ -15,7 +15,7 @@ const MenteeProfileCard = ({ name, jobTitle, bio, careerInterest }) => {
           {name || "Mentee Name"}
         </div>
         <div className="text-center">
-          <p>Status: Mentee</p>
+          <p>Status: Mentor</p>
           <p>{jobTitle || "Job Title"}</p> 
           <p>{bio || "Bio"}</p> 
           <p>{careerInterest || "Career Interest"}</p>
