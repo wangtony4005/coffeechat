@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import base64
-from UserTableInfo import add_user, get_user
+from UserTableInfo import add_user, get_user, add_mentee, add_mentor
+from messagetableinfo import add_message
 from cryptography.fernet import Fernet
 import jwt
 
@@ -110,6 +111,7 @@ def handle_new_message(message):
         if users[user] == request.sid:
             username = user
     emit("chat", {"message": message['message'], "username": message['username']}, broadcast=True)
+    add_message(message['username'], message['message'])
 
 @app.post("/users/signin")
 def signin():
@@ -134,9 +136,31 @@ def signin():
 def reset_password():
     pass
 
+@app.post("/users/mentee/updateprofile")
+def upload_mentee():
+    data = request.get_json()
+    email = data["email"]
+    major = data["major"]
+    school = data["school"]
+    gradelevel = data["gradelevel"]
+    career_interests = data["careerinterests"]
+    newMentee = add_mentee(email, major , school, gradelevel, career_interests)
+    if newMentee == False:
+        return {"Response": "Mentee was not added successfully"}, 500
+    return {"Response": "Mentee was added successfully"}, 201
 
-
-
+@app.post("/users/mentor/updateprofile")
+def upload_mentor():
+    data = request.get_json()
+    email = data["email"]
+    companyname = data["companyname"]
+    jobtitle = data["jobtitle"]
+    industry = data["industry"]
+    yearsofexperience = data["yearsofexperience"]
+    newMentor = add_mentor(email, companyname, jobtitle, industry, yearsofexperience)
+    if newMentor == False:
+        return {"Response": "Mentor was not added successfully"}, 500
+    return {"Response": "Mentor was added successfully"}, 201
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)
