@@ -8,14 +8,16 @@ CREATE TABLE users (
     password VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL,
     userType VARCHAR(100) NOT NULL,
+    points INT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE mentee {
     menteeEmail VARCHAR(100) NOT NULL,
-    major VARCHAR(100) NOT NULL,
-    school VARCHAR(100) NOT NULL,
-    gradeLevel VARCHAR(100) NOT NULL,
+    major VARCHAR(100),
+    school VARCHAR(100),
+    gradeLevel VARCHAR(100),
+    career_interests TEXT[],
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 };
 
@@ -33,12 +35,14 @@ CREATE TABLE match{
     mentorEmail VARCHAR(100) NOT NULL,
     matchID INT NOT NULL,
     matchStatus status,
+    coffeechatStatus BOOLEAN
 }
 
 CREATE TABLE messages {
     message_id SERIAL PRIMARY KEY,
     user_email VARCHAR(255) UNIQUE,
     messages TEXT[] DEFAULT ARRAY[]::TEXT[],
+    FOREIGN KEY (matchID) REFERENCES match(matchID) ON DELETE CASCADE
     timestamps TIMESTAMP[] DEFAULT ARRAY[]::TIMESTAMP[], 
     FOREIGN KEY (user_email) REFERENCES users(email) ON DELETE CASCADE
 };
