@@ -167,6 +167,10 @@ function Login({ onClose }) {
       setCreateAccount(true);
       setLogin(false);
       setReset(false);
+    } else {
+      setLogin(false);
+      setReset(false);
+      setCreateAccount(true);
     }
   };
 

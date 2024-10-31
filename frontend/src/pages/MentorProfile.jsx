@@ -1,103 +1,131 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import LogggedNavbar from "../components/LogggedNavbar";
-import Footer from "../components/Footer";
-
+import MochaChart from "../components/mentor/MochaChart";
+import MentorNavbar from "../components/mentor/MentorNavbar";
 const MentorProfile = () => {
   // State for form inputs (used for editing)
-  const [nameInput, setNameInput] = useState('');
-  const [jobTitleInput, setJobTitleInput] = useState('');
-  const [bioInput, setBioInput] = useState('');
-  const [careerInterestInput, setCareerInterestInput] = useState(''); // For dropdown
+  const [name, setName] = useState("John Doe");
+  const [jobTitle, setJobTitle] = useState("Software Engineer");
+  const [bio, setBio] = useState(
+    "As a passionate Software Engineer with a strong background in full-stack development, I thrive on solving complex problems and creating efficient, user-friendly applications. I hold a degree in Computer Science and have experience working with a variety of technologies, including React, Node.js, Python, and SQL."
+  );
+  const [careerInterest, setCareerInterest] = useState("Technology");
+  // const [menteeRequests, setMenteeRequests] = useState([]);
 
-
-  // State for saved values (shown in profile card view)
-  const [name, setName] = useState('');
-  const [jobTitle, setJobTitle] = useState('');
-  const [bio, setBio] = useState('');
-  const [careerInterest, setCareerInterest] = useState('');
-
-  const handleSave = () => {
-    // You can handle form submission or saving the data here
-    setName(nameInput);
-    setJobTitle(jobTitleInput);
-    setBio(bioInput);
-    setCareerInterest(careerInterestInput); // Save career interest
-
-    //alert('Profile saved!');
-  };
+  const menteeRequests = [
+    {
+      id: 1,
+      name: "Alice Smith",
+      requestDate: "2024-10-22",
+    },
+    {
+      id: 2,
+      name: "Bob Johnson",
+      requestDate: "2024-10-23",
+    },
+    {
+      id: 3,
+      name: "Charlie Brown",
+      requestDate: "2024-10-24",
+    },
+    {
+      id: 4,
+      name: "David Williams",
+      requestDate: "2024-10-25",
+    },
+    { id: 5, name: "Eva Green", requestDate: "2024-10-26", status: "Pending" },
+    {
+      id: 6,
+      name: "Frank Miller",
+      requestDate: "2024-10-27",
+    },
+    // Add more mentee requests as needed
+  ];
 
   return (
-    <div className="min-h-screen p-5 bg-base-color"> 
-      <LogggedNavbar />
+    <main className="h-auto w-auto  bg-base-color">
+      <MentorNavbar />
+      <div className="w-full min-h-screen h-auto  flex flex-col md:flex-row items-start bg-base-color text-black justify-center pt-20 ">
+        <aside className="flex-shrink-0 w-64 h-screen bg-gray-800 text-white p-5">
+          <nav className="flex flex-col space-y-2 ">
+            <a href="#" className="text-gray-300 hover:text-white mt-4">
+              Dashboard
+            </a>
+            <a href="#" className="text-gray-300 hover:text-white">
+              Profile
+            </a>
+            <a href="chatpage" className="text-gray-300 hover:text-white">
+              Messages
+            </a>
+            <a href="#" className="text-gray-300 hover:text-white">
+              Settings
+            </a>
+          </nav>
+        </aside>
 
-      <hr className="border-mocha-color"/>
-      <div className="flex justify-between mt-12 px-12">
-        {/* Profile Card View */}
-        <div className="w-1/4 p-5 bg-darker-nav-color flex flex-col items-center justify-center h-128">
-          <h1 className="text-mocha-color">Profile Card View</h1>
-          <img src="https://via.placeholder.com/150" alt="Profile Pic" />
-          <h2 className="text-mocha-color">Name: {name || "N/A"}</h2>
-          <p>Status: Mentor</p>
-          <p>Job Title: {jobTitle || "N/A"}</p>
-          <p>Bio: {bio || "N/A"}</p>
-          <p>Career Interest: {careerInterest || "N/A"}</p>
-        </div>
+        <div className="flex flex-col md:flex-row justify-center h-screen flex-grow p-5 space-y-4 md:space-y-0 md:space-x-4">
+          <div className="flex-1 h-auto p-5 rounded-lg w-96 ">
+            <div className="flex items-center justify-center h-full flex-col ">
+              <div className="w-auto h-auto bg-white rounded-lg drop-shadow-lg px-8 py-12">
+                <div className="flex flex-col items-center justify-center text-center mb-4">
+                  <div className="w-24 h-24 bg-gray-300 rounded-full mr-4">
+                    <img
+                      src="https://via.placeholder.com/96"
+                      alt="Profile"
+                      className="w-full h-full rounded-full object-cover"
+                    />
+                  </div>
 
-        {/* Edit Profile Section */}
-        <div className="w-2/5 p-5 bg-darker-nav-color flex flex-col items-center">
-          <h1 className="text-mocha-color">Edit Profile</h1>  
-          <img src="https://via.placeholder.com/150" alt="Profile Pic" className="mb-5"/>
-          {/* Input fields */}
-          <h2 className="text-mocha-color">Name:</h2>
-          <input 
-            type="text" 
-            value={nameInput} // Editable input
-            onChange={(e) => setNameInput(e.target.value)} // Updates input state
-            className="mb-3 p-2 border rounded"
-          />
-          <p>Status:</p>
-          <h2 className="text-mocha-color">Job Title:</h2>
-          <input 
-            type="text" 
-            value={jobTitleInput} // Editable input
-            onChange={(e) => setJobTitleInput(e.target.value)} // Updates input state
-            className="mb-3 p-2 border rounded"
-          />
-          <h2>Company:</h2>
-          <h2 className="text-mocha-color">Bio:</h2>
-          <textarea 
-            value={bioInput} // Editable input
-            onChange={(e) => setBioInput(e.target.value)} // Updates input state
-            className="mb-5 p-2 border rounded"
-          />
+                  <div className="text-wrap text-black">
+                    <h2 className="text-xl font-bold mb-2">{name}</h2>
+                    <h3 className="text-md text-gray-600 mb-4">{jobTitle}</h3>
+                  </div>
+                </div>
+                <p className="text-sm text-center text-wrap text-gray-700 mb-4">
+                  <strong>Bio: </strong>
+                  {bio}
+                </p>
+                <p className="text-sm text-gray-700 mb-4">
+                  <strong>Email:</strong> sample@gmail.com
+                </p>
+                <p className="text-sm text-gray-700 mb-4">
+                  <strong>Career Interest:</strong> {careerInterest}
+                </p>
+              </div>
+            </div>
+          </div>
 
-  
-          {/* Dropdown for Career Interest */}
-          <h2 className="text-mocha-color">Career Interest:</h2>
-          <select 
-            value={careerInterestInput} 
-            onChange={(e) => setCareerInterestInput(e.target.value)} 
-            className="mb-5 p-2 border rounded"
-          >
-            <option value="">Select a career interest</option>
-            <option value="Software Engineering">Software Engineering</option>
-            <option value="Data Science">Data Science</option>
-            <option value="Product Management">Product Management</option>
-            <option value="UX/UI Design">UX/UI Design</option>
-            <option value="Cybersecurity">Cybersecurity</option>
-          </select>
+          <div className="flex-1 flex flex-col space-y-4 text-black rounded-lg drop-shadow-lg">
+            <div className="flex-1 flex flex-col items-center justify-start p-4 bg-white rounded-lg drop-shadow-lg overflow-auto">
+              <h2 className="text-lg font-bold mb-4">Mentee Requests</h2>
+              <div className="grid grid-cols-2 gap-4 ">
+                {menteeRequests.map((request) => (
+                  <div
+                    key={request.id}
+                    className="p-2 border rounded-lg bg-gray-100 shadow"
+                  >
+                    <p>
+                      <strong>Name:</strong> {request.name}
+                    </p>
+                    <p>
+                      <strong>Request Date:</strong> {request.requestDate}
+                    </p>
+                    <p>
+                      <strong>Bio: </strong>
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-          <button 
-            className="mt-5 px-5 py-2 bg-green-500 text-white rounded cursor-pointer"
-            onClick={handleSave}
-          >
-            Save
-          </button>
+            <div className="flex-1 flex items-start justify-start p-4 bg-white rounded-lg drop-shadow-lg">
+              <MochaChart />
+            </div>
+          </div>
         </div>
       </div>
-      <Footer />
-    </div>
+    </main>
   );
-}
+};
 
 export default MentorProfile;
