@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
+import { useNavigate } from "react-router-dom";
 import LoggedNavBar from "../components/LogggedNavbar";
+import { IoArrowBackCircle } from "react-icons/io5";
 
 const socket = io("http://127.0.0.1:5000", { autoConnect: false });
 
@@ -74,6 +76,11 @@ const ChatApp = () => {
   const [isChatActive, setIsChatActive] = useState(false);
   const [room, setRoom] = useState("");
 
+  const navigate = useNavigate(); // Use useNavigate for programmatic navigation
+
+  const handleBackClick = () => {
+    navigate(-1); // Navigate back to the previous page
+  };
   const tempUser = {
     username: "Crosve",
     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
@@ -116,7 +123,7 @@ const ChatApp = () => {
 
   const handleRoomChange = (e, name, index) => {
     e.preventDefault();
-    setMessages([]); // Clear messages
+    setMessages([]);
     setRoom(index);
     setIsChatActive(true);
     socket.emit("join_room", { username: name, room: index });
@@ -124,11 +131,13 @@ const ChatApp = () => {
 
   return (
     <main className="h-auto w-auto bg-darker-nav-color">
-      <LoggedNavBar />
+      <div className="flex p-4 bg-base-color ">
+        <IoArrowBackCircle className="h-8 w-8" onClick={handleBackClick} />
+      </div>
 
       <div className="w-screen min-h-screen h-auto overflow-auto flex flex-col md:flex-row items-start bg-base-color">
         <div
-          className="flex-[1] flex-col relative h-full flex pt-24"
+          className="flex-[1] flex-col relative h-full flex pt-4" // Adjusted padding to fit back button
           style={{ height: "100vh", overflowY: "scroll" }}
         >
           {chooseChat.map((chat, index) => (
@@ -150,7 +159,7 @@ const ChatApp = () => {
           ))}
         </div>
 
-        <div className="flex-[2] h-full  w-full flex flex-col items-center justify-center lg:relative lg:translate-y-24 p-2">
+        <div className="flex-[2] h-full w-full flex flex-col items-center justify-center lg:relative lg:translate-y-24 p-2 ">
           {isChatActive && (
             <div id="chat" className="h-full w-full">
               <div
@@ -165,7 +174,7 @@ const ChatApp = () => {
                 {messages.map((msg, index) => (
                   <>
                     {tempUser && (
-                      <div className="flex items-center">
+                      <div className="flex items-center" key={index}>
                         <img
                           src={tempUser.pfp}
                           alt="pfp"
