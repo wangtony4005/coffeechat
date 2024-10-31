@@ -50,7 +50,27 @@ psql -U {insert user name you want for your database}
 \i schema.sql
 ```
 
-5. Run the server
+5. If running locally from an IDE create a virtual environment and run it
+
+```bash
+python -m venv /path/to/new/virtual/environment
+```
+Windows Command:
+```bash
+PS C:\> <venv>\Scripts\Activate.ps1
+```
+POSIX Command:
+```bash
+$ <venv>/bin/Activate.ps1
+```
+
+6. Install dependencies from requirements.txt file
+
+```bash
+pip install -r requirements.txt
+```
+
+7. Run the server
 
 ```bash
 flask run
