@@ -128,13 +128,24 @@ function Login({ onClose }) {
         .then((res) => {
           console.log(res.data);
           const data = res.data;
+          console.log(data.user_data);
           if (data.condition === "success") {
             localStorage.setItem("token", data.token);
             onClose();
-            navigate("/homepage", {
-              user_data: data.user_data,
-            });
-            return;
+
+            console.log(data.user_data[6]);
+            if (data.user_data[6] === "mentor") {
+              navigate("/mentor-profile", {
+                state: { user_data: data.user_data },
+              });
+              return;
+            }
+            if (data.user_data[6] === "mentee") {
+              navigate("/mentor-profile", {
+                state: { user_data: data.user_data },
+              });
+              return;
+            }
           } else {
             setError("Invalid credentials");
           }
