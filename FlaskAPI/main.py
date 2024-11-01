@@ -61,10 +61,6 @@ def addUser():
     password = data["password"]
 
     encrypted_password = cipher_suite.encrypt(password.encode())
-    
-
-
-
 
     newUser = add_user(firstname, lastname, username,  email, encrypted_password , role)
     if newUser == False:
@@ -149,15 +145,15 @@ def upload_mentee():
         return {"Response": "Mentee was not added successfully"}, 500
     return {"Response": "Mentee was added successfully"}, 201
 
+
 @app.post("/users/mentor/updateprofile")
 def upload_mentor():
     data = request.get_json()
     email = data["email"]
-    companyname = data["companyname"]
+    bio = data["bio"]
     jobtitle = data["jobtitle"]
-    industry = data["industry"]
-    yearsofexperience = data["yearsofexperience"]
-    newMentor = add_mentor(email, companyname, jobtitle, industry, yearsofexperience)
+    career_interest = data["career_interest"]
+    newMentor = add_mentor(email, bio, jobtitle, career_interest)
     if newMentor == False:
         return {"Response": "Mentor was not added successfully"}, 500
     return {"Response": "Mentor was added successfully"}, 201

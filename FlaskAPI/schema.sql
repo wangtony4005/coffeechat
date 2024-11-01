@@ -22,11 +22,10 @@ CREATE TABLE mentee {
 };
 
 CREATE TABLE mentor {
-    mentorEmail VARCHAR(100) NOT NULL,
-    companyName VARCHAR(100) NOT NULL,
-    jobTitle VARCHAR(255) NOT NULL,
-    industry VARCHAR(255) NOT NULL.
-    yearsOfExperience INT,
+    mentorEmail VARCHAR(100),
+    bio TEXT,
+    jobTitle VARCHAR(255),
+    career_interest VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 };
 

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import axios from "axios";
 import LogggedNavbar from "../components/LogggedNavbar";
 import MochaChart from "../components/mentor/MochaChart";
 import MentorNavbar from "../components/mentor/MentorNavbar";
+import { json } from "react-router-dom";
 const MentorProfile = () => {
   // State for form inputs (used for editing)
   const [name, setName] = useState("John Doe");
@@ -9,6 +11,8 @@ const MentorProfile = () => {
   const [bio, setBio] = useState(
     "As a passionate Software Engineer with a strong background in full-stack development, I thrive on solving complex problems and creating efficient, user-friendly applications. I hold a degree in Computer Science and have experience working with a variety of technologies, including React, Node.js, Python, and SQL."
   );
+  const [role, setRole] = useState("")
+  const [email, setEmail] = useState("sample@gmail.com")
   const [careerInterest, setCareerInterest] = useState("Technology");
   // const [menteeRequests, setMenteeRequests] = useState([]);
 
@@ -41,6 +45,30 @@ const MentorProfile = () => {
     },
     // Add more mentee requests as needed
   ];
+
+  const updateProfile = async () => {
+    if (role == "Mentor"){
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:5000//users/mentor/updateprofile",
+        {
+          email: email,
+          bio: bio,
+          jobTitle: jobTitle,
+          careerInterest: careerInterest,
+        }
+      );
+      if(response.status == 200) {
+        console.log("Mentor Added Successfully")
+      }
+    }
+    catch(error){
+      console.log(error)
+    }
+  } else {
+    console.log("This is not a mentor")
+  }
+}
 
   return (
     <main className="h-auto w-auto  bg-base-color">
@@ -78,6 +106,7 @@ const MentorProfile = () => {
 
                   <div className="text-wrap text-black">
                     <h2 className="text-xl font-bold mb-2">{name}</h2>
+                    <h3 className="text-md text-gray-600 mb-4">{role}</h3>
                     <h3 className="text-md text-gray-600 mb-4">{jobTitle}</h3>
                   </div>
                 </div>
@@ -86,13 +115,14 @@ const MentorProfile = () => {
                   {bio}
                 </p>
                 <p className="text-sm text-gray-700 mb-4">
-                  <strong>Email:</strong> sample@gmail.com
+                  <strong>Email:</strong> {email}
                 </p>
                 <p className="text-sm text-gray-700 mb-4">
                   <strong>Career Interest:</strong> {careerInterest}
                 </p>
               </div>
             </div>
+            <button onClick={updateProfile()}>Update Profile</button>
           </div>
 
           <div className="flex-1 flex flex-col space-y-4 text-black rounded-lg drop-shadow-lg">

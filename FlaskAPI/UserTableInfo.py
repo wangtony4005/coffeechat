@@ -48,15 +48,15 @@ def add_mentee(email, major, school, gradelevel, career_interests):
     return False
 
 
-def add_mentor(email, companyname, jobtitle, industry, yearsofexperience):
-    print("mentor's info: "  , email, companyname, jobtitle, industry, yearsofexperience)
+def add_mentor(email, bio, jobtitle, career_interest):
+    print("mentor's info: "  , email, bio, jobtitle, career_interest)
     addMentor = ("""
-            INSERT INTO users (email, companyname, jobtitle, industry, yearsofexperience)
-            VALUES (%s, %s, %s, %s, %s, %s)
+            INSERT INTO users (email, bio, jobtitle, career_interest)
+            VALUES (%s, %s, %s, %s)
         """)
     with connection:
         with connection.cursor() as cursor:
-            cursor.execute(addMentor, (email, companyname, jobtitle, industry, yearsofexperience))
+            cursor.execute(addMentor, (email, bio, jobtitle, career_interest))
             return True
     return False
 
