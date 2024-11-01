@@ -122,6 +122,8 @@ def signin():
         
 
         user = get_user(username, password)
+        role = user[6]
+        print("user role: ", role)
 
         token = jwt.encode({"username": username}, token_key, algorithm="HS256")
         if user is None:

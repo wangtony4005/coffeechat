@@ -74,7 +74,7 @@ def get_user(username, password):
                 decrypted_password = cipher_suite.decrypt(encrypt_password_bytes).decode()
                 
                 if password == decrypted_password:
-                    print("passwords are the same")
+                    print("passwords are the same", "user info: ", users)
                     return users
     
     return None
