@@ -1,4 +1,5 @@
 data/
+datacleaning/
 venv/
 .env
 __pycache__/
