@@ -8,6 +8,7 @@ from UserTableInfo import add_user, get_user, add_mentee, add_mentor
 from messagetableinfo import add_message
 from cryptography.fernet import Fernet
 import jwt
+from model_logic import model_route
 
 
 
@@ -163,6 +164,24 @@ def upload_mentor():
     if newMentor == False:
         return {"Response": "Mentor was not added successfully"}, 500
     return {"Response": "Mentor was added successfully"}, 201
+
+
+# @app.route("/model/fetchMentors", methods=["GET"])
+# def fetch_mentors():
+#     #load the model to fetch relaated mentors 
+#     return jsonify({"Response": "Mentors fetched successfully"}), 200
+
+#     model = joblib.load('./model/model.joblib')
+#     index = joblib.load('./model/index.joblib')
+
+
+
+#     print("model loaded")
+
+
+#     return jsonify({"Response": "Mentors fetched successfully"}), 200
+
+app.register_blueprint(model_route)
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)

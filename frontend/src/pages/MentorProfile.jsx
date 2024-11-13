@@ -6,6 +6,7 @@ import { IoIosExit } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { useLocation } from "react-router-dom";
+import axios from "axios";
 
 const MentorProfile = () => {
   // State for form inputs (used for editing)
@@ -20,6 +21,27 @@ const MentorProfile = () => {
     }
   }, [location.state]);
 
+  useEffect(() => {
+    const fetchMentors = async () => {
+      try {
+        const response = await axios.get(
+          "http://127.0.0.1:5000/model/fetchMentors"
+        );
+        console.log("response from the user: ", response.data);
+      } catch (error) {
+        if (error.response) {
+          console.error("Response error: ", error.response.data);
+        } else if (error.request) {
+          console.error("Request error: ", error.request);
+        } else {
+          console.error("General error: ", error.message);
+        }
+        console.error(error.config);
+      }
+    };
+
+    fetchMentors();
+  }, []);
   const [bio, setBio] = useState(
     "As a passionate Software Engineer with a strong background in full-stack development, I thrive on solving complex problems and creating efficient, user-friendly applications. I hold a degree in Computer Science and have experience working with a variety of technologies, including React, Node.js, Python, and SQL."
   );
