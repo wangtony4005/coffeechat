@@ -1,33 +1,30 @@
 import React from "react";
 import profile_icon from "../assets/anonprofile.jpg";
 
-const MentorProfileCard = ({ name, jobTitle, bio, careerInterest }) => {
+const ProfileCard = ({ image = profile_icon, name, jobTitle, location, bio }) => {
   return (
-    <div className="w-[350px] m-[20px] rounded-[4px] pb-[20px] bg-white shadow-lg">
-      <div className="bg-gradient-to-b from-[#F6F3EC] to-[#36302A] h-[125px] rounded-t-[4px]"></div>
-      <div className="flex flex-col items-center">
+    <div className="max-w-sm bg-[#f7f3e9] rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <div className="flex justify-center mt-6">
         <img
-          src={profile_icon}
-          alt="Profile"
-          className="h-[150px] rounded-full mt-[-75px] p-[5px] bg-white"
+          className="w-32 h-32 rounded-full object-cover border-4 border-[#8a7569]"
+          src={image}
+          alt={`${name}'s profile`}
         />
-        <div className="text-[36px] font-semibold">
-          {name || "Mentor Name"}
-        </div>
-        <div className="text-center">
-          <p>Status: Mentor</p>
-          <p>{jobTitle || "Job Title"}</p> 
-          <p>{bio || "Bio"}</p> 
-          <p>{careerInterest || "Career Interest"}</p>
-        </div>
-        <div className="text-[16px] bg-[#2b5dff] mx-[100px] my-[10px] py-[8px] px-[10px] rounded-[40px] text-white">
-          <a href="mailto:johndoe@gmail.com" className="no-underline">
-            Contact Me
-          </a>
-        </div>
+      </div>
+      <div className="p-6 text-center">
+        <h2 className="text-2xl font-semibold text-[#4b3f31]">{name}</h2>
+        <p className="text-lg text-[#6b5846]">{jobTitle}</p>
+        <p className="text-md text-[#8a7569]">{location}</p>
+        <p className="mt-4 text-[#4b3f31]">{bio}</p>
+        <button
+          className="mt-6 w-full bg-[#8a7569] text-white py-2 rounded-lg hover:bg-[#6b5846] transition-colors duration-300"
+          onClick={() => alert("Connect feature coming soon!")}
+        >
+          Connect
+        </button>
       </div>
     </div>
   );
 };
 
-export default MentorProfileCard;
+export default ProfileCard;
