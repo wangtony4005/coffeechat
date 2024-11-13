@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import Hamburger from "hamburger-react";
 import { motion } from "framer-motion";
 
-function LogggedNavbar() {
+function LogggedNavbar(props) {
   const [login, setLogin] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -31,6 +31,13 @@ function LogggedNavbar() {
     hidden: { opacity: 0, y: 0 },
     visible: { opacity: 1, y: 0 },
   };
+
+  console.log(props.firstName, props.lastName, props.username, props.email, props.role)
+  const firstName = props.firstName
+  const lastName = props.lastName
+  const username = props.username
+  const email = props.email
+  const role = props.role
   return (
     <>
       <motion.header
@@ -45,7 +52,7 @@ function LogggedNavbar() {
         </Link>
         <div className="hidden lg:flex space-x-2">
           <Link to="/find">Find</Link>
-          <Link to="/chatpage">Chats</Link>
+          <Link to="/chatpage" state={{firstName, lastName, username, email, role}}>Chats</Link>
         </div>
         <div className="hidden lg:flex space-x-4">
           <img

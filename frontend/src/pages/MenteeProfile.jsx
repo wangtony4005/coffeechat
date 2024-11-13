@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import LogggedNavbar from "../components/LogggedNavbar";
+import { useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
 import MenteeProfileCard from "../components/MenteeProfileCard";
 
@@ -17,6 +18,15 @@ const MenteeProfile = () => {
   const [bio, setBio] = useState('');
   const [careerInterest, setCareerInterest] = useState('');
 
+
+  const location = useLocation();
+  const {user_data} = location.state || {}
+  console.log(user_data)
+  const firstName = user_data[1]
+  const lastName = user_data[2]
+  const username = user_data[3]
+  const email = user_data[5]
+  const role = user_data[6]
 
   const handleSave = () => {
     // You can handle form submission or saving the data here

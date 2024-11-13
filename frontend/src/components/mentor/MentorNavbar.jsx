@@ -35,7 +35,7 @@ function MentorNavbar() {
   return (
     <>
       <header className="absolute w-screen z-10 flex items-center justify-between bg-nav-color py-6 px-6 font-semibold stroke-stone-400">
-        <Link to="/mentor-profile" className="lg:text-2xl sm:text-sm ">
+        <Link to="/homepage" className="lg:text-2xl sm:text-sm ">
           Mocha Mentors
         </Link>
 

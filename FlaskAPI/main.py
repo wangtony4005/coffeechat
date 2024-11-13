@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import base64
-from UserTableInfo import add_user, get_user, add_mentee, add_mentor
+from UserTableInfo import add_user, get_user, update_user, get_user_preferences, get_user_with_email
 from messagetableinfo import add_message
 from cryptography.fernet import Fernet
 import jwt
@@ -118,7 +118,7 @@ def signin():
         
 
         user = get_user(username, password)
-
+        print(user)
         token = jwt.encode({"username": username}, token_key, algorithm="HS256")
         if user is None:
             return {"error": "Invalid username or password"}, 401
@@ -132,31 +132,31 @@ def signin():
 def reset_password():
     pass
 
-@app.post("/users/mentee/updateprofile")
-def upload_mentee():
+@app.post("/users/getUser")
+def find_user_with_email():
     data = request.get_json()
-    email = data["email"]
-    major = data["major"]
-    school = data["school"]
-    gradelevel = data["gradelevel"]
-    career_interests = data["careerinterests"]
-    newMentee = add_mentee(email, major , school, gradelevel, career_interests)
-    if newMentee == False:
-        return {"Response": "Mentee was not added successfully"}, 500
-    return {"Response": "Mentee was added successfully"}, 201
+    user = None
+    if data:
+        email = data['email']
+        user = get_user_with_email(email)
+    if user:
+        return {"Reponse": "User found", "User": user}
+    return {"Response": "User not Found", "User": None}
 
 
-@app.post("/users/mentor/updateprofile")
-def upload_mentor():
+@app.post("/users/updateprofile")
+def add_interests_to_profile():
     data = request.get_json()
     email = data["email"]
     bio = data["bio"]
-    jobtitle = data["jobtitle"]
-    career_interest = data["career_interest"]
-    newMentor = add_mentor(email, bio, jobtitle, career_interest)
-    if newMentor == False:
-        return {"Response": "Mentor was not added successfully"}, 500
-    return {"Response": "Mentor was added successfully"}, 201
+    jobtitle = data["jobTitle"]
+    career_interest = data["careerInterest"]
+    update = update_user(email, bio, jobtitle, career_interest)
+    if update == False:
+        return {"Response": "Profile was not updated successfully"}, 500
+    user_preferences = get_user_with_email(email)
+    return {"Response": "Profile was updated successfully", "UserPreferences": user_preferences}, 201
+
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)

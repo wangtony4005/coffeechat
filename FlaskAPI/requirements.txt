@@ -11,4 +11,4 @@ Werkzeug==3.0.4
 flask-socketio
 datetime
 cryptography
-jwt
+PyJWT

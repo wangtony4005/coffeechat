@@ -17,6 +17,7 @@ host = os.getenv("DATABASE_HOST")
 connection = psycopg2.connect(
     dbname=dbname, user=user, password=password, host=host, port=port
 )
+connection.autocommit = True
 
 
 encrypt_key = os.getenv("ENCRYPT_KEY")
@@ -26,7 +27,7 @@ cipher_suite = Fernet(encrypt_key)
 def add_user(firstname, lastname, username,  email, password, role):
     print("users info: "  , firstname, lastname, username, email, password, role)
     addUser = ("""
-            INSERT INTO users (firstname, lastname, username, password, email, userrole)
+            INSERT INTO users (firstname, lastname, username, password, email, userType)
             VALUES (%s, %s, %s, %s, %s, %s)
         """)
     with connection:
@@ -35,28 +36,16 @@ def add_user(firstname, lastname, username,  email, password, role):
             return True
     return False
 
-def add_mentee(email, major, school, gradelevel, career_interests):
-    print("mentee's info: "  , email, major, school, gradelevel, career_interests)
-    addMentee = ("""
-            INSERT INTO users (email, major, school, gradelevel, career_interests)
-            VALUES (%s, %s, %s, %s, %s)
+def update_user(email, bio, jobTitle, career_interest):
+    updateUser = ("""UPDATE users
+        SET bio = COALESCE(%s, bio),
+            jobTitle = COALESCE(%s, jobTitle),
+            career_interest = COALESCE(%s, career_interest)
+        WHERE email = %s;
         """)
     with connection:
         with connection.cursor() as cursor:
-            cursor.execute(addMentee, (email, major, school, gradelevel, career_interests))
-            return True
-    return False
-
-
-def add_mentor(email, bio, jobtitle, career_interest):
-    print("mentor's info: "  , email, bio, jobtitle, career_interest)
-    addMentor = ("""
-            INSERT INTO users (email, bio, jobtitle, career_interest)
-            VALUES (%s, %s, %s, %s)
-        """)
-    with connection:
-        with connection.cursor() as cursor:
-            cursor.execute(addMentor, (email, bio, jobtitle, career_interest))
+            cursor.execute(updateUser, (bio, jobTitle, career_interest, email))
             return True
     return False
 
@@ -66,6 +55,7 @@ def get_user(username, password):
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
             users = cursor.fetchone()
+            
             if users:
                 encrypt_password_hex = users[4]
                 
@@ -77,4 +67,23 @@ def get_user(username, password):
                     print("passwords are the same")
                     return users
     
+    return None
+def get_user_preferences(email):
+    userPreferences = ("""
+                    SELECT bio, jobTitle, career_interest from users where email = %s
+                       """)
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(userPreferences, (email,))
+            user_info = cursor.fetchone()
+            if user_info:
+                return user_info
+    return None
+    
+def get_user_with_email(email):
+    with connection.cursor() as cursor:
+        cursor.execute("""SELECT * FROM users WHERE email = %s""", (email,))
+        user_info = cursor.fetchone()
+        if user_info:
+            return user_info
     return None

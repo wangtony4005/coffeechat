@@ -1,20 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useLocation, useNavigate } from "react-router-dom";
 import LogggedNavbar from "../components/LogggedNavbar";
 import MochaChart from "../components/mentor/MochaChart";
 import MentorNavbar from "../components/mentor/MentorNavbar";
 import { json } from "react-router-dom";
-const MentorProfile = () => {
+import MentorUpdateProfile from "../pages/MentorUpdateProfile"
+
+const MentorProfile = ({user, setUser}) => {
   // State for form inputs (used for editing)
   const [name, setName] = useState("John Doe");
   const [jobTitle, setJobTitle] = useState("Software Engineer");
   const [bio, setBio] = useState(
     "As a passionate Software Engineer with a strong background in full-stack development, I thrive on solving complex problems and creating efficient, user-friendly applications. I hold a degree in Computer Science and have experience working with a variety of technologies, including React, Node.js, Python, and SQL."
   );
+  console.log(user)
   const [role, setRole] = useState("")
   const [email, setEmail] = useState("sample@gmail.com")
   const [careerInterest, setCareerInterest] = useState("Technology");
   // const [menteeRequests, setMenteeRequests] = useState([]);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const {user_data, form_data} = location.state || {}
+  console.log(setUser)
+  let firstName = user[1]
+  let lastName = user[2]
+  let username = user[3]
+  let user_email = user[5]
+  let user_role = user[6]
+  let job_Title = user[8]
+  let bio_info = user[7]
+  let career_Interest = user[9]
 
   const menteeRequests = [
     {
@@ -46,30 +62,12 @@ const MentorProfile = () => {
     // Add more mentee requests as needed
   ];
 
-  const updateProfile = async () => {
-    if (role == "Mentor"){
-    try {
-      const response = await axios.post(
-        "http://127.0.0.1:5000//users/mentor/updateprofile",
-        {
-          email: email,
-          bio: bio,
-          jobTitle: jobTitle,
-          careerInterest: careerInterest,
-        }
-      );
-      if(response.status == 200) {
-        console.log("Mentor Added Successfully")
-      }
-    }
-    catch(error){
-      console.log(error)
-    }
-  } else {
-    console.log("This is not a mentor")
+  const updateProfile = () => {
+    navigate("/mentor-update-profile")
   }
-}
 
+
+console.log(job_Title, bio_info, career_Interest)
   return (
     <main className="h-auto w-auto  bg-base-color">
       <MentorNavbar />
@@ -105,24 +103,24 @@ const MentorProfile = () => {
                   </div>
 
                   <div className="text-wrap text-black">
-                    <h2 className="text-xl font-bold mb-2">{name}</h2>
-                    <h3 className="text-md text-gray-600 mb-4">{role}</h3>
-                    <h3 className="text-md text-gray-600 mb-4">{jobTitle}</h3>
+                    <h2 className="text-xl font-bold mb-2">{firstName + " " + lastName}</h2>
+                    <h3 className="text-md text-gray-600 mb-4">{user_role}</h3>
+                    <h3 className="text-md text-gray-600 mb-4">{job_Title}</h3>
                   </div>
                 </div>
                 <p className="text-sm text-center text-wrap text-gray-700 mb-4">
                   <strong>Bio: </strong>
-                  {bio}
+                  {bio_info}
                 </p>
                 <p className="text-sm text-gray-700 mb-4">
-                  <strong>Email:</strong> {email}
+                  <strong>Email:</strong> {user_email}
                 </p>
                 <p className="text-sm text-gray-700 mb-4">
-                  <strong>Career Interest:</strong> {careerInterest}
+                  <strong>Career Interest:</strong> {career_Interest}
                 </p>
               </div>
             </div>
-            <button onClick={updateProfile()}>Update Profile</button>
+            <button onClick={() => updateProfile()}>Update Profile</button>
           </div>
 
           <div className="flex-1 flex flex-col space-y-4 text-black rounded-lg drop-shadow-lg">

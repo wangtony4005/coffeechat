@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { io } from "socket.io-client";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import LoggedNavBar from "../components/LogggedNavbar";
 import { IoArrowBackCircle } from "react-icons/io5";
 
@@ -70,19 +70,21 @@ const chooseChat = [
 ];
 
 const ChatApp = () => {
-  const [username, setUsername] = useState("");
+  const [username1, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [isChatActive, setIsChatActive] = useState(false);
   const [room, setRoom] = useState("");
 
   const navigate = useNavigate(); // Use useNavigate for programmatic navigation
-
+  const location = useLocation();
+  const {firstName, lastName, username, email, role} = location.state || {};
+ console.log(firstName, lastName, username, email, role)
   const handleBackClick = () => {
     navigate(-1); // Navigate back to the previous page
   };
   const tempUser = {
-    username: "Crosve",
+    username1: "Crosve",
     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
   };
 
@@ -106,18 +108,18 @@ const ChatApp = () => {
 
   const handleJoin = () => {
     setIsChatActive(true);
-    socket.emit("join_room", { username, room });
+    socket.emit("join_room", { username1, room });
   };
 
   const handleLeave = () => {
     setIsChatActive(false);
-    socket.emit("leave_room", { username, room });
+    socket.emit("leave_room", { username1, room });
   };
 
   const handleSendMessage = (e) => {
     e.preventDefault();
 
-    socket.emit("new_message", { username, message, room });
+    socket.emit("new_message", { username1, message, room });
     setMessage("");
   };
 
@@ -180,7 +182,7 @@ const ChatApp = () => {
                           alt="pfp"
                           className="w-8 h-8 rounded-full"
                         />
-                        <h1>{msg.username}</h1>
+                        <h1>{msg.username1}</h1>
                       </div>
                     )}
                     <div
