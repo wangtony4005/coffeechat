@@ -55,6 +55,7 @@ def get_user(username, password):
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM users WHERE username = %s", (username,))
             users = cursor.fetchone()
+            print("user info fetched from db: ", users)
             
             if users:
                 encrypt_password_hex = users[4]

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Login({ onClose, user, setUser }) {
-  console.log(setUser)
+  console.log(setUser);
   const [reset, setReset] = useState(false);
   const [createAccount, setCreateAccount] = useState(false);
   const [login, setLogin] = useState(true);
@@ -112,7 +112,7 @@ function Login({ onClose, user, setUser }) {
     // setError("");
     // setMessage("");
     // e.preventDefault();
-    let mentorProfileCheck = false
+    let mentorProfileCheck = false;
 
     console.log(userName, password);
 
@@ -134,16 +134,15 @@ function Login({ onClose, user, setUser }) {
           if (data.condition === "success") {
             localStorage.setItem("token", data.token);
             onClose();
-            const user_info = data.user_data
-            await setUser(user_info)
-            console.log(user)
-          } 
-          if (data.user_data[6] == "mentee"){
-            navigate("/mentor-profile");
-          } else if (data.user_data[6] == "mentor"){
-            navigate("/mentor-profile")
+            const user_info = data.user_data;
+            await setUser(user_info);
+            console.log(user);
           }
-          else {
+          if (data.user_data[6] == "mentee") {
+            navigate("/profile");
+          } else if (data.user_data[6] == "mentor") {
+            navigate("/profile");
+          } else {
             setError("Invalid credentials");
           }
         })

@@ -9,6 +9,7 @@ from messagetableinfo import add_message
 from cryptography.fernet import Fernet
 import jwt
 from model_logic import fetch_mentors
+from model_logic import model_route
 
 
 
@@ -119,7 +120,7 @@ def signin():
         
 
         user = get_user(username, password)
-        print(user)
+        print("user info: ",user)
         role = user[6]
         print("user role: ", role)
 

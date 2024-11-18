@@ -12,13 +12,13 @@ import Find from "./pages/Find";
 import MentorProfile from "./pages/MentorProfile";
 import MenteeProfile from "./pages/MenteeProfile";
 import MenteeDashboard from "./pages/MenteeDashboard";
-import MentorUpdateProfile from "./pages/MentorUpdateProfile"
+import MentorUpdateProfile from "./pages/MentorUpdateProfile";
 
 import "./App.css";
 
 function App() {
-  const [user, setUser] = useState()
-  console.log(user)
+  const [user, setUser] = useState();
+  console.log(user);
   function ProtectedRoute({ children }) {
     const navigate = useNavigate();
     const token = localStorage.getItem("token");
@@ -39,18 +39,18 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home user={user} setUser={setUser}/>}/>
+        <Route path="/" element={<Home user={user} setUser={setUser} />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/chatpage" element={<ChatPage />} />
-        <Route
+        {/* <Route
           path="/homepage"
           element={
             <ProtectedRoute>
               <Homepage user={user} setUser={setUser}/>
             </ProtectedRoute>
           }
-        />
+        /> */}
 
         <Route
           path="/find"
@@ -61,32 +61,17 @@ function App() {
           }
         />
         <Route
-          path="/mentor-profile"
-          element={
-            
-              <MentorProfile user={user} setUser={setUser}/>
-            
-          }
+          path="/profile"
+          element={<MentorProfile user={user} setUser={setUser} />}
         />
         <Route
           path="/mentee-profile"
-          element={
-            
-              <MenteeProfile user={user} setUser={setUser}/>
-            
-          }
+          element={<MenteeProfile user={user} setUser={setUser} />}
         />
-        <Route
-          path="/mentee-dashboard"
-          element={
-              <MenteeDashboard />
-          }
-        />
+        <Route path="/mentee-dashboard" element={<MenteeDashboard />} />
         <Route
           path="/mentor-update-profile"
-          element={
-              <MentorUpdateProfile user={user} setUser={setUser}/>
-          }
+          element={<MentorUpdateProfile user={user} setUser={setUser} />}
         />
       </Routes>
     </BrowserRouter>
