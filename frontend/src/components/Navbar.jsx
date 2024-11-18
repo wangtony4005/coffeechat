@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Hamburger from "hamburger-react";
 import { motion } from "framer-motion";
-
 import Login from "./Login";
 
 function Navbar({user, setUser}) {
@@ -10,15 +9,11 @@ function Navbar({user, setUser}) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    if (login) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = login ? "hidden" : "auto";
   }, [login]);
 
   const headerVariants = {
-    hidden: { opacity: 0, y: 0 },
+    hidden: { opacity: 0, y: -20 },
     visible: { opacity: 1, y: 0 },
   };
 
@@ -28,43 +23,58 @@ function Navbar({user, setUser}) {
         initial="hidden"
         animate="visible"
         variants={headerVariants}
-        transition={{ duration: 2.5, ease: "easeOut" }}
-        className="absolute w-screen z-10 flex items-center justify-between bg-nav-color py-6 px-6 font-semibold stroke-stone-400"
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        className="absolute w-full z-10 flex items-center justify-between bg-nav-color py-4 px-6 shadow-lg"
       >
-        <Link to="/" className="lg:text-2xl sm:text-sm">
+        <Link to="/" className="lg:text-3xl text-xl font-bold text-mocha-color tracking-wide">
           Mocha Mentors
         </Link>
-        <div className="hidden lg:flex space-x-2">
-          <Link to="/resources">Resources</Link>
-          <Link to="/faqs">FAQS</Link>
+        
+        <nav className="hidden lg:flex flex-1 justify-center space-x-8 text-lg">
+          <Link to="/resources" className="text-black hover:text-mocha-color transition">
+            Resources
+          </Link>
+          <Link to="/faqs" className="text-black hover:text-mocha-color transition">
+            FAQS
+          </Link>
+        </nav>
+        <div className="hidden lg:flex">
+          <button 
+            onClick={() => setLogin(true)}
+            className="bg-mocha-color text-white py-2 px-4 rounded-lg shadow-md hover:bg-darker-nav-color transition"
+          >
+            Login
+          </button>
         </div>
-        <div className="hidden lg:flex space-x-4">
-          <button onClick={() => setLogin(true)}>Login</button>
-        </div>
-        <div className="lg:hidden flex items-center z-auto">
+        <div className="lg:hidden flex items-center">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            <Hamburger />
+            <Hamburger toggled={isMenuOpen} />
           </button>
         </div>
         {isMenuOpen && (
-          <div className="absolute top-16 right-0 w-full z-40 bg-nav-color flex flex-col items-center lg:hidden">
-            <Link
-              to="/resources"
-              className="py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              Resources
-            </Link>
-            <Link
-              to="/faqs"
-              className="py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              FAQS
-            </Link>
-            <button onClick={() => setLogin(true)} className="py-2">
-              Login
-            </button>
+          <div className="absolute top-16 right-0 w-full z-40 bg-nav-color shadow-lg lg:hidden">
+            <nav className="flex flex-col items-center py-4 space-y-4">
+              <Link 
+                to="/resources" 
+                className="text-black text-lg"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Resources
+              </Link>
+              <Link 
+                to="/faqs" 
+                className="text-black text-lg"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                FAQS
+              </Link>
+              <button 
+                onClick={() => { setIsMenuOpen(false); setLogin(true); }}
+                className="bg-mocha-color text-white py-2 px-6 rounded-lg shadow-md hover:bg-darker-nav-color transition"
+              >
+                Login
+              </button>
+            </nav>
           </div>
         )}
       </motion.header>
@@ -74,13 +84,6 @@ function Navbar({user, setUser}) {
           <Login onClose={() => setLogin(false)} user={user} setUser={setUser}/>
         </>
       )}
-      <style>
-        {`
-          body.blur-background {
-            filter: blur(5px);
-          }
-        `}
-      </style>
     </>
   );
 }

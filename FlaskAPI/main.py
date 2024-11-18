@@ -8,6 +8,7 @@ from UserTableInfo import add_user, get_user, update_user, get_user_preferences,
 from messagetableinfo import add_message
 from cryptography.fernet import Fernet
 import jwt
+from model_logic import fetch_mentors
 
 
 
@@ -119,6 +120,9 @@ def signin():
 
         user = get_user(username, password)
         print(user)
+        role = user[6]
+        print("user role: ", role)
+
         token = jwt.encode({"username": username}, token_key, algorithm="HS256")
         if user is None:
             return {"error": "Invalid username or password"}, 401
@@ -157,6 +161,24 @@ def add_interests_to_profile():
     user_preferences = get_user_with_email(email)
     return {"Response": "Profile was updated successfully", "UserPreferences": user_preferences}, 201
 
+@app.post("/model/fetchMentors")
+def fetch_mentors_from_model(career_interest):
+    fetch_mentors(career_interest)
+    return
+#     #load the model to fetch relaated mentors 
+#     return jsonify({"Response": "Mentors fetched successfully"}), 200
+
+#     model = joblib.load('./model/model.joblib')
+#     index = joblib.load('./model/index.joblib')
+
+
+
+#     print("model loaded")
+
+
+#     return jsonify({"Response": "Mentors fetched successfully"}), 200
+
+app.register_blueprint(model_route)
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)

@@ -12,3 +12,6 @@ flask-socketio
 datetime
 cryptography
 PyJWT
+joblib
+pandas
+faiss

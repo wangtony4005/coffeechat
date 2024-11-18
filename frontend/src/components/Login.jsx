@@ -130,6 +130,7 @@ function Login({ onClose, user, setUser }) {
         .then(async (res) => {
           console.log(res.data);
           const data = res.data;
+          console.log(data.user_data);
           if (data.condition === "success") {
             localStorage.setItem("token", data.token);
             onClose();
@@ -138,7 +139,7 @@ function Login({ onClose, user, setUser }) {
             console.log(user)
           } 
           if (data.user_data[6] == "mentee"){
-            navigate("/mentee-profile");
+            navigate("/mentor-profile");
           } else if (data.user_data[6] == "mentor"){
             navigate("/mentor-profile")
           }

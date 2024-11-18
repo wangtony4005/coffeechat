@@ -16,9 +16,9 @@ const MentorProfileCard = ({ name, jobTitle, bio, careerInterest }) => {
         </div>
         <div className="text-center">
           <p>Status: Mentor</p>
-          <p>{jobTitle || "Job Title"}</p> 
-          <p>{bio || "Bio"}</p> 
-          <p>{careerInterest || "Career Interest"}</p>
+          <p>Job Title: {jobTitle || "Job Title"}</p> 
+          <p>Bio: {bio || "Bio"}</p> 
+          <p>Career Interest: {careerInterest || "Career Interest"}</p>
         </div>
         <div className="text-[16px] bg-[#2b5dff] mx-[100px] my-[10px] py-[8px] px-[10px] rounded-[40px] text-white">
           <a href="mailto:johndoe@gmail.com" className="no-underline">
