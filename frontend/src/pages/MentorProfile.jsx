@@ -10,6 +10,8 @@ import axios from "axios";
 import { json } from "react-router-dom";
 import MentorUpdateProfile from "../pages/MentorUpdateProfile";
 import MentorProfileCard from "../components/MentorProfileCard";
+import MentorFInd from "../components/mentee/MentorFInd";
+import MenteeRequests from "../components/mentor/MenteeRequests";
 
 const MentorProfile = ({ user, setUser }) => {
   // State for form inputs (used for editing)
@@ -65,8 +67,10 @@ const MentorProfile = ({ user, setUser }) => {
     const fetchMentors = async () => {
       try {
         const response = await axios
-          .get("http://127.0.0.1:5000/model/fetchMentors", {
-            careerInterest: career_Interest,
+          .post("http://127.0.0.1:5000/users/fetchMentors", {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
           })
           .then((res) => {
             console.log(res.data);
@@ -84,7 +88,7 @@ const MentorProfile = ({ user, setUser }) => {
       }
     };
 
-    fetchMentors();
+    // fetchMentors();
   }, []);
 
   const menteeRequests = [
@@ -171,31 +175,16 @@ const MentorProfile = ({ user, setUser }) => {
 
           <div className="flex-1 flex flex-col space-y-4 text-black rounded-lg drop-shadow-lg">
             <div className="flex-1 flex flex-col items-center justify-start p-4 bg-white rounded-lg drop-shadow-lg overflow-auto">
-              {"mentor" == "mentor" ? (
+              {user && user[6] == "mentee" ? (
                 <>
-                  <h2 className="text-lg font-bold mb-4">Mentee Requests</h2>
-                  <div className="grid grid-cols-2 gap-4 ">
-                    {menteeRequests.map((request) => (
-                      <div
-                        key={request.id}
-                        className="p-2 border rounded-lg bg-gray-100 shadow"
-                      >
-                        <p>
-                          <strong>Name:</strong> {request.name}
-                        </p>
-                        <p>
-                          <strong>Request Date:</strong> {request.requestDate}
-                        </p>
-                        <p>
-                          <strong>Bio: </strong>
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                  <h2 className="text-lg font-bold mb-4">Mentor Find</h2>
+                  <MentorFInd />
                 </>
               ) : (
                 <>
-                  {mentorCards.map((mentor) => (
+                  <h2 className="text-lg font-bold mb-4">Mentee requests</h2>
+                  <MenteeRequests />
+                  {/* {mentorCards.map((mentor) => (
                     <div
                       key={mentor[0]}
                       className="p-2 border rounded-lg bg-gray-100 shadow"
@@ -210,7 +199,7 @@ const MentorProfile = ({ user, setUser }) => {
                         <strong>Bio: </strong> {mentor[7]}
                       </p>
                     </div>
-                  ))}
+                  ))} */}
                 </>
               )}
             </div>

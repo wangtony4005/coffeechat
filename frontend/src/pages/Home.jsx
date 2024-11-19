@@ -7,8 +7,8 @@ import { motion, useInView, useAnimation } from "framer-motion";
 import Fade from "../components/Fade";
 import { useNavigate } from "react-router-dom";
 
-function Home({user, setUser}) {
-  console.log(user, setUser)
+function Home({ user, setUser }) {
+  console.log(user, setUser);
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
   const Navigate = useNavigate();
@@ -22,7 +22,7 @@ function Home({user, setUser}) {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      Navigate("/homepage");
+      Navigate("/profile");
     }
   }, []);
 
@@ -35,7 +35,7 @@ function Home({user, setUser}) {
   return (
     <main className="h-auto w-auto bg-stone-700">
       <div className="w-screen h-screen relative bg-stone-700">
-        <Navbar user={user} setUser={setUser}/>
+        <Navbar user={user} setUser={setUser} />
 
         <div>
           {/* Motion div with a gradient overlay and background image */}
@@ -53,7 +53,9 @@ function Home({user, setUser}) {
           >
             {/* Text content without semi-transparent background */}
             <div className="flex items-center justify-center flex-col text-center">
-              <h1 className="text-5xl md:text-8xl font-bold text-white drop-shadow-lg">WHO WE ARE</h1>
+              <h1 className="text-5xl md:text-8xl font-bold text-white drop-shadow-lg">
+                WHO WE ARE
+              </h1>
               <h1 className="text-2xl md:text-3xl mt-2 w-3/4 md:w-1/2 font-light text-white drop-shadow-lg">
                 MochaMentors is an online platform that lets students connect
                 with professionals.
