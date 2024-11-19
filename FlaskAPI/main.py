@@ -10,6 +10,8 @@ from cryptography.fernet import Fernet
 import jwt
 from model_logic import fetch_mentors
 from model_logic import model_route
+from functools import wraps
+
 
 
 
@@ -28,8 +30,8 @@ socketio = SocketIO(app, cors_allowed_origins='*')
 
 
 CORS(app, resources={r"/users/*": {"origins": "*"}},
-     methods=["GET", "POST"],
-     allow_headers=["Content-Type"])
+     methods=["GET", "POST", "OPTIONS"],
+     allow_headers=["Content-Type", "Authorization"])
 
 dbname = os.getenv("DATABASE_NAME")
 user = os.getenv("DATABASE_USER")
@@ -44,6 +46,48 @@ cipher_suite = Fernet(encrypt_key)
 connection = psycopg2.connect(
     dbname=dbname, user=user, password=password, host=host, port=port
 )
+
+def jwttoken_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = None
+
+        if 'Authorization' in request.headers:
+            token = request.headers['Authorization'].split(" ")[1]
+
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 401
+
+        try:
+            data = jwt.decode(token, token_key, algorithms=["HS256"])
+            print("decoded data: ", data)
+            request.user = data['username']
+        except jwt.ExpiredSignatureError:
+            return jsonify({'message': 'Token has expired!'}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({'message': 'Invalid token!'}), 401
+
+        return f(*args, **kwargs)
+
+    return decorated
+
+def jwt_get_username():
+    print("getting username")
+    if 'Authorization' in request.headers:
+        token = request.headers['Authorization'].split(" ")[1]
+        try:
+            data = jwt.decode(token, token_key, algorithms=["HS256"])
+            print("decoded data: ", data)
+
+            return data['username']
+        except jwt.ExpiredSignatureError:
+            print("Token has expired")
+            return None
+        except jwt.InvalidTokenError:
+            print("Invalid token")
+            return None
+    print("No authorization header")
+    return None
 
 @app.get("/users/create_table")
 def createUserTable():
@@ -162,10 +206,15 @@ def add_interests_to_profile():
     user_preferences = get_user_with_email(email)
     return {"Response": "Profile was updated successfully", "UserPreferences": user_preferences}, 201
 
-@app.post("/model/fetchMentors")
-def fetch_mentors_from_model(career_interest):
-    fetch_mentors(career_interest)
-    return
+@app.post("/users/fetchMentors")
+@jwttoken_required
+def fetch_mentors_from_model():
+    print("request data: ", request)
+    print("fetching mentors")
+    username = request.user
+    print("username: ", username)
+    # fetch_mentors(career_interest)
+    return jsonify({"Response": "Mentors fetched successfully"}), 200
 #     #load the model to fetch relaated mentors 
 #     return jsonify({"Response": "Mentors fetched successfully"}), 200
 
