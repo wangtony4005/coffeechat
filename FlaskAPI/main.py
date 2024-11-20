@@ -5,6 +5,7 @@ from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import base64
 from UserTableInfo import add_user, get_user, update_user, get_user_preferences, get_user_with_email
+from MatchTableInfo import add_inital_match, update_match_status_accepted, update_match_status_rejected
 from messagetableinfo import add_message
 from cryptography.fernet import Fernet
 import jwt
@@ -205,6 +206,40 @@ def add_interests_to_profile():
         return {"Response": "Profile was not updated successfully"}, 500
     user_preferences = get_user_with_email(email)
     return {"Response": "Profile was updated successfully", "UserPreferences": user_preferences}, 201
+
+@app.post("/matches/addmatch")
+def add_initial_match_request():
+    data = request.get_json()
+    menteeEmail = data["menteeEmail"]
+    mentorEmail = data["mentorEmail"]
+    success = add_inital_match(menteeEmail, mentorEmail)
+    if success:
+        return {"Response": "Request was made successfully"}
+    else:
+        return {"Response": "Request was not made successfully"}
+    
+
+@app.post("/matches/updatematch/statustoaccepted")
+def update_match_status_to_accepted():
+    data = request.get_json()
+    menteeEmail = data["menteeEmail"]
+    mentorEmail = data["mentorEmail"]
+    success = update_match_status_accepted(menteeEmail, mentorEmail)
+    if success:
+        return {"Response": "Request was made successfully"}
+    else:
+        return {"Response": "Request was not made successfully"}
+    
+@app.post("/matches/updatematch/statustorejected")
+def update_match_status_to_rejected():
+    data = request.get_json()
+    menteeEmail = data["menteeEmail"]
+    mentorEmail = data["mentorEmail"]
+    success = update_match_status_rejected(menteeEmail, mentorEmail)
+    if success:
+        return {"Response": "Request was made successfully"}
+    else:
+        return {"Response": "Request was not made successfully"}
 
 @app.post("/users/fetchMentors")
 @jwttoken_required

@@ -62,6 +62,15 @@ const MentorProfile = ({ user, setUser }) => {
   // let bio_info = user[7];
   // let career_Interest = user[9];
   // let fullname = firstName + " " + lastName;
+  const handleCreateMatch = async (email) => {
+    try{
+      const response = await axios.post("http://127.0.0.1:5000/matches/addmatch", {menteeEmail: user[5], mentorEmail: email}).then((res) => {
+        console.log(res.data)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
 
   useEffect(() => {
     const fetchMentors = async () => {
@@ -198,6 +207,7 @@ const MentorProfile = ({ user, setUser }) => {
                       <p>
                         <strong>Bio: </strong> {mentor[7]}
                       </p>
+                      <button onClick={handleCreateMatch(mentor[5])}>Send Match Request</button>
                     </div>
                   ))} */}
                 </>
