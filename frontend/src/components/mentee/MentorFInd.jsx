@@ -7,16 +7,17 @@ function MentorFInd() {
     const fetchMentors = async () => {
       try {
         const response = await axios.post(
-          "http://127.0.0.1:5000/users/fetchMentors", // URL
-          {}, // Request body (you can send data here if necessary, or keep it empty)
+          "http://127.0.0.1:5000/users/fetchMentors",
+          {},
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`, // Send the token in the Authorization header
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }
         );
-        console.log(response.data); // Handle the response
+        console.table(response.data);
+        setMentorList(response.data.data);
       } catch (error) {
         console.error("There was an error!", error); // Handle errors
       }
@@ -24,49 +25,22 @@ function MentorFInd() {
 
     fetchMentors();
   }, []);
-  const menteeRequests = [
-    {
-      id: 1,
-      name: "Alice Smith",
-      requestDate: "2024-10-22",
-    },
-    {
-      id: 2,
-      name: "Bob Johnson",
-      requestDate: "2024-10-23",
-    },
-    {
-      id: 3,
-      name: "Charlie Brown",
-      requestDate: "2024-10-24",
-    },
-    {
-      id: 4,
-      name: "David Williams",
-      requestDate: "2024-10-25",
-    },
-    { id: 5, name: "Eva Green", requestDate: "2024-10-26", status: "Pending" },
-    {
-      id: 6,
-      name: "Frank Miller",
-      requestDate: "2024-10-27",
-    },
-  ];
+
   return (
     <div className="grid grid-cols-2 gap-4 ">
-      {menteeRequests.map((request) => (
-        <div
-          key={request.id}
-          className="p-2 border rounded-lg bg-gray-100 shadow"
-        >
+      {mentorList.map((mentor, index) => (
+        <div key={index} className="p-2 border rounded-lg bg-gray-100 shadow">
           <p>
-            <strong>Name:</strong> {request.name}
+            <strong>Name:</strong> {mentor.firstname} {mentor.lastname}
           </p>
           <p>
-            <strong>Request Date:</strong> {request.requestDate}
+            <strong>Job Title</strong> {mentor.jobTitle}
           </p>
           <p>
-            <strong>Bio: </strong>
+            <strong>bio: </strong> {mentor.bio}
+          </p>
+          <p>
+            <strong>Career Interest: </strong> {mentor.careerInterest}
           </p>
         </div>
       ))}

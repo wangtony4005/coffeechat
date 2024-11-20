@@ -39,11 +39,11 @@ def fetch_mentors(career_interest):
     print("D: ", D)
     indices = I[0]
 
-    for index in indices:
-        print(df.iloc[index]['Job_Title'], '\n\n')
+    job_titles = set()
     
 
+    for index in indices:
+        job_titles.add(df.iloc[index]['Job_Title'])
 
-
-
-    return jsonify({"Response": "Mentors fetched successfully"}), 200
+    return job_titles
+    

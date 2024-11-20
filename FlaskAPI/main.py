@@ -244,10 +244,61 @@ def update_match_status_to_rejected():
 @app.post("/users/fetchMentors")
 @jwttoken_required
 def fetch_mentors_from_model():
-    print("request data: ", request)
-    print("fetching mentors")
+   
     username = request.user
-    print("username: ", username)
+    try:
+        #query to get users information for db
+        query = """SELECT career_interest, bio, jobTitle FROM users WHERE username = %s"""
+        
+
+        
+        with connection.cursor() as cursor:
+            cursor.execute(query, (username,))
+            user_info = cursor.fetchone()
+
+            if not user_info:
+                return {"error": "User not found"}, 404
+
+            user_sentence = f"The user is interested in {user_info[0]} and has a job title of {user_info[2]}. Their bio is {user_info[1]}"
+            result = list(fetch_mentors(user_sentence))
+
+            #query users with the same job title
+            job_title_query = """select * from users where jobTitle = %s"""
+
+            all_mentors = set()
+
+            for res in result:
+                cursor.execute(job_title_query, (res,))
+                mentors = cursor.fetchall()
+                if not mentors:
+                    continue
+                all_mentors.add(mentor[0] for mentor in mentors)
+
+
+            if not all_mentors:
+                cursor.execute("select * from users where userType = 'mentor'")
+                res = cursor.fetchall()
+            data = []
+            for mentor in res:
+                data.append({
+                    "firstname": mentor[1],
+                    "lastname": mentor[2],
+                    "email": mentor[5],
+                    "bio": mentor[7],
+                    "jobTitle": mentor[8],
+                    "careerInterest": mentor[9]
+                })
+                
+            return jsonify({"Response": "Mentors fetched successfully", "data": data}), 200
+            
+
+
+
+
+            
+
+    except Exception as e:
+        return {"error": str(e)}, 500
     # fetch_mentors(career_interest)
     return jsonify({"Response": "Mentors fetched successfully"}), 200
 #     #load the model to fetch relaated mentors 
