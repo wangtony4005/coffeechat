@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LogggedNavbar from "../components/LogggedNavbar";
 import Footer from "../components/Footer";
-import MentorProfileCard from "../components/MentorProfileCard";
+import ProfileCard from "../components/ProfileCard";
 
 function MenteeDashboard() {
     const [userName, setUserName] = useState("");
@@ -70,7 +70,7 @@ function MenteeDashboard() {
                             >
                                 Close
                             </button>
-                            <MentorProfileCard
+                            <ProfileCard
                                 name={selectedMentor.name}
                                 jobTitle={selectedMentor.job}
                                 bio={selectedMentor.bio}

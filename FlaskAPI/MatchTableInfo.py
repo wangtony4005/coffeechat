@@ -24,7 +24,7 @@ def generate_random_number_string(length):
 
 def add_inital_match(menteeEmail, mentorEmail):
     print(menteeEmail, mentorEmail)
-    matchID = generate_random_number_string(10)
+    matchID = generate_random_number_string(16)
     matchStatus = "Pending"
     coffeechatStatus = False
     add_match = ("""
@@ -40,7 +40,7 @@ def update_match_status_accepted(menteeEmail, mentorEmail):
     print(menteeEmail, mentorEmail)
     update_to_accepted = ("""
                         UPDATE match
-                        SET status = 'Accepted'
+                        SET matchStatus = 'Accepted'
                         WHERE menteeEmail = %s AND mentorEmail = %s
                         """)
     with connection.cursor() as cursor:
@@ -52,10 +52,20 @@ def update_match_status_rejected(menteeEmail, mentorEmail):
     print(menteeEmail, mentorEmail)
     update_to_rejected = ("""
                         UPDATE match
-                        SET status = 'Rejected'
+                        SET matchStatus = 'Rejected'
                         WHERE menteeEmail = %s AND mentorEmail = %s
                         """)
     with connection.cursor() as cursor:
         cursor.execute(update_to_rejected, (menteeEmail, mentorEmail))
         return True
     return False
+
+def get_mentee_requests_from_database(mentorEmail):
+    get_mentee_requests = (""" 
+                            SELECT menteeEmail from match WHERE mentorEmail = %s AND status = 'Pending'""")
+    with connection.cursor() as cursor:
+        cursor.execute(get_mentee_requests, (mentorEmail))
+        mentees = cursor.fetchall()
+        if mentees:
+            return mentees
+    return None

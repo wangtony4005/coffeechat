@@ -1,7 +1,7 @@
 import React from "react";
 import profile_icon from "../assets/anonprofile.jpg";
 
-const MentorProfileCard = ({ name, jobTitle, bio, careerInterest }) => {
+const MentorProfileCard = ({ name, jobTitle, bio, careerInterest, userRole }) => {
   return (
     <div className="w-[350px] m-[20px] rounded-[4px] pb-[20px] bg-white shadow-lg">
       <div className="bg-gradient-to-b from-[#F6F3EC] to-[#36302A] h-[125px] rounded-t-[4px]"></div>
@@ -15,7 +15,7 @@ const MentorProfileCard = ({ name, jobTitle, bio, careerInterest }) => {
           {name || "Mentor Name"}
         </div>
         <div className="text-center">
-          <p>Status: Mentor</p>
+          <p>Status: {userRole}</p>
           <p>Job Title: {jobTitle || "Job Title"}</p> 
           <p>Bio: {bio || "Bio"}</p> 
           <p>Career Interest: {careerInterest || "Career Interest"}</p>

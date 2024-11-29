@@ -4,8 +4,8 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import base64
-from UserTableInfo import add_user, get_user, update_user, get_user_preferences, get_user_with_email
-from MatchTableInfo import add_inital_match, update_match_status_accepted, update_match_status_rejected
+from UserTableInfo import add_user, get_user, update_user, get_user_preferences, get_user_with_email, get_mentees
+from MatchTableInfo import add_inital_match, update_match_status_accepted, update_match_status_rejected, get_mentee_requests_from_database
 from messagetableinfo import add_message
 from cryptography.fernet import Fernet
 import jwt
@@ -168,11 +168,12 @@ def add_initial_match_request():
     data = request.get_json()
     menteeEmail = data["menteeEmail"]
     mentorEmail = data["mentorEmail"]
-    success = add_inital_match(menteeEmail, mentorEmail)
-    if success:
-        return {"Response": "Request was made successfully"}
-    else:
-        return {"Response": "Request was not made successfully"}
+    try:
+        success = add_inital_match(menteeEmail, mentorEmail)
+        if success:
+            return {"Response": "Request was made successfully"}
+    except Exception as e:
+        return {"error": str(e)}, 500
     
 
 @app.post("/matches/updatematch/statustoaccepted")
@@ -180,22 +181,37 @@ def update_match_status_to_accepted():
     data = request.get_json()
     menteeEmail = data["menteeEmail"]
     mentorEmail = data["mentorEmail"]
-    success = update_match_status_accepted(menteeEmail, mentorEmail)
-    if success:
-        return {"Response": "Request was made successfully"}
-    else:
-        return {"Response": "Request was not made successfully"}
+    try:
+        success = update_match_status_accepted(menteeEmail, mentorEmail)
+        if success:
+            return {"Response": "Request was made successfully"}
+    except Exception as e:
+        return {"error": str(e)}, 500
     
 @app.post("/matches/updatematch/statustorejected")
 def update_match_status_to_rejected():
     data = request.get_json()
     menteeEmail = data["menteeEmail"]
     mentorEmail = data["mentorEmail"]
-    success = update_match_status_rejected(menteeEmail, mentorEmail)
-    if success:
-        return {"Response": "Request was made successfully"}
-    else:
-        return {"Response": "Request was not made successfully"}
+    try: 
+        success = update_match_status_rejected(menteeEmail, mentorEmail)
+        if success:
+            return {"Response": "Request was made successfully"}
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+@app.post("/matches/getmenteerequests")
+def get_mentee_requests():
+    data = request.get_json()
+    mentorEmail = data["mentorEmail"]
+    try:
+        menteeEmails = get_mentee_requests_from_database(mentorEmail)
+        if menteeEmails:
+            menteeList = get_mentees(menteeEmails)
+            if menteeList:
+                return {"Response": "Mentees gathered successfully", "MenteeList": menteeList}
+    except Exception as e:
+        return {"error": str(e)}, 500
 
 @app.post("/model/fetchMentors")
 def fetch_mentors_from_model(career_interest):

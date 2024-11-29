@@ -89,3 +89,12 @@ def get_user_with_email(email):
         if user_info:
             return user_info
     return None
+
+def get_mentees(menteeEmails):
+    listOfMentees = []
+    n = len(menteeEmails)
+    for i in range(n-1):
+        currentMenteeEmail = menteeEmails[i]
+        mentee = get_user_with_email(currentMenteeEmail)
+        listOfMentees.append(mentee)
+    return listOfMentees

@@ -9,7 +9,7 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { json } from "react-router-dom";
 import MentorUpdateProfile from "../pages/MentorUpdateProfile";
-import MentorProfileCard from "../components/MentorProfileCard";
+import ProfileCard from "../components/ProfileCard";
 
 const MentorProfile = ({ user, setUser }) => {
   // State for form inputs (used for editing)
@@ -18,6 +18,7 @@ const MentorProfile = ({ user, setUser }) => {
   const location = useLocation();
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
+  const [menteeRequests, setmenteeRequests] = useState([])
 
   useEffect(() => {
     if (location.state) {
@@ -60,15 +61,54 @@ const MentorProfile = ({ user, setUser }) => {
   // let bio_info = user[7];
   // let career_Interest = user[9];
   // let fullname = firstName + " " + lastName;
-  const handleCreateMatch = async (email) => {
+  const handleCreateMatch = async (mentoremail) => {
     try{
-      const response = await axios.post("http://127.0.0.1:5000/matches/addmatch", {menteeEmail: user[5], mentorEmail: email}).then((res) => {
+      const response = await axios.post("http://127.0.0.1:5000/matches/addmatch", {menteeEmail: user[5], mentorEmail: mentoremail}).then((res) => {
         console.log(res.data)
       })
     } catch (err) {
       console.log(err)
     }
   }
+
+  const handleAcceptRequest = async (menteeEmail) => {
+    try{
+      const response = await axios.post("http://127.0.0.1:5000/matches/updatematch/statustoaccepted", {mentorEmail: user[5], menteeEmail: menteeEmail}).then((res) => {
+        console.log(res.data)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleRejectRequest = async (menteeEmail) => {
+    try{
+      const response = await axios.post("http://127.0.0.1:5000/matches/updatematch/statustorejected", {mentorEmail: user[5], menteeEmail: menteeEmail}).then((res) => {
+        console.log(res.data)
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  useEffect(() => {
+    // Function to fetch data from the API
+    const fetchMentees = async () => {
+      try {
+        if (user[6] != "Mentor"){
+          return
+        }
+        const response = await axios.get("http://127.0.0.1:5000/matches/getmenteerequests", {mentorEmail: user[5]}).then((res) => {
+          console.log(res.data)
+          setmenteeRequests(response.data.MenteeList);
+        }); 
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchMentees(); 
+  }, []); 
 
   useEffect(() => {
     const fetchMentors = async () => {
@@ -96,7 +136,7 @@ const MentorProfile = ({ user, setUser }) => {
     fetchMentors();
   }, []);
 
-  const menteeRequests = [
+  const menteeRequestsExample = [
     {
       id: 1,
       name: "Alice Smith",
@@ -138,11 +178,12 @@ const MentorProfile = ({ user, setUser }) => {
         <div className="flex flex-col md:flex-row justify-center h-screen flex-grow p-5 space-y-4 md:space-y-0 md:space-x-4">
           <div className="flex-1 h-auto p-5 rounded-lg w-96 ">
             {user && (
-              <MentorProfileCard
+              <ProfileCard
                 name={user[1] + " " + user[2]}
                 jobTitle={user[8]}
                 bio={user[7]}
                 careerInterest={user[9]}
+                userRole={user[6]}
               />
             )}
 
@@ -183,6 +224,7 @@ const MentorProfile = ({ user, setUser }) => {
               {"mentor" == "mentor" ? (
                 <>
                   <h2 className="text-lg font-bold mb-4">Mentee Requests</h2>
+                  {menteeRequests ? 
                   <div className="grid grid-cols-2 gap-4 ">
                     {menteeRequests.map((request) => (
                       <div
@@ -198,13 +240,16 @@ const MentorProfile = ({ user, setUser }) => {
                         <p>
                           <strong>Bio: </strong>
                         </p>
+                        <button onClick={() => handleAcceptRequest(request.email)}>Accept</button>
+                        <button onClick={() => handleRejectRequest(request.email)}>Reject</button>
                       </div>
                     ))}
                   </div>
-                </>
+                : <h2 className="text-lg font-bold mb-4">Loading Mentee Requests...</h2>} </>
               ) : (
                 <>
-                  {mentorCards.map((mentor) => (
+                {mentorCards ? 
+                  mentorCards.map((mentor) => (
                     <div
                       key={mentor[0]}
                       className="p-2 border rounded-lg bg-gray-100 shadow"
@@ -220,7 +265,7 @@ const MentorProfile = ({ user, setUser }) => {
                       </p>
                       <button onClick={handleCreateMatch(mentor[5])}>Send Match Request</button>
                     </div>
-                  ))}
+                  )) : <h2>Loading Possible Matches...</h2> }
                 </>
               )}
             </div>
