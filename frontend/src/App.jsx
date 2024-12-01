@@ -42,7 +42,7 @@ function App() {
         <Route path="/" element={<Home user={user} setUser={setUser} />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/faqs" element={<Faqs />} />
-        <Route path="/chatpage" element={<ChatPage />} />
+        <Route path="/chatpage" element={<ChatPage user={user} setUser={setUser}/>} />
         <Route path="*" element={<Navigate to="/" />} />
 
         <Route

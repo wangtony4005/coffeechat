@@ -25,9 +25,10 @@ CREATE TABLE match(
 
 CREATE TABLE messages (
     message_id SERIAL PRIMARY KEY,
-    user_email VARCHAR(255) UNIQUE,
-    messages TEXT[] DEFAULT ARRAY[]::TEXT[],
-	matchID INT, 
-    FOREIGN KEY (matchID) REFERENCES match(matchID) ON DELETE CASCADE,
+    mentorEmail VARCHAR(255) UNIQUE,
+    menteeEmail VARCHAR(255) UNIQUE,
+    mentorMessages TEXT[] DEFAULT ARRAY[]::TEXT[],
+    menteeMessages TEXT[] DEFAULT ARRAY[]::TEXT[],
+	roomID BIGINT, 
     timestamps TIMESTAMP[] DEFAULT ARRAY[]::TIMESTAMP[]
 );

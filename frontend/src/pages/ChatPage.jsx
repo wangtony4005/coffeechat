@@ -6,80 +6,80 @@ import { IoArrowBackCircle } from "react-icons/io5";
 
 const socket = io("http://127.0.0.1:5000", { autoConnect: false });
 
-const chooseChat = [
-  {
-    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-    name: "Person 1",
-    description: "Last Mesage",
-    user: true,
-  },
-  {
-    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-    name: "Person 2",
-    description: "This is chat 2",
-    user: true,
-  },
-  {
-    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-    name: "Person 3",
-    description: "This is chat 3",
-    user: true,
-  },
-  {
-    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-    name: "Person 4",
-    description: "This is chat 4",
-    user: true,
-  },
-  {
-    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-    name: "Person 5",
-    description: "This is chat 5",
-    user: true,
-  },
-  {
-    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-    name: "Person 6",
-    description: "This is chat 6",
-    user: true,
-  },
-  {
-    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-    name: "Person 7",
-    description: "This is chat 7",
-    user: true,
-  },
-  {
-    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-    name: "Person 8",
-    description: "This is chat 8",
-    user: true,
-  },
-  {
-    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-    name: "Person 9",
-    description: "This is chat 9",
-    user: true,
-  },
-  {
-    pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-    name: "Person 10",
-    description: "This is chat 10",
-    user: true,
-  },
-];
+// const chooseChat = [
+//   {
+//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+//     name: "Person 1",
+//     description: "Last Mesage",
+//     user: true,
+//   },
+//   {
+//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+//     name: "Person 2",
+//     description: "This is chat 2",
+//     user: true,
+//   },
+//   {
+//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+//     name: "Person 3",
+//     description: "This is chat 3",
+//     user: true,
+//   },
+//   {
+//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+//     name: "Person 4",
+//     description: "This is chat 4",
+//     user: true,
+//   },
+//   {
+//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+//     name: "Person 5",
+//     description: "This is chat 5",
+//     user: true,
+//   },
+//   {
+//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+//     name: "Person 6",
+//     description: "This is chat 6",
+//     user: true,
+//   },
+//   {
+//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+//     name: "Person 7",
+//     description: "This is chat 7",
+//     user: true,
+//   },
+//   {
+//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+//     name: "Person 8",
+//     description: "This is chat 8",
+//     user: true,
+//   },
+//   {
+//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+//     name: "Person 9",
+//     description: "This is chat 9",
+//     user: true,
+//   },
+//   {
+//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
+//     name: "Person 10",
+//     description: "This is chat 10",
+//     user: true,
+//   },
+// ];
 
-const ChatApp = () => {
+const ChatApp = ({user, setUser}) => {
+  console.log(user)
   const [username1, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [isChatActive, setIsChatActive] = useState(false);
-  const [room, setRoom] = useState("");
+  const [room, setRoom] = useState();
+  const [chooseChat, setChooseChat] = useState()
 
   const navigate = useNavigate(); // Use useNavigate for programmatic navigation
   const location = useLocation();
-  const {firstName, lastName, username, email, role} = location.state || {};
- console.log(firstName, lastName, username, email, role)
   const handleBackClick = () => {
     navigate(-1); // Navigate back to the previous page
   };
@@ -87,6 +87,20 @@ const ChatApp = () => {
     username1: "Crosve",
     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
   };
+
+  useEffect(() => {
+    const getMessageRooms = async () => {
+      try {
+        const response = await axios.post("http://127.0.0.1:5000/messages/get_rooms", {email: user[5]}).then(async (res) => {
+          console.log(res.data)
+          setChooseChat(res.data.RoomList)
+        })
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    getMessageRooms()
+  }, [])
 
   useEffect(() => {
     if (isChatActive) {
@@ -123,12 +137,17 @@ const ChatApp = () => {
     setMessage("");
   };
 
-  const handleRoomChange = (e, name, index) => {
+  const handleRoomChange = (e, mentorEmail, menteeEmail, roomID) => {
     e.preventDefault();
     setMessages([]);
-    setRoom(index);
+    setRoom(roomID);
     setIsChatActive(true);
-    socket.emit("join_room", { username: name, room: index });
+    if (user[6] == 'mentee'){
+      socket.emit("join_room", { username: menteeEmail, room: roomID });
+    }
+    else {
+      socket.emit("join_room", { username: mentorEmail, room: roomID });
+    }
   };
 
   return (
@@ -146,17 +165,17 @@ const ChatApp = () => {
             <div
               key={index}
               className="flex items-center border-2 p-4 w-full h-24 rounded-lg m-0 right-0 left-0 relative hover:bg-gray-200 cursor-pointer"
-              onClick={(e) => handleRoomChange(e, chat.name, index)}
+              onClick={(e) => handleRoomChange(e, chat[1], chat[2], chat[5])}
             >
-              <img
+              {/* <img
                 src={chat.pfp}
                 alt="pfp"
                 className="w-16 h-12 rounded-full"
-              />
-              <div className="flex flex-col relative left-7 justify-center">
+              /> */}
+              {/* <div className="flex flex-col relative left-7 justify-center">
                 <h1>{chat.name}</h1>
                 <h1>{chat.description}</h1>
-              </div>
+              </div> */}
             </div>
           ))}
         </div>

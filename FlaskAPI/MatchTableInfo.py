@@ -24,7 +24,7 @@ def generate_random_number_string(length):
 
 def add_inital_match(menteeEmail, mentorEmail):
     print(menteeEmail, mentorEmail)
-    matchID = generate_random_number_string(16)
+    matchID = generate_random_number_string(10)
     matchStatus = "Pending"
     coffeechatStatus = False
     add_match = ("""
@@ -32,7 +32,7 @@ def add_inital_match(menteeEmail, mentorEmail):
                 VALUES(%s, %s, %s, %s, %s) 
                 """)
     with connection.cursor() as cursor:
-       cursor.execute(add_match, (menteeEmail, mentorEmail, matchID, matchStatus, coffeechatStatus))
+       cursor.execute(add_match, (menteeEmail, mentorEmail, matchID, matchStatus, coffeechatStatus,))
        return True
     return False
 
@@ -43,8 +43,17 @@ def update_match_status_accepted(menteeEmail, mentorEmail):
                         SET matchStatus = 'Accepted'
                         WHERE menteeEmail = %s AND mentorEmail = %s
                         """)
+    get_mentor_mentee_info = ("""
+                            SELECT matchID from match where menteeEmail = %s AND mentorEmail = %s
+                              """)
+    add_to_messages_table = ("""INSERT INTO messages (mentorEmail, menteeEmail, roomID)
+                             VALUES(%s, %s, %s)
+                             """)
     with connection.cursor() as cursor:
         cursor.execute(update_to_accepted, (menteeEmail, mentorEmail))
+        cursor.execute(get_mentor_mentee_info, (menteeEmail, mentorEmail))
+        roomID = cursor.fetchone()
+        cursor.execute(add_to_messages_table, (mentorEmail, menteeEmail, roomID))
         return True
     return False
 
@@ -62,9 +71,9 @@ def update_match_status_rejected(menteeEmail, mentorEmail):
 
 def get_mentee_requests_from_database(mentorEmail):
     get_mentee_requests = (""" 
-                            SELECT menteeEmail from match WHERE mentorEmail = %s AND status = 'Pending'""")
+                            SELECT menteeEmail from match WHERE mentorEmail = %s AND matchStatus = 'Pending'""")
     with connection.cursor() as cursor:
-        cursor.execute(get_mentee_requests, (mentorEmail))
+        cursor.execute(get_mentee_requests, (mentorEmail,))
         mentees = cursor.fetchall()
         if mentees:
             return mentees

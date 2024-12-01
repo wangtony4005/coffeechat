@@ -24,37 +24,51 @@ def get_user(email):
                 return True
     return False
 
-def add_message_to_table(message, email):
+def add_message_to_table(email, message, room):
     ts = time.time()
     ts = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
-    addMessage = ("""
+    role = determine_mentor_or_mentee(email)
+    addMessageMentee = ("""
                     UPDATE messages
                 SET messages = array_append(messages, %s),
                     timestamps = array_append(timestamps, %s)
-                WHERE user_email = %s;
+                WHERE menteeEmail = %s AND roomID = %s;
+            """)
+    addMessageMentor = ("""
+                    UPDATE messages
+                SET messages = array_append(messages, %s),
+                    timestamps = array_append(timestamps, %s)
+                WHERE mentorEmail = %s AND roomID = %s;
             """)
     with connection:
         with connection.cursor() as cursor:
-            cursor.execute(addMessage, (message, ts, email))
+            if role == 'mentee':
+                cursor.execute(addMessageMentee, (message, ts, email, room))
+            else:
+                cursor.execute(addMessageMentor, (message, ts, email, room))
             return True
     return False
 
-
-def add_user_to_table(email):
-    addUser = ("""
-               INSERT INTO messages (user_email)
-               VALUES(%s)
-               """)
+def fetch_rooms(email):
+    fetch_message_rooms = ("""
+                            SELECT * FROM messages WHERE menteeEmail = %s OR mentorEmail = %s
+                           """)
+    print(email)
     with connection:
         with connection.cursor() as cursor:
-            cursor.execute(addUser, (email,))
-            return True
-    return False
+            cursor.execute(fetch_message_rooms, (email, email,))
+            rooms = cursor.fetchone()
+            if rooms:
+                return rooms
+    return None
 
-def add_message(email, message):
-    print("user info and message: ", email, message)
-    if get_user(email) == True:
-        add_message_to_table(email, message)
-    else:
-        add_user_to_table(email)
-        add_message_to_table(email, message)
+def determine_mentor_or_mentee(email):
+    determine_role = ("""
+                    SELECT userType from users WHERE email = %s
+                      """)
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(determine_role, (email, email,))
+            role = cursor.fetchone()
+    return role
+

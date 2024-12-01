@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, emit, join_room, leave_room
 import base64
 from UserTableInfo import add_user, get_user, update_user, get_user_preferences, get_user_with_email, get_mentees
 from MatchTableInfo import add_inital_match, update_match_status_accepted, update_match_status_rejected, get_mentee_requests_from_database
-from messagetableinfo import add_message
+from messagetableinfo import fetch_rooms, add_message_to_table
 from cryptography.fernet import Fernet
 import jwt
 from model_logic import fetch_mentors
@@ -109,8 +109,8 @@ def handle_new_message(message):
     for user in users:
         if users[user] == request.sid:
             username = user
-    emit("chat", {"message": message['message'], "username": message['username']}, broadcast=True)
-    add_message(message['username'], message['message'])
+    emit("chat", {"message": message['message'], "username": message['username1'], "roomID": message['room']}, broadcast=True)
+    add_message_to_table(message['username'], message['message'], message['room'])
 
 @app.post("/users/signin")
 def signin():
@@ -206,10 +206,11 @@ def get_mentee_requests():
     mentorEmail = data["mentorEmail"]
     try:
         menteeEmails = get_mentee_requests_from_database(mentorEmail)
-        if menteeEmails:
-            menteeList = get_mentees(menteeEmails)
-            if menteeList:
-                return {"Response": "Mentees gathered successfully", "MenteeList": menteeList}
+        emails = [row[0] for row in menteeEmails]
+        print(emails)
+        menteeList = get_mentees(emails)
+        if menteeList:
+            return {"Response": "Mentees gathered successfully", "MenteeList": menteeList}
     except Exception as e:
         return {"error": str(e)}, 500
 
@@ -220,6 +221,16 @@ def fetch_mentors_from_model():
     try:
         results = fetch_mentors(career_interest)
         return {"Response": "Mentees gathered successfully", "MentorList": results}
+    except Exception as e:
+        return {"error": str(e)}, 500
+    
+@app.post("/messages/get_rooms")
+def get_message_rooms():
+    data = request.get_json()
+    email = data['email']
+    try:
+        rooms = fetch_rooms(email)
+        return {"Response": "Mentees gathered successfully", "RoomList": rooms}
     except Exception as e:
         return {"error": str(e)}, 500
 

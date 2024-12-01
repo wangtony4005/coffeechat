@@ -92,9 +92,8 @@ def get_user_with_email(email):
 
 def get_mentees(menteeEmails):
     listOfMentees = []
-    n = len(menteeEmails)
-    for i in range(n-1):
-        currentMenteeEmail = menteeEmails[i]
-        mentee = get_user_with_email(currentMenteeEmail)
+    for menteeEmail in menteeEmails:
+        mentee = get_user_with_email(menteeEmail)
         listOfMentees.append(mentee)
+        print(listOfMentees)
     return listOfMentees

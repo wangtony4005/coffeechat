@@ -19,6 +19,7 @@ const MentorProfile = ({ user, setUser }) => {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
   const [menteeRequests, setmenteeRequests] = useState([])
+  const [mentorCards, setMentorCards] = useState()
 
   useEffect(() => {
     if (location.state) {
@@ -45,9 +46,6 @@ const MentorProfile = ({ user, setUser }) => {
   );
 
   console.log(user);
-  const [role, setRole] = useState("");
-  const [email, setEmail] = useState("sample@gmail.com");
-  const [careerInterest, setCareerInterest] = useState("Technology");
   // const [menteeRequests, setMenteeRequests] = useState([]);
   const navigate = useNavigate();
   const { user_data, form_data } = location.state || {};
@@ -71,7 +69,8 @@ const MentorProfile = ({ user, setUser }) => {
     }
   }
 
-  const handleAcceptRequest = async (menteeEmail) => {
+  const handleAcceptRequest = async (menteeEmail, index) => {
+    menteeRequests.splice(index, 1)
     try{
       const response = await axios.post("http://127.0.0.1:5000/matches/updatematch/statustoaccepted", {mentorEmail: user[5], menteeEmail: menteeEmail}).then((res) => {
         console.log(res.data)
@@ -82,6 +81,7 @@ const MentorProfile = ({ user, setUser }) => {
   }
 
   const handleRejectRequest = async (menteeEmail) => {
+    menteeRequests.splice(index, 1)
     try{
       const response = await axios.post("http://127.0.0.1:5000/matches/updatematch/statustorejected", {mentorEmail: user[5], menteeEmail: menteeEmail}).then((res) => {
         console.log(res.data)
@@ -108,17 +108,18 @@ const MentorProfile = ({ user, setUser }) => {
     };
 
     fetchMentees(); 
-  }, []); 
+  }, [menteeRequests]); 
 
   useEffect(() => {
     const fetchMentors = async () => {
       try {
         const response = await axios
           .get("http://127.0.0.1:5000/model/fetchMentors", {
-            careerInterest: career_Interest,
+            careerInterest: user[9],
           })
-          .then((res) => {
-            console.log(res.data);
+          .then(async (res) => {
+            console.log(res.data)
+            setMentorCards(res.data.MentorList);
           });
         console.log("response from the user: ", response.data);
       } catch (error) {
@@ -226,22 +227,22 @@ const MentorProfile = ({ user, setUser }) => {
                   <h2 className="text-lg font-bold mb-4">Mentee Requests</h2>
                   {menteeRequests ? 
                   <div className="grid grid-cols-2 gap-4 ">
-                    {menteeRequests.map((request) => (
+                    {menteeRequests.map((request, index) => (
                       <div
                         key={request.id}
                         className="p-2 border rounded-lg bg-gray-100 shadow"
                       >
                         <p>
-                          <strong>Name:</strong> {request.name}
+                          <strong>Name:</strong> {request[1] + " " + request[2]}
                         </p>
                         <p>
-                          <strong>Request Date:</strong> {request.requestDate}
+                          <strong>Request Date:</strong> {request[11]}
                         </p>
                         <p>
-                          <strong>Bio: </strong>
+                          <strong>Bio: </strong> {request[8]}
                         </p>
-                        <button onClick={() => handleAcceptRequest(request.email)}>Accept</button>
-                        <button onClick={() => handleRejectRequest(request.email)}>Reject</button>
+                        <button onClick={() => handleAcceptRequest(request[5], index)}>Accept</button>
+                        <button onClick={() => handleRejectRequest(request[5], index)}>Reject</button>
                       </div>
                     ))}
                   </div>
