@@ -214,21 +214,14 @@ def get_mentee_requests():
         return {"error": str(e)}, 500
 
 @app.post("/model/fetchMentors")
-def fetch_mentors_from_model(career_interest):
-    fetch_mentors(career_interest)
-    return
-#     #load the model to fetch relaated mentors 
-#     return jsonify({"Response": "Mentors fetched successfully"}), 200
-
-#     model = joblib.load('./model/model.joblib')
-#     index = joblib.load('./model/index.joblib')
-
-
-
-#     print("model loaded")
-
-
-#     return jsonify({"Response": "Mentors fetched successfully"}), 200
+def fetch_mentors_from_model():
+    data = request.get_json()
+    career_interest = data["careerInterest"]
+    try:
+        results = fetch_mentors(career_interest)
+        return {"Response": "Mentees gathered successfully", "MentorList": results}
+    except Exception as e:
+        return {"error": str(e)}, 500
 
 app.register_blueprint(model_route)
 

@@ -14,4 +14,5 @@ cryptography
 PyJWT
 joblib
 pandas
-faiss
+faiss-cpu
+sentence_transformers

@@ -23,6 +23,10 @@ connection = psycopg2.connect(
 )
 
 def fetch_mentors(career_interest):
+    results = []
+    db_query = (""" SELECT * FROM users
+        WHERE career_interest = %s  AND userType = 'mentor' """)
+
     #load the model to fetch relaated mentors 
 
     model = joblib.load('./model/model.joblib')
@@ -32,18 +36,25 @@ def fetch_mentors(career_interest):
     print("Index type: ", type(index))
     print("df type: ", type(df))
 
-    # query_model = "I want to me a software engineer"
+    
     query_vector = model.encode(career_interest).reshape(1, -1)
-    D, I = index.search(query_vector, 4)
+    D, I = index.search(query_vector, 10)
 
     print("D: ", D)
     indices = I[0]
 
+    matched_careers = []
+
     for index in indices:
-        print(df.iloc[index]['Job_Title'], '\n\n')
+        matched_careers.append(df.iloc[index]['Job_Title'])
     
-
-
-
-
-    return jsonify({"Response": "Mentors fetched successfully"}), 200
+    matched_careers = list(set(matched_careers))
+    with connection.cursor() as cursor:
+        for interest in matched_careers:
+            cursor.execute(db_query, (interest,))
+            mentors = cursor.fetchall()
+            
+            # Append mentors to results
+            for mentor in mentors:
+                results.append(mentor)
+    return results
