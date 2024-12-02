@@ -28,7 +28,7 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 socketio = SocketIO(app, cors_allowed_origins='*')
 
 
-CORS(app, resources={r"/users/*": {"origins": "*"}},
+CORS(app, resources={r"/users/*": {"origins": "*"}, r"/matches/*": {"origins": "*"}, r"/model/*": {"origins": "*"}, r"/messages/*": {"origins": "*"}},
      methods=["GET", "POST"],
      allow_headers=["Content-Type"])
 
@@ -173,6 +173,7 @@ def add_initial_match_request():
         if success:
             return {"Response": "Request was made successfully"}
     except Exception as e:
+        print("error: ", e)
         return {"error": str(e)}, 500
     
 
@@ -220,7 +221,14 @@ def fetch_mentors_from_model():
     career_interest = data["careerInterest"]
     try:
         results = fetch_mentors(career_interest)
-        return {"Response": "Mentees gathered successfully", "MentorList": results}
+        if len(results) == 0:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM users WHERE userType = 'mentor' LIMIT 10")
+                results = cursor.fetchall()
+                print("mentors fetched cause no matches: ", results)
+            results = [list(result) for result in results]
+            return {"Response": "No mentors found", "MentorList": results}
+        return {"Response": "Mentors gathered successfully", "MentorList": results}
     except Exception as e:
         return {"error": str(e)}, 500
     
@@ -232,6 +240,7 @@ def get_message_rooms():
         rooms = fetch_rooms(email)
         return {"Response": "Mentees gathered successfully", "RoomList": rooms}
     except Exception as e:
+        print("error: ", e)
         return {"error": str(e)}, 500
 
 app.register_blueprint(model_route)

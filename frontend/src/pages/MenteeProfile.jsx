@@ -31,13 +31,13 @@ const MenteeProfile = () => {
   }, []);
 
   const location = useLocation();
-  const {user_data} = location.state || {}
-  console.log(user_data)
-  const firstName = user_data[1]
-  const lastName = user_data[2]
-  const username = user_data[3]
-  const email = user_data[5]
-  const role = user_data[6]
+  const { user_data } = location.state || {};
+  console.log(user_data);
+  const firstName = user_data[1];
+  const lastName = user_data[2];
+  const username = user_data[3];
+  const email = user_data[5];
+  const role = user_data[6];
 
   const handleSave = () => {
     // You can handle form submission or saving the data here
@@ -56,6 +56,7 @@ const MenteeProfile = () => {
       <hr className="border-mocha-color" />
 
       <div className="flex justify-between mt-12 px-12">
+        <p>Hehhehe</p>
         {/* Profile Card View */}
 
         <div className="w-1/4 p-5 bg-darker-nav-color flex flex-col items-center justify-center h-128">
