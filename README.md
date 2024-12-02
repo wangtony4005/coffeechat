@@ -26,31 +26,42 @@ npm run dev
 
 ### Backend(Flask + Postgresql)
 
-1. Navigate to the backend folder
+1. If you haven't already download psql
+```bash
+https://www.postgresql.org/download/
+```
+   
+2. Navigate to the backend folder
 
 ```bash
 cd FlaskAPI
 ```
 
-2. Create an env file to store enviormental variables
+3. Create an env file to store enviormental variables
 
 ```bash
 cat .env
 ```
 
-3. Login to you postgres terminal
+4. Login to you postgres terminal
 
 ```bash
 psql -U {insert user name you want for your database}
 ```
 
-4. source the createdb file
+5. source the createdb file
 
 ```bash
 \i schema.sql
 ```
 
-5. If running locally from an IDE create a virtual environment and run it
+6. Run the mockdata.sql file to generate data for the database
+
+```bash
+\i mockdata.sql
+```
+
+7. If running locally from an IDE create a virtual environment and run it
 
 ```bash
 python -m venv /path/to/new/virtual/environment
@@ -64,13 +75,13 @@ POSIX Command:
 $ <venv>/bin/Activate.ps1
 ```
 
-6. Install dependencies from requirements.txt file
+8. Install dependencies from requirements.txt file
 
 ```bash
 pip install -r requirements.txt
 ```
 
-7. Run the server
+9. Run the server
 
 ```bash
 flask run
