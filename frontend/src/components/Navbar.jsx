@@ -20,26 +20,36 @@ function Navbar() {
   return (
     <>
       <motion.header
+        id="navbar"
         initial="hidden"
         animate="visible"
         variants={headerVariants}
         transition={{ duration: 1.5, ease: "easeOut" }}
-        className="absolute w-full z-10 flex items-center justify-between bg-nav-color py-4 px-6 shadow-lg"
+        className="relative w-full z-10 flex items-center justify-between bg-nav-color py-4 px-6 shadow-lg"
       >
-        <Link to="/" className="lg:text-3xl text-xl font-bold text-mocha-color tracking-wide">
+        <Link
+          to="/"
+          className="lg:text-3xl text-xl font-bold text-mocha-color tracking-wide"
+        >
           Mocha Mentors
         </Link>
-        
+
         <nav className="hidden lg:flex flex-1 justify-center space-x-8 text-lg">
-          <Link to="/resources" className="text-black hover:text-mocha-color transition">
+          <Link
+            to="/resources"
+            className="text-black hover:text-mocha-color transition"
+          >
             Resources
           </Link>
-          <Link to="/faqs" className="text-black hover:text-mocha-color transition">
+          <Link
+            to="/faqs"
+            className="text-black hover:text-mocha-color transition"
+          >
             FAQS
           </Link>
         </nav>
         <div className="hidden lg:flex">
-          <button 
+          <button
             onClick={() => setLogin(true)}
             className="bg-mocha-color text-white py-2 px-4 rounded-lg shadow-md hover:bg-darker-nav-color transition"
           >
@@ -54,22 +64,25 @@ function Navbar() {
         {isMenuOpen && (
           <div className="absolute top-16 right-0 w-full z-40 bg-nav-color shadow-lg lg:hidden">
             <nav className="flex flex-col items-center py-4 space-y-4">
-              <Link 
-                to="/resources" 
+              <Link
+                to="/resources"
                 className="text-black text-lg"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Resources
               </Link>
-              <Link 
-                to="/faqs" 
+              <Link
+                to="/faqs"
                 className="text-black text-lg"
                 onClick={() => setIsMenuOpen(false)}
               >
                 FAQS
               </Link>
-              <button 
-                onClick={() => { setIsMenuOpen(false); setLogin(true); }}
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  setLogin(true);
+                }}
                 className="bg-mocha-color text-white py-2 px-6 rounded-lg shadow-md hover:bg-darker-nav-color transition"
               >
                 Login
@@ -89,3 +102,4 @@ function Navbar() {
 }
 
 export default Navbar;
+

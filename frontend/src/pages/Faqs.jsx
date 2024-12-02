@@ -38,37 +38,41 @@ const faqs = {
 };
 
 function Faqs() {
-  const Navigate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      Navigate("/homepage");
+      navigate("/homepage");
     }
   }, []);
+
   return (
-    <main className="h-auto w-auto">
+    <main className="min-h-screen w-screen bg-base-color text-mocha-color">
       <Navbar />
-      <div className="w-screen h-screen overflow-auto">
-        <div className="flex items-center justify-center w-full h-1/2 relative bg-darker-nav-color">
-          <Fade>
-            <h1 className="text-4xl text-black font-bold text-center">
-              Frequently Asked Questions
-            </h1>
-          </Fade>
-        </div>
-        <div className="w-full min-h-1/2 bg-nav-color flex-grow h-auto ">
-          <Fade>
-            <div className="container mx-auto py-10 flex items-center justify-center flex-col ">
-              {faqs.questions.map((faq, index) => (
-                <div key={index} className="mb-4 lg:h-48 h-auto gap-2 w-3/5">
-                  <h2 className="text-2xl font-bold">{faq.question}</h2>
-                  <p className="text-lg ">{faq.answer}</p>
-                </div>
-              ))}
-            </div>
-          </Fade>
-        </div>
+      <div className="w-full bg-darker-nav-color py-10">
+        <Fade>
+          <h1 className="text-5xl font-extrabold text-center text-black tracking-widest">
+            Frequently Asked Questions
+          </h1>
+        </Fade>
+      </div>
+      <div className="w-full bg-nav-color py-16">
+        <Fade>
+          <div className="container mx-auto px-6 lg:px-20">
+            {faqs.questions.map((faq, index) => (
+              <div
+                key={index}
+                className="mb-8 p-6 bg-white shadow-lg rounded-lg transition-transform hover:scale-105"
+              >
+                <h2 className="text-2xl font-semibold text-mocha-color mb-4">
+                  {faq.question}
+                </h2>
+                <p className="text-lg leading-relaxed text-gray-700">{faq.answer}</p>
+              </div>
+            ))}
+          </div>
+        </Fade>
       </div>
     </main>
   );
