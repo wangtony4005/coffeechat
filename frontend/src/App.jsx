@@ -6,10 +6,10 @@ import Faqs from "./pages/Faqs";
 import ChatPage from "./pages/ChatPage";
 import Homepage from "./pages/Homepage";
 import Find from "./pages/Find";
-
 import MentorProfile from "./pages/MentorProfile";
 import MenteeProfile from "./pages/MenteeProfile";
 import MenteeDashboard from "./pages/MenteeDashboard";
+import Shop from "./pages/shop";
 
 import "./App.css";
 
@@ -46,7 +46,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-
         <Route
           path="/find"
           element={
@@ -58,6 +57,12 @@ function App() {
         <Route path="/mentor-profile" element={<MentorProfile />} />
         <Route path="/mentee-profile" element={<MenteeProfile />} />
         <Route path="/mentee-dashboard" element={<MenteeDashboard />} />
+        <Route
+          path="/shop"
+          element={
+              <Shop />
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

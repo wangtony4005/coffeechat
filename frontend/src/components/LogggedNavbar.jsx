@@ -8,7 +8,9 @@ function LogggedNavbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-  const openProfile = () => {
+  const navigate = useNavigate();
+
+  const toggleProfileMenu = () => {
     setIsProfileOpen(!isProfileOpen);
   };
 
@@ -17,101 +19,83 @@ function LogggedNavbar() {
     navigate("/");
   };
 
-  const navigate = useNavigate();
-
   useEffect(() => {
-    if (login) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = login ? "hidden" : "auto";
   }, [login]);
 
   const headerVariants = {
-    hidden: { opacity: 0, y: 0 },
+    hidden: { opacity: 0, y: -10 },
     visible: { opacity: 1, y: 0 },
   };
+
   return (
     <>
       <motion.header
         initial="hidden"
         animate="visible"
         variants={headerVariants}
-        transition={{ duration: 2.5, ease: "easeOut" }}
-        className="absolute w-screen z-10 flex items-center justify-between bg-nav-color py-6 px-6 font-semibold stroke-stone-400"
+        transition={{ duration: 1.5, ease: "easeOut" }}
+        className="relative w-full z-10 flex items-center justify-between bg-nav-color py-4 px-8 shadow-md"
       >
-        <Link to="/homepage" className="lg:text-2xl sm:text-sm">
+        <Link to="/homepage" className="text-2xl font-bold text-mocha-color tracking-wide">
           Mocha Mentors
         </Link>
-        <div className="hidden lg:flex space-x-2">
-          <Link to="/find">Find</Link>
-          <Link to="/chatpage">Chats</Link>
-        </div>
-        <div className="hidden lg:flex space-x-4">
+        <nav className="hidden lg:flex space-x-8 text-lg">
+          <Link to="/find" className="hover:text-mocha-color transition">Find</Link>
+          <Link to="/chatpage" className="hover:text-mocha-color transition">Chats</Link>
+        </nav>
+        <div className="hidden lg:flex items-center space-x-6">
           <img
             src="https://via.placeholder.com/150"
             alt="Profile Pic"
-            className="rounded-full h-10 w-10"
-            onClick={() => openProfile()}
+            className="rounded-full h-10 w-10 cursor-pointer hover:ring-2 hover:ring-mocha-color"
+            onClick={toggleProfileMenu}
           />
           {isProfileOpen && (
-            <div className="absolute top-16 right-0 w-32 z-40 bg-nav-color flex flex-col items-center">
-              <Link to="/mentor-profile" className="py-2">
+            <div className="absolute top-16 right-8 w-40 bg-nav-color shadow-md rounded-md flex flex-col items-center">
+              <Link to="/mentor-profile" className="py-2 hover:text-mocha-color transition">
                 Profile
               </Link>
-              <button onClick={() => logout()} className="py-2">
+              <button
+                onClick={logout}
+                className="py-2 hover:text-mocha-color transition"
+              >
                 Logout
               </button>
             </div>
           )}
         </div>
-        <div className="lg:hidden flex items-center z-auto">
+        <div className="lg:hidden flex items-center">
           <button onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            <Hamburger />
+            <Hamburger toggled={isMenuOpen} />
           </button>
         </div>
         {isMenuOpen && (
-          <div className="absolute top-16 right-0 w-full z-40 bg-nav-color flex flex-col items-center lg:hidden">
-            <Link
-              to="/find"
-              className="py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
+          <div className="absolute top-16 right-0 w-full bg-nav-color shadow-lg lg:hidden flex flex-col items-center py-4 space-y-4">
+            <Link to="/find" className="text-lg hover:text-mocha-color transition" onClick={() => setIsMenuOpen(false)}>
               Find
             </Link>
-            <Link
-              to="/chatpage"
-              className="py-2"
-              onClick={() => setIsMenuOpen(false)}
-            >
+            <Link to="/chatpage" className="text-lg hover:text-mocha-color transition" onClick={() => setIsMenuOpen(false)}>
               Chats
             </Link>
-
-            <Link to="/mentor-profile " className="py-2">
+            <Link to="/mentor-profile" className="text-lg hover:text-mocha-color transition" onClick={() => setIsMenuOpen(false)}>
               Profile
             </Link>
-
-            <button onClick={() => logout()} className="py-2">
+            <button
+              onClick={() => {
+                setIsMenuOpen(false);
+                logout();
+              }}
+              className="text-lg text-white bg-mocha-color py-2 px-4 rounded-md hover:bg-darker-nav-color transition"
+            >
               Logout
             </button>
           </div>
         )}
       </motion.header>
-      {/* {login && (
-        <>
-          <div className="fixed inset-0 bg-black bg-opacity-50 z-20"></div>
-          <Login onClose={() => setLogin(false)} />
-        </>
-      )} */}
-      {/* <style>
-        {`
-        body.blur-background {
-          filter: blur(5px);
-        }
-      `}
-      </style> */}
     </>
   );
 }
 
 export default LogggedNavbar;
+
