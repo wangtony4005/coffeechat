@@ -28,9 +28,6 @@ def fetch_mentors(career_interest):
     model = joblib.load('./model/model.joblib')
     index = faiss.read_index('./model/faiss_index.faiss')
     df = pd.read_pickle('./model/df.pkl')
-    print("Mode type: ", type(model))
-    print("Index type: ", type(index))
-    print("df type: ", type(df))
 
     # query_model = "I want to me a software engineer"
     query_vector = model.encode(career_interest).reshape(1, -1)
