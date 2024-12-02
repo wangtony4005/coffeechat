@@ -57,7 +57,7 @@ def fetch_rooms(email):
     with connection:
         with connection.cursor() as cursor:
             cursor.execute(fetch_message_rooms, (email, email,))
-            rooms = cursor.fetchone()
+            rooms = cursor.fetchall()
             if rooms:
                 return rooms
     return None
