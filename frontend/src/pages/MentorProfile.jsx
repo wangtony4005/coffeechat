@@ -59,7 +59,8 @@ const MentorProfile = ({ user, setUser }) => {
   // let bio_info = user[7];
   // let career_Interest = user[9];
   // let fullname = firstName + " " + lastName;
-  const handleCreateMatch = async (mentoremail) => {
+  const handleCreateMatch = async (mentoremail, indexToRemove) => {
+    setMentorCards((mentorCards) => mentorCards.filter((_, index) => index !== indexToRemove));
     try{
       const response = await axios.post("http://127.0.0.1:5000/matches/addmatch", {menteeEmail: user[5], mentorEmail: mentoremail}).then((res) => {
         console.log(res.data)
@@ -69,8 +70,8 @@ const MentorProfile = ({ user, setUser }) => {
     }
   }
 
-  const handleAcceptRequest = async (menteeEmail, index) => {
-    menteeRequests.splice(index, 1)
+  const handleAcceptRequest = async (menteeEmail, indexToRemove) => {
+    setmenteeRequests((menteeRequests) => menteeRequests.filter((_, index) => index !== indexToRemove));
     try{
       const response = await axios.post("http://127.0.0.1:5000/matches/updatematch/statustoaccepted", {mentorEmail: user[5], menteeEmail: menteeEmail}).then((res) => {
         console.log(res.data)
@@ -80,8 +81,8 @@ const MentorProfile = ({ user, setUser }) => {
     }
   }
 
-  const handleRejectRequest = async (menteeEmail) => {
-    menteeRequests.splice(index, 1)
+  const handleRejectRequest = async (menteeEmail, indexToRemove) => {
+    setmenteeRequests((menteeRequests) => menteeRequests.filter((_, index) => index !== indexToRemove));
     try{
       const response = await axios.post("http://127.0.0.1:5000/matches/updatematch/statustorejected", {mentorEmail: user[5], menteeEmail: menteeEmail}).then((res) => {
         console.log(res.data)
@@ -250,7 +251,7 @@ const MentorProfile = ({ user, setUser }) => {
               ) : (
                 <>
                 {mentorCards ? 
-                  mentorCards.map((mentor) => (
+                  mentorCards.map((mentor, index) => (
                     <div
                       key={mentor[0]}
                       className="p-2 border rounded-lg bg-gray-100 shadow"
@@ -264,7 +265,7 @@ const MentorProfile = ({ user, setUser }) => {
                       <p>
                         <strong>Bio: </strong> {mentor[7]}
                       </p>
-                      <button onClick={handleCreateMatch(mentor[5])}>Send Match Request</button>
+                      <button onClick={handleCreateMatch(mentor[5], index)}>Send Match Request</button>
                     </div>
                   )) : <h2>Loading Possible Matches...</h2> }
                 </>
