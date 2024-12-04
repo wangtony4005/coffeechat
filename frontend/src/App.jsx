@@ -8,7 +8,7 @@ import Faqs from "./pages/Faqs";
 import ChatPage from "./pages/ChatPage";
 import Homepage from "./pages/Homepage";
 import Find from "./pages/Find";
-
+import { Navigate } from "react-router-dom";
 import MentorProfile from "./pages/MentorProfile";
 import MenteeProfile from "./pages/MenteeProfile";
 import MenteeDashboard from "./pages/MenteeDashboard";
@@ -42,14 +42,7 @@ function App() {
         <Route path="/resources" element={<Resources />} />
         <Route path="/faqs" element={<Faqs />} />
         <Route path="/chatpage" element={<ChatPage />} />
-        <Route
-          path="/homepage"
-          element={
-            <ProtectedRoute>
-              <Homepage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="*" element={<Navigate to="/" />} />
 
         <Route
           path="/find"
