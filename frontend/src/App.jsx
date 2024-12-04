@@ -8,11 +8,10 @@ import Faqs from "./pages/Faqs";
 import ChatPage from "./pages/ChatPage";
 import Homepage from "./pages/Homepage";
 import Find from "./pages/Find";
-import { Navigate } from "react-router-dom";
+
 import MentorProfile from "./pages/MentorProfile";
 import MenteeProfile from "./pages/MenteeProfile";
 import MenteeDashboard from "./pages/MenteeDashboard";
-import MentorUpdateProfile from "./pages/MentorUpdateProfile";
 
 import "./App.css";
 
@@ -42,8 +41,15 @@ function App() {
         <Route path="/" element={<Home user={user} setUser={setUser} />} />
         <Route path="/resources" element={<Resources />} />
         <Route path="/faqs" element={<Faqs />} />
-        <Route path="/chatpage" element={<ChatPage user={user} setUser={setUser}/>} />
-        <Route path="*" element={<Navigate to="/" />} />
+        <Route path="/chatpage" element={<ChatPage />} />
+        <Route
+          path="/homepage"
+          element={
+            <ProtectedRoute>
+              <Homepage />
+            </ProtectedRoute>
+          }
+        />
 
         <Route
           path="/find"
@@ -62,10 +68,6 @@ function App() {
           element={<MenteeProfile user={user} setUser={setUser} />}
         />
         <Route path="/mentee-dashboard" element={<MenteeDashboard />} />
-        <Route
-          path="/mentor-update-profile"
-          element={<MentorUpdateProfile user={user} setUser={setUser} />}
-        />
       </Routes>
     </BrowserRouter>
   );
