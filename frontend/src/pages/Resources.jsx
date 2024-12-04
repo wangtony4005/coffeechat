@@ -10,7 +10,7 @@ function Resources() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      Navigate("/homepage");
+      Navigate("/mentor-profile");
     }
   }, []);
 

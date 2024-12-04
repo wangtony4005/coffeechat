@@ -61,7 +61,16 @@ psql -U {insert user name you want for your database}
 \i mockdata.sql
 ```
 
-7. If running locally from an IDE create a virtual environment and run it
+7. To ensure Flask is connected to your created database, create a .env file in the flaskAPI directory and make sure to include the following:
+- DATABASE_USER=yourdbuser
+- DATABASE_PASS=yourdbpassword
+- DATABASE_HOST=yourdbhost
+- DATABASE_PORT=5432
+- DATABASE_NAME=yourdbname
+- ENCRYPT_KEY='your encrypt key for Fernet Library'
+- TOKEN_KEY='your token key for jwt encoding'
+
+8. If running locally from an IDE create a virtual environment and run it
 
 ```bash
 python -m venv /path/to/new/virtual/environment
@@ -75,13 +84,13 @@ POSIX Command:
 $ <venv>/bin/Activate.ps1
 ```
 
-8. Install dependencies from requirements.txt file
+9. Install dependencies from requirements.txt file
 
 ```bash
 pip install -r requirements.txt
 ```
 
-9. Run the server
+10. Run the server
 
 ```bash
 flask run

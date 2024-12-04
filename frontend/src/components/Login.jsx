@@ -2,7 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-function Login({ onClose }) {
+function Login({ onClose, user, setUser }) {
+  console.log(setUser);
   const [reset, setReset] = useState(false);
   const [createAccount, setCreateAccount] = useState(false);
   const [login, setLogin] = useState(true);
@@ -111,6 +112,7 @@ function Login({ onClose }) {
     // setError("");
     // setMessage("");
     // e.preventDefault();
+    let mentorProfileCheck = false;
 
     console.log(userName, password);
 
@@ -125,27 +127,21 @@ function Login({ onClose }) {
           username: userName,
           password: password,
         })
-        .then((res) => {
+        .then(async (res) => {
           console.log(res.data);
           const data = res.data;
           console.log(data.user_data);
           if (data.condition === "success") {
             localStorage.setItem("token", data.token);
             onClose();
-
-            console.log(data.user_data[6]);
-            if (data.user_data[6] === "mentor") {
-              navigate("/mentor-profile", {
-                state: { user_data: data.user_data },
-              });
-              return;
-            }
-            if (data.user_data[6] === "mentee") {
-              navigate("/mentor-profile", {
-                state: { user_data: data.user_data },
-              });
-              return;
-            }
+            const user_info = data.user_data;
+            await setUser(user_info);
+            console.log(user);
+          }
+          if (data.user_data[6] == "mentee") {
+            navigate("/profile");
+          } else if (data.user_data[6] == "mentor") {
+            navigate("/profile");
           } else {
             setError("Invalid credentials");
           }

@@ -4,7 +4,7 @@ import Hamburger from "hamburger-react";
 import { motion } from "framer-motion";
 import Login from "./Login";
 
-function Navbar() {
+function Navbar({user, setUser}) {
   const [login, setLogin] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -94,7 +94,7 @@ function Navbar() {
       {login && (
         <>
           <div className="fixed inset-0 bg-black bg-opacity-50 z-20"></div>
-          <Login onClose={() => setLogin(false)} />
+          <Login onClose={() => setLogin(false)} user={user} setUser={setUser}/>
         </>
       )}
     </>

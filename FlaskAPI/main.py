@@ -4,10 +4,13 @@ from dotenv import load_dotenv
 from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import base64
-from UserTableInfo import add_user, get_user, add_mentee, add_mentor
-from messagetableinfo import add_message
+from UserTableInfo import add_user, get_user, update_user, get_user_preferences, get_user_with_email, get_mentees
+from MatchTableInfo import add_inital_match, update_match_status_accepted, update_match_status_rejected, get_mentee_requests_from_database
+from messagetableinfo import fetch_rooms, add_message_to_table
 from cryptography.fernet import Fernet
 import jwt
+from model_logic import fetch_mentors
+from model_logic import model_route
 
 
 
@@ -61,10 +64,6 @@ def addUser():
     password = data["password"]
 
     encrypted_password = cipher_suite.encrypt(password.encode())
-    
-
-
-
 
     newUser = add_user(firstname, lastname, username,  email, encrypted_password , role)
     if newUser == False:
@@ -110,8 +109,8 @@ def handle_new_message(message):
     for user in users:
         if users[user] == request.sid:
             username = user
-    emit("chat", {"message": message['message'], "username": message['username']}, broadcast=True)
-    add_message(message['username'], message['message'])
+    emit("chat", {"message": message['message'], "username": message['username1'], "roomID": message['room']}, broadcast=True)
+    add_message_to_table(message['username'], message['message'], message['room'])
 
 @app.post("/users/signin")
 def signin():
@@ -122,6 +121,7 @@ def signin():
         
 
         user = get_user(username, password)
+        print("user info: ",user)
         role = user[6]
         print("user role: ", role)
 
@@ -138,31 +138,103 @@ def signin():
 def reset_password():
     pass
 
-@app.post("/users/mentee/updateprofile")
-def upload_mentee():
+@app.post("/users/getUser")
+def find_user_with_email():
     data = request.get_json()
-    email = data["email"]
-    major = data["major"]
-    school = data["school"]
-    gradelevel = data["gradelevel"]
-    career_interests = data["careerinterests"]
-    newMentee = add_mentee(email, major , school, gradelevel, career_interests)
-    if newMentee == False:
-        return {"Response": "Mentee was not added successfully"}, 500
-    return {"Response": "Mentee was added successfully"}, 201
+    user = None
+    if data:
+        email = data['email']
+        user = get_user_with_email(email)
+    if user:
+        return {"Reponse": "User found", "User": user}
+    return {"Response": "User not Found", "User": None}
 
-@app.post("/users/mentor/updateprofile")
-def upload_mentor():
+
+@app.post("/users/updateprofile")
+def add_interests_to_profile():
     data = request.get_json()
     email = data["email"]
-    companyname = data["companyname"]
-    jobtitle = data["jobtitle"]
-    industry = data["industry"]
-    yearsofexperience = data["yearsofexperience"]
-    newMentor = add_mentor(email, companyname, jobtitle, industry, yearsofexperience)
-    if newMentor == False:
-        return {"Response": "Mentor was not added successfully"}, 500
-    return {"Response": "Mentor was added successfully"}, 201
+    bio = data["bio"]
+    jobtitle = data["jobTitle"]
+    career_interest = data["careerInterest"]
+    update = update_user(email, bio, jobtitle, career_interest)
+    if update == False:
+        return {"Response": "Profile was not updated successfully"}, 500
+    user_preferences = get_user_with_email(email)
+    return {"Response": "Profile was updated successfully", "UserPreferences": user_preferences}, 201
+
+@app.post("/matches/addmatch")
+def add_initial_match_request():
+    data = request.get_json()
+    menteeEmail = data["menteeEmail"]
+    mentorEmail = data["mentorEmail"]
+    try:
+        success = add_inital_match(menteeEmail, mentorEmail)
+        if success:
+            return {"Response": "Request was made successfully"}
+    except Exception as e:
+        return {"error": str(e)}, 500
+    
+
+@app.post("/matches/updatematch/statustoaccepted")
+def update_match_status_to_accepted():
+    data = request.get_json()
+    menteeEmail = data["menteeEmail"]
+    mentorEmail = data["mentorEmail"]
+    try:
+        success = update_match_status_accepted(menteeEmail, mentorEmail)
+        if success:
+            return {"Response": "Request was made successfully"}
+    except Exception as e:
+        return {"error": str(e)}, 500
+    
+@app.post("/matches/updatematch/statustorejected")
+def update_match_status_to_rejected():
+    data = request.get_json()
+    menteeEmail = data["menteeEmail"]
+    mentorEmail = data["mentorEmail"]
+    try: 
+        success = update_match_status_rejected(menteeEmail, mentorEmail)
+        if success:
+            return {"Response": "Request was made successfully"}
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+@app.post("/matches/getmenteerequests")
+def get_mentee_requests():
+    data = request.get_json()
+    mentorEmail = data["mentorEmail"]
+    try:
+        menteeEmails = get_mentee_requests_from_database(mentorEmail)
+        emails = [row[0] for row in menteeEmails]
+        print(emails)
+        menteeList = get_mentees(emails)
+        if menteeList:
+            return {"Response": "Mentees gathered successfully", "MenteeList": menteeList}
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+@app.post("/model/fetchMentors")
+def fetch_mentors_from_model():
+    data = request.get_json()
+    career_interest = data["careerInterest"]
+    try:
+        results = fetch_mentors(career_interest)
+        return {"Response": "Mentees gathered successfully", "MentorList": results}
+    except Exception as e:
+        return {"error": str(e)}, 500
+    
+@app.post("/messages/get_rooms")
+def get_message_rooms():
+    data = request.get_json()
+    email = data['email']
+    try:
+        rooms = fetch_rooms(email)
+        return {"Response": "Mentees gathered successfully", "RoomList": rooms}
+    except Exception as e:
+        return {"error": str(e)}, 500
+
+app.register_blueprint(model_route)
 
 if __name__ == "__main__":
     socketio.run(app, debug=True)

@@ -1,22 +1,43 @@
 import React, { useEffect, useState } from "react";
 import LogggedNavbar from "../components/LogggedNavbar";
+import { useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
 import MenteeProfileCard from "../components/MenteeProfileCard";
+import axios from "axios";
 
 const MenteeProfile = () => {
   // State for form inputs (used for editing)
-  const [nameInput, setNameInput] = useState('');
-  const [jobTitleInput, setJobTitleInput] = useState('');
-  const [bioInput, setBioInput] = useState('');
-  const [careerInterestInput, setCareerInterestInput] = useState(''); // For dropdown
-
+  const [nameInput, setNameInput] = useState("");
+  const [jobTitleInput, setJobTitleInput] = useState("");
+  const [bioInput, setBioInput] = useState("");
+  const [careerInterestInput, setCareerInterestInput] = useState(""); // For dropdown
 
   // State for saved values (shown in profile card view)
-  const [name, setName] = useState('');
-  const [jobTitle, setJobTitle] = useState('');
-  const [bio, setBio] = useState('');
-  const [careerInterest, setCareerInterest] = useState('');
+  const [name, setName] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
+  const [bio, setBio] = useState("");
+  const [careerInterest, setCareerInterest] = useState("");
 
+  //ftch example from models route
+  useEffect(() => {
+    const fetchMentors = async () => {
+      const response = await axios.get(
+        "http://127.0.0.1:5000/model/fetchMentors"
+      );
+      console.log(response.response);
+    };
+
+    fetchMentors();
+  }, []);
+
+  const location = useLocation();
+  const {user_data} = location.state || {}
+  console.log(user_data)
+  const firstName = user_data[1]
+  const lastName = user_data[2]
+  const username = user_data[3]
+  const email = user_data[5]
+  const role = user_data[6]
 
   const handleSave = () => {
     // You can handle form submission or saving the data here
@@ -29,16 +50,21 @@ const MenteeProfile = () => {
   };
 
   return (
-    <div className="min-h-screen p-5 bg-base-color"> 
-       <LogggedNavbar />
+    <div className="min-h-screen p-5 bg-base-color">
+      <LogggedNavbar />
 
-      <hr className="border-mocha-color"/>
+      <hr className="border-mocha-color" />
 
       <div className="flex justify-between mt-12 px-12">
         {/* Profile Card View */}
-        
+
         <div className="w-1/4 p-5 bg-darker-nav-color flex flex-col items-center justify-center h-128">
-          <MenteeProfileCard name={name} jobTitle={jobTitle} bio={bio} careerInterest={careerInterest}/>
+          <MenteeProfileCard
+            name={name}
+            jobTitle={jobTitle}
+            bio={bio}
+            careerInterest={careerInterest}
+          />
         </div>
         {/*  
           <h1 className="text-mocha-color">Profile Card View</h1>
@@ -53,39 +79,42 @@ const MenteeProfile = () => {
 
         {/* Edit Profile Section */}
         <div className="w-2/5 p-5 bg-darker-nav-color flex flex-col items-center">
-          <h1 className="text-mocha-color">Edit Profile</h1>  
-          <img src="https://via.placeholder.com/150" alt="Profile Pic" className="mb-5"/>
-          
+          <h1 className="text-mocha-color">Edit Profile</h1>
+          <img
+            src="https://via.placeholder.com/150"
+            alt="Profile Pic"
+            className="mb-5"
+          />
+
           {/* Input fields */}
           <h2 className="text-mocha-color">Name:</h2>
-          <input 
-            type="text" 
+          <input
+            type="text"
             value={nameInput} // Editable input
             onChange={(e) => setNameInput(e.target.value)} // Updates input state
             className="mb-3 p-2 border rounded"
           />
           <p>Status:</p>
           <h2 className="text-mocha-color">Job Title:</h2>
-          <input 
-            type="text" 
+          <input
+            type="text"
             value={jobTitleInput} // Editable input
             onChange={(e) => setJobTitleInput(e.target.value)} // Updates input state
             className="mb-3 p-2 border rounded"
           />
           <h2>Company:</h2>
           <h2 className="text-mocha-color">Bio:</h2>
-          <textarea 
+          <textarea
             value={bioInput} // Editable input
             onChange={(e) => setBioInput(e.target.value)} // Updates input state
             className="mb-5 p-2 border rounded"
           />
 
-  
           {/* Dropdown for Career Interest */}
           <h2 className="text-mocha-color">Career Interest:</h2>
-          <select 
-            value={careerInterestInput} 
-            onChange={(e) => setCareerInterestInput(e.target.value)} 
+          <select
+            value={careerInterestInput}
+            onChange={(e) => setCareerInterestInput(e.target.value)}
             className="mb-5 p-2 border rounded"
           >
             <option value="">Select a career interest</option>
@@ -96,7 +125,7 @@ const MenteeProfile = () => {
             <option value="Cybersecurity">Cybersecurity</option>
           </select>
 
-          <button 
+          <button
             className="mt-5 px-5 py-2 bg-green-500 text-white rounded cursor-pointer"
             onClick={handleSave}
           >
@@ -107,6 +136,6 @@ const MenteeProfile = () => {
       <Footer />
     </div>
   );
-}
+};
 
 export default MenteeProfile;

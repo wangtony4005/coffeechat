@@ -7,7 +7,8 @@ import { motion, useInView, useAnimation } from "framer-motion";
 import Fade from "../components/Fade";
 import { useNavigate } from "react-router-dom";
 
-function Home() {
+function Home({user, setUser}) {
+  console.log(user, setUser)
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
   const Navigate = useNavigate();
@@ -34,7 +35,7 @@ function Home() {
   return (
     <main className="h-auto w-auto bg-stone-700">
       <div className="w-screen h-screen relative bg-stone-700">
-        <Navbar />
+        <Navbar user={user} setUser={setUser}/>
 
         <div>
           {/* Motion div with a gradient overlay and background image */}
