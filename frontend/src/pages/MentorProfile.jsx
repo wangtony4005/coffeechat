@@ -217,7 +217,11 @@ const MentorProfile = ({ user, setUser }) => {
                 </p>
               </div>
             </div> */}
-            <button onClick={() => updateProfile()}>Update Profile</button>
+            <button 
+              onClick={() => updateProfile()}
+              className="bg-mocha-color text-white py-2 px-4 rounded-lg hover:bg-darker-nav-color transition"
+            >
+              Update Profile</button>
           </div>
 
           <div className="flex-1 flex flex-col space-y-4 text-black rounded-lg drop-shadow-lg">

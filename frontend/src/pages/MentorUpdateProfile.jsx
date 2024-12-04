@@ -55,6 +55,7 @@ const MentorUpdateProfile = ({ user, setUser }) => {
   };
 
   return (
+    <div className="min-h-screen bg-base-color text-mocha-color">
     <div
       style={{
         maxWidth: "500px",
@@ -64,7 +65,8 @@ const MentorUpdateProfile = ({ user, setUser }) => {
         borderRadius: "8px",
       }}
     >
-      <h2>Update Your Profile</h2>
+      <h2 className="font-bold text-center mb-6">Update Your Profile</h2>
+
       <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: "15px" }}>
           <label htmlFor="jobTitle">Job Title:</label>
@@ -104,18 +106,12 @@ const MentorUpdateProfile = ({ user, setUser }) => {
 
         <button
           type="submit"
-          style={{
-            padding: "10px 15px",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            border: "none",
-            borderRadius: "5px",
-            cursor: "pointer",
-          }}
+          className="bg-mocha-color text-white py-2 px-4 rounded-lg hover:bg-darker-nav-color transition"
         >
           Update Profile
         </button>
       </form>
+    </div>
     </div>
   );
 };
