@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/navbar";
 import Footer from "../components/Footer";
 import faqimg from "../assets/faqimg.jpeg";
 import homepageimg1 from "../assets/coffee-shop.jpg";
