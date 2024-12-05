@@ -96,10 +96,10 @@ const MentorProfile = ({ user, setUser }) => {
     // Function to fetch data from the API
     const fetchMentees = async () => {
       try {
-        if (user[6] != "Mentor"){
+        if (user[6] != "mentor"){
           return
         }
-        const response = await axios.get("http://127.0.0.1:5000/matches/getmenteerequests", {mentorEmail: user[5]}).then((res) => {
+        const response = await axios.post("http://127.0.0.1:5000/matches/getmenteerequests", {mentorEmail: user[5]}).then((res) => {
           console.log(res.data)
           setmenteeRequests(response.data.MenteeList);
         }); 
@@ -114,8 +114,11 @@ const MentorProfile = ({ user, setUser }) => {
   useEffect(() => {
     const fetchMentors = async () => {
       try {
+        if (user[6] != "mentee"){
+          return
+        }
         const response = await axios
-          .get("http://127.0.0.1:5000/model/fetchMentors", {
+          .post("http://127.0.0.1:5000/model/fetchMentors", {
             careerInterest: user[9],
           })
           .then(async (res) => {
