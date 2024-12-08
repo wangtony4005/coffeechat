@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import { json } from "react-router-dom";
 import MentorUpdateProfile from "../pages/MentorUpdateProfile";
 import ProfileCard from "../components/ProfileCard";
 
@@ -39,6 +40,8 @@ const MentorProfile = ({ user, setUser }) => {
       setError("Neither user or local storage available");
     }
   }, []);
+  const navigate = useNavigate();
+  const { user_data, form_data } = location.state || {};
 
   const handleCreateMatch = async (mentoremail, indexToRemove) => {
     setMentorCards((mentorCards) => mentorCards.filter((_, index) => index !== indexToRemove));
