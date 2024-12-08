@@ -1,13 +1,23 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { IoIosExit } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Sidebar({ user_data }) {
   const navigate = useNavigate();
 
+  useEffect(() => {
+    console.log("side bar user data: ", user_data);
+  }, []);
+
   const logout = () => {
     localStorage.removeItem("token");
     navigate("/");
+  };
+
+  const handleChatPage = () => {
+    navigate("/chatpage", {
+      state: { user_data: user_data },
+    });
   };
   return (
     <aside className="flex flex-col flex-shrink-0 w-64 h-screen bg-gray-800 text-white p-5">
@@ -26,9 +36,15 @@ function Sidebar({ user_data }) {
         <a href="" className="text-gray-300 hover:text-white">
           Profile
         </a>
-        <a href="chatpage" className="text-gray-300 hover:text-white">
+        <Link
+          to={{
+            pathname: "/chatpage",
+            state: { user: user_data },
+          }}
+          className="text-gray-300 hover:text-white"
+        >
           Messages
-        </a>
+        </Link>
         <a href="" className="text-gray-300 hover:text-white">
           Settings
         </a>
