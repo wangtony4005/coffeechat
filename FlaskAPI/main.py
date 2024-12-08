@@ -28,7 +28,7 @@ cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 socketio = SocketIO(app, cors_allowed_origins='*')
 
 
-CORS(app, resources={r"/users/*": {"origins": "*"}},
+CORS(app, resources={r"/users/*": {"origins": "*"}, r"/matches/*": {"origins": "*"}, r"/model/*": {"origins": "*"}, r"/messages/*": {"origins": "*"}},
      methods=["GET", "POST"],
      allow_headers=["Content-Type"])
 
