@@ -4,6 +4,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import LoggedNavBar from "../components/LogggedNavbar";
 import { IoArrowBackCircle } from "react-icons/io5";
 
+import axios from "axios";
+
 const socket = io("http://127.0.0.1:5000", { autoConnect: false });
 
 // const chooseChat = [
@@ -161,7 +163,7 @@ const ChatApp = ({user, setUser}) => {
           className="flex-[1] flex-col relative h-full flex pt-4" // Adjusted padding to fit back button
           style={{ height: "100vh", overflowY: "scroll" }}
         >
-          {chooseChat.map((chat, index) => (
+          {chooseChat && chooseChat.map((chat, index) => (
             <div
               key={index}
               className="flex items-center border-2 p-4 w-full h-24 rounded-lg m-0 right-0 left-0 relative hover:bg-gray-200 cursor-pointer"
