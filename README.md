@@ -83,11 +83,19 @@ POSIX Command:
 ```bash
 $ <venv>/bin/Activate.ps1
 ```
+Mac:
+```bash
+source venv/bin/activate
+```
 
 9. Install dependencies from requirements.txt file
 
 ```bash
 pip install -r requirements.txt
+```
+or
+```bash
+pip3 install -r requirements.txt
 ```
 
 10. Run the server
