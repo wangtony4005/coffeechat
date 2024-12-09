@@ -33,7 +33,7 @@ function Sidebar({ user_data }) {
           </a>
         )}
 
-        <a href="" className="text-gray-300 hover:text-white">
+        <a href="profile" className="text-gray-300 hover:text-white">
           Profile
         </a>
         <Link
