@@ -55,7 +55,7 @@ def fetch_rooms(email):
     fetch_message_rooms = ("""
                             SELECT * FROM messages WHERE menteeEmail = %s OR mentorEmail = %s
                            """)
-    print(email)
+    print("email in fetch_rooms function : ",email)
     with connection:
         with connection.cursor() as cursor:
             cursor.execute(fetch_message_rooms, (email, email,))

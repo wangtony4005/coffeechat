@@ -5,7 +5,6 @@ import LoggedNavBar from "../components/LogggedNavbar";
 import { IoArrowBackCircle } from "react-icons/io5";
 import profile_icon from "../assets/anonprofile.jpg";
 
-
 import axios from "axios";
 
 const socket = io("http://127.0.0.1:5000", { autoConnect: false });
@@ -73,14 +72,15 @@ const socket = io("http://127.0.0.1:5000", { autoConnect: false });
 //   },
 // ];
 
-const ChatApp = ({user, setUser}) => {
-  console.log(user)
+const ChatApp = ({ user, setUser }) => {
+  console.log(user);
   const [username1, setUsername] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [isChatActive, setIsChatActive] = useState(false);
   const [room, setRoom] = useState();
-  const [chooseChat, setChooseChat] = useState()
+  const [chooseChat, setChooseChat] = useState();
+  const [userMessage, setUserMessage] = useState("");
 
   const navigate = useNavigate(); // Use useNavigate for programmatic navigation
   const location = useLocation();
@@ -95,16 +95,32 @@ const ChatApp = ({user, setUser}) => {
   useEffect(() => {
     const getMessageRooms = async () => {
       try {
-        const response = await axios.post("http://127.0.0.1:5000/messages/get_rooms", {email: user[5]}).then(async (res) => {
-          console.log(res.data)
-          setChooseChat(res.data.RoomList)
-        })
+        const response = await axios
+          .post("http://127.0.0.1:5000/messages/get_rooms", { email: user[5] })
+          .then(async (res) => {
+            console.log(res.data);
+            if (res.data.Response == "No rooms found") {
+              console.log(res.data.error);
+              alert("No rooms found");
+              setUserMessage(
+                "No rooms found, Connect with a mentor to get started!"
+              );
+              setChooseChat([]);
+              return;
+            } else {
+              setChooseChat(res.data.RoomList);
+            }
+          });
       } catch (err) {
-        console.log(err)
+        console.log(err.message);
+        if (err.message.response == "No rooms found") {
+          console.log("No rooms found");
+          setChooseChat([]);
+        }
       }
-    }
-    getMessageRooms()
-  }, [])
+    };
+    getMessageRooms();
+  }, []);
 
   useEffect(() => {
     if (isChatActive) {
@@ -146,13 +162,12 @@ const ChatApp = ({user, setUser}) => {
     setMessages([]);
     setRoom(roomID);
     setIsChatActive(true);
-    if (user[6] == 'mentee'){
+    if (user[6] == "mentee") {
       socket.emit("join_room", { username: menteeEmail, room: roomID });
-      setUsername(menteeEmail)
-    }
-    else {
+      setUsername(menteeEmail);
+    } else {
       socket.emit("join_room", { username: mentorEmail, room: roomID });
-      setUsername(mentorEmail)
+      setUsername(mentorEmail);
     }
   };
 
@@ -163,27 +178,32 @@ const ChatApp = ({user, setUser}) => {
       </div>
 
       <div className="w-screen min-h-screen h-auto overflow-auto flex flex-col md:flex-row items-start bg-base-color">
+        {userMessage && (
+          <p className="text-gray-600 text-lg my-2">{userMessage}</p>
+        )}
+
         <div
           className="flex-[1] flex-col relative h-full flex pt-4" // Adjusted padding to fit back button
           style={{ height: "100vh", overflowY: "scroll" }}
         >
-          {chooseChat && chooseChat.map((chat, index) => (
-            <div
-              key={index}
-              className="flex items-center border-2 p-4 w-full h-24 rounded-lg m-0 right-0 left-0 relative hover:bg-gray-200 cursor-pointer"
-              onClick={(e) => handleRoomChange(e, chat[1], chat[2], chat[5])}
-            >
-              <img
-                src={profile_icon}
-                alt="pfp"
-                className="w-16 h-12 rounded-full"
-              />
-              <div className="flex flex-col relative left-7 justify-center">
-                <h1>Mentor: {chat[1]}</h1>
-                <h1>Mentee: {chat[2]}</h1>
+          {chooseChat &&
+            chooseChat.map((chat, index) => (
+              <div
+                key={index}
+                className="flex items-center border-2 p-4 w-full h-24 rounded-lg m-0 right-0 left-0 relative hover:bg-gray-200 cursor-pointer"
+                onClick={(e) => handleRoomChange(e, chat[1], chat[2], chat[5])}
+              >
+                <img
+                  src={profile_icon}
+                  alt="pfp"
+                  className="w-16 h-12 rounded-full"
+                />
+                <div className="flex flex-col relative left-7 justify-center">
+                  <h1>Mentor: {chat[1]}</h1>
+                  <h1>Mentee: {chat[2]}</h1>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         <div className="flex-[2] h-full w-full flex flex-col items-center justify-center lg:relative lg:translate-y-24 p-2 ">
