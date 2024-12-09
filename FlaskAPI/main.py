@@ -239,10 +239,17 @@ def fetch_mentors_from_model():
 def get_message_rooms():
     data = request.get_json()
     email = data['email']
+    if email == None or email == "":
+        print("No email provided")
+        return {"Response": "No email provided"}, 400
     try:
         rooms = fetch_rooms(email)
+        if rooms == None or len(rooms) == 0:
+            print("No rooms found")
+            return {"Response": "No rooms found", "RoomList": rooms}
         return {"Response": "Mentees gathered successfully", "RoomList": rooms}
     except Exception as e:
+        print("Error in fetching rooms: ", e)
         return {"error": str(e)}, 500
 
 app.register_blueprint(model_route)

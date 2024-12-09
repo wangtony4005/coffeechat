@@ -1,6 +1,6 @@
 CREATE TYPE status AS ENUM('Accepted', 'Rejected', 'Pending');
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     firstname VARCHAR(50) NOT NULL,
     lastname VARCHAR(50) NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE match(
+CREATE TABLE IF NOT EXISTS match(
     menteeEmail VARCHAR(100) NOT NULL,
     mentorEmail VARCHAR(100) NOT NULL,
     matchID INT PRIMARY KEY,
@@ -23,7 +23,7 @@ CREATE TABLE match(
     coffeechatStatus BOOLEAN
 );
 
-CREATE TABLE messages (
+CREATE TABLE IF NOT EXISTS messages (
     message_id SERIAL PRIMARY KEY,
     mentorEmail VARCHAR(255) UNIQUE,
     menteeEmail VARCHAR(255) UNIQUE,
