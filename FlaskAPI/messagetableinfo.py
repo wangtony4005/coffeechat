@@ -29,15 +29,16 @@ def add_message_to_table(email, message, room):
     ts = time.time()
     ts = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
     role = determine_mentor_or_mentee(email)
+    role = role[0]
     addMessageMentee = ("""
                     UPDATE messages
-                SET messages = array_append(messages, %s),
+                SET menteemessages = array_append(menteemessages, %s),
                     timestamps = array_append(timestamps, %s)
                 WHERE menteeEmail = %s AND roomID = %s;
             """)
     addMessageMentor = ("""
                     UPDATE messages
-                SET messages = array_append(messages, %s),
+                SET mentormessages = array_append(mentormessages, %s),
                     timestamps = array_append(timestamps, %s)
                 WHERE mentorEmail = %s AND roomID = %s;
             """)
@@ -69,7 +70,7 @@ def determine_mentor_or_mentee(email):
                       """)
     with connection:
         with connection.cursor() as cursor:
-            cursor.execute(determine_role, (email, email,))
+            cursor.execute(determine_role, (email,))
             role = cursor.fetchone()
     return role
 

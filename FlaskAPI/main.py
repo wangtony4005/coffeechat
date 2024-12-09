@@ -110,7 +110,7 @@ def handle_new_message(message):
         if users[user] == request.sid:
             username = user
     emit("chat", {"message": message['message'], "username": message['username1'], "roomID": message['room']}, broadcast=True)
-    add_message_to_table(message['username'], message['message'], message['room'])
+    add_message_to_table(message['username1'], message['message'], message['room'])
 
 @app.post("/users/signin")
 def signin():

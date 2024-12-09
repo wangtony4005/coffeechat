@@ -27,8 +27,8 @@ CREATE TABLE messages (
     message_id SERIAL PRIMARY KEY,
     mentorEmail VARCHAR(255) UNIQUE,
     menteeEmail VARCHAR(255) UNIQUE,
-    mentorMessages TEXT[] DEFAULT ARRAY[]::TEXT[],
-    menteeMessages TEXT[] DEFAULT ARRAY[]::TEXT[],
+    mentorMessages TEXT[],
+    menteeMessages TEXT[],
 	roomID BIGINT, 
     timestamps TIMESTAMP[] DEFAULT ARRAY[]::TIMESTAMP[]
 );
