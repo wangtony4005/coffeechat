@@ -14,6 +14,7 @@ host = os.getenv("DATABASE_HOST")
 connection = psycopg2.connect(
     dbname=dbname, user=user, password=password, host=host, port=port
 )
+connection.autocommit = True
 
 def get_user(email):
     with connection:

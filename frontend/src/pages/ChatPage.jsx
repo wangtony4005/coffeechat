@@ -3,6 +3,8 @@ import { io } from "socket.io-client";
 import { useNavigate, useLocation } from "react-router-dom";
 import LoggedNavBar from "../components/LogggedNavbar";
 import { IoArrowBackCircle } from "react-icons/io5";
+import profile_icon from "../assets/anonprofile.jpg";
+
 
 import axios from "axios";
 
@@ -146,9 +148,11 @@ const ChatApp = ({user, setUser}) => {
     setIsChatActive(true);
     if (user[6] == 'mentee'){
       socket.emit("join_room", { username: menteeEmail, room: roomID });
+      setUsername(menteeEmail)
     }
     else {
       socket.emit("join_room", { username: mentorEmail, room: roomID });
+      setUsername(mentorEmail)
     }
   };
 
@@ -169,15 +173,15 @@ const ChatApp = ({user, setUser}) => {
               className="flex items-center border-2 p-4 w-full h-24 rounded-lg m-0 right-0 left-0 relative hover:bg-gray-200 cursor-pointer"
               onClick={(e) => handleRoomChange(e, chat[1], chat[2], chat[5])}
             >
-              {/* <img
-                src={chat.pfp}
+              <img
+                src={profile_icon}
                 alt="pfp"
                 className="w-16 h-12 rounded-full"
-              /> */}
-              {/* <div className="flex flex-col relative left-7 justify-center">
-                <h1>{chat.name}</h1>
-                <h1>{chat.description}</h1>
-              </div> */}
+              />
+              <div className="flex flex-col relative left-7 justify-center">
+                <h1>Mentor: {chat[1]}</h1>
+                <h1>Mentee: {chat[2]}</h1>
+              </div>
             </div>
           ))}
         </div>

@@ -109,7 +109,7 @@ const MentorProfile = ({ user, setUser }) => {
     };
 
     fetchMentees(); 
-  }, [menteeRequests]); 
+  }, []); 
 
   useEffect(() => {
     const fetchMentors = async () => {
@@ -132,7 +132,7 @@ const MentorProfile = ({ user, setUser }) => {
         } else if (error.request) {
           console.error("Request error: ", error.request);
         } else {
-          console.error("General error: ", error.message);
+          console.error("General error: ", error);
         }
         console.error(error.config);
       }
@@ -231,7 +231,7 @@ const MentorProfile = ({ user, setUser }) => {
 
           <div className="flex-1 flex flex-col space-y-4 text-black rounded-lg drop-shadow-lg">
             <div className="flex-1 flex flex-col items-center justify-start p-4 bg-white rounded-lg drop-shadow-lg overflow-auto">
-              {"mentor" == "mentor" ? (
+              {user[6] == "mentor" ? (
                 <>
                   <h2 className="text-lg font-bold mb-4">Mentee Requests</h2>
                   {menteeRequests ? 
@@ -258,6 +258,7 @@ const MentorProfile = ({ user, setUser }) => {
                 : <h2 className="text-lg font-bold mb-4">Loading Mentee Requests...</h2>} </>
               ) : (
                 <>
+                <h2 className="text-lg font-bold mb-4">Mentor Recommendations</h2>
                 {mentorCards ? 
                   mentorCards.map((mentor, index) => (
                     <div
@@ -273,7 +274,7 @@ const MentorProfile = ({ user, setUser }) => {
                       <p>
                         <strong>Bio: </strong> {mentor[7]}
                       </p>
-                      <button onClick={handleCreateMatch(mentor[5], index)}>Send Match Request</button>
+                      <button onClick={() => handleCreateMatch(mentor[5], index)}>Send Match Request</button>
                     </div>
                   )) : <h2>Loading Possible Matches...</h2> }
                 </>
