@@ -11,6 +11,106 @@ import { json } from "react-router-dom";
 import MentorUpdateProfile from "../pages/MentorUpdateProfile";
 import ProfileCard from "../components/ProfileCard";
 
+import {
+  User,
+  Calendar,
+  FileText,
+  Send,
+  CheckCircle,
+  XCircle,
+} from "lucide-react";
+
+const MentorCard = ({ mentor, index, handleCreateMatch }) => {
+  return (
+    <div
+      className="group relative transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl 
+             bg-white border-2 border-transparent hover:border-blue-500 
+             rounded-2xl overflow-hidden 
+             hover:ring-4 hover:ring-blue-500 hover:ring-opacity-20 
+             max-w-sm mx-auto"
+      style={{ width: "300px", height: "400px" }} // Adjust width and height as needed
+    >
+      {/* Subtle gradient background overlay */}
+      <div
+        className="absolute inset-0 opacity-10 bg-gradient-to-br from-blue-200 to-purple-200 
+               transition-opacity group-hover:opacity-30 pointer-events-none h-"
+      />
+
+      {/* Content Container */}
+      <div className="relative z-10 p-6 space-y-4">
+        {/* Header with Name */}
+        <div className="flex items-center space-x-4">
+          <div className="bg-blue-100 p-3 rounded-full">
+            <User className="text-blue-600" size={24} />
+          </div>
+          <h2 className="text-xl font-semibold text-gray-800 tracking-tight">
+            {mentor[1]} {mentor[2]}
+          </h2>
+        </div>
+
+        {/* Metadata Section */}
+        <div className="space-y-3 text-gray-600">
+          {/* Request Date */}
+          <div className="flex items-center space-x-3">
+            <Calendar className="text-gray-400" size={20} />
+            <p className="text-sm">
+              <span className="font-medium text-gray-500">Request Date:</span>{" "}
+              {mentor[10]}
+            </p>
+          </div>
+
+          {/* Bio */}
+          <div className="flex items-start space-x-3">
+            <FileText className="text-gray-400 mt-1" size={20} />
+            <p className="text-sm leading-relaxed text-gray-700 italic">
+              {mentor[7]}
+            </p>
+          </div>
+        </div>
+
+        {/* Action Button */}
+        <button
+          onClick={() => handleCreateMatch(mentor[5], index)}
+          className="w-full flex items-center justify-center 
+                 bg-blue-500 text-white py-3 rounded-lg 
+                 hover:bg-blue-600 transition-colors 
+                 group/button"
+        >
+          <Send size={18} className="mr-2 group-hover/button:animate-pulse" />
+          Send Match Request
+        </button>
+      </div>
+
+      {/* Subtle Animated Border */}
+      <div
+        className="absolute inset-0 border-2 border-transparent 
+               group-hover:border-blue-500 
+               group-hover:animate-pulse-border 
+               pointer-events-none"
+      />
+    </div>
+  );
+};
+
+// Custom CSS for additional animations
+const styles = `
+@keyframes pulse-border {
+  0% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: rgba(59, 130, 246, 0.5);
+  }
+  100% {
+    border-color: transparent;
+  }
+}
+
+.animate-pulse-border {
+  animation: pulse-border 2s infinite;
+}
+`;
+
 const MentorProfile = ({ user, setUser }) => {
   // State for form inputs (used for editing)
   const [name, setName] = useState("John Doe");
@@ -18,8 +118,11 @@ const MentorProfile = ({ user, setUser }) => {
   const location = useLocation();
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState(null);
-  const [menteeRequests, setmenteeRequests] = useState([])
-  const [mentorCards, setMentorCards] = useState()
+  const [menteeRequests, setmenteeRequests] = useState([]);
+  const [mentorCards, setMentorCards] = useState();
+  const [loading, setLoading] = useState(false);
+  const [menteeRequestMessage, setMenteeRequestMessage] =
+    useState("Loading...");
 
   useEffect(() => {
     if (location.state) {
@@ -60,69 +163,104 @@ const MentorProfile = ({ user, setUser }) => {
   // let career_Interest = user[9];
   // let fullname = firstName + " " + lastName;
   const handleCreateMatch = async (mentoremail, indexToRemove) => {
-    setMentorCards((mentorCards) => mentorCards.filter((_, index) => index !== indexToRemove));
-    try{
-      const response = await axios.post("http://127.0.0.1:5000/matches/addmatch", {menteeEmail: user[5], mentorEmail: mentoremail}).then((res) => {
-        console.log(res.data)
-      })
+    setMentorCards((mentorCards) =>
+      mentorCards.filter((_, index) => index !== indexToRemove)
+    );
+    try {
+      const response = await axios
+        .post("http://127.0.0.1:5000/matches/addmatch", {
+          menteeEmail: user[5],
+          mentorEmail: mentoremail,
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   const handleAcceptRequest = async (menteeEmail, indexToRemove) => {
-    setmenteeRequests((menteeRequests) => menteeRequests.filter((_, index) => index !== indexToRemove));
-    try{
-      const response = await axios.post("http://127.0.0.1:5000/matches/updatematch/statustoaccepted", {mentorEmail: user[5], menteeEmail: menteeEmail}).then((res) => {
-        console.log(res.data)
-      })
+    setmenteeRequests((menteeRequests) =>
+      menteeRequests.filter((_, index) => index !== indexToRemove)
+    );
+    try {
+      const response = await axios
+        .post("http://127.0.0.1:5000/matches/updatematch/statustoaccepted", {
+          mentorEmail: user[5],
+          menteeEmail: menteeEmail,
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   const handleRejectRequest = async (menteeEmail, indexToRemove) => {
-    setmenteeRequests((menteeRequests) => menteeRequests.filter((_, index) => index !== indexToRemove));
-    try{
-      const response = await axios.post("http://127.0.0.1:5000/matches/updatematch/statustorejected", {mentorEmail: user[5], menteeEmail: menteeEmail}).then((res) => {
-        console.log(res.data)
-      })
+    setmenteeRequests((menteeRequests) =>
+      menteeRequests.filter((_, index) => index !== indexToRemove)
+    );
+    try {
+      const response = await axios
+        .post("http://127.0.0.1:5000/matches/updatematch/statustorejected", {
+          mentorEmail: user[5],
+          menteeEmail: menteeEmail,
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
     } catch (err) {
-      console.log(err)
+      console.log(err);
     }
-  }
+  };
 
   useEffect(() => {
     // Function to fetch data from the API
     const fetchMentees = async () => {
       try {
-        if (user[6] != "mentor"){
-          return
+        if (user[6] != "mentor") {
+          return;
         }
-        const response = await axios.post("http://127.0.0.1:5000/matches/getmenteerequests", {mentorEmail: user[5]}).then((res) => {
-          console.log(res.data)
-          setmenteeRequests(response.data.MenteeList);
-        }); 
+        setLoading(true);
+        const response = await axios
+          .post("http://127.0.0.1:5000/matches/getmenteerequests", {
+            mentorEmail: user[5],
+          })
+          .then((res) => {
+            console.log("mentee request data: ", res.data);
+            if (res.data.Success == false) {
+              setmenteeRequests([]);
+              console.log("No mentee requests found");
+              setMenteeRequestMessage("No mentee requests found");
+              setLoading(false);
+              return;
+            } else {
+              setmenteeRequests(res.data.MenteeList);
+            }
+            setLoading(false);
+          });
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
 
-    fetchMentees(); 
-  }, []); 
+    fetchMentees();
+  }, []);
 
   useEffect(() => {
     const fetchMentors = async () => {
       try {
-        if (user[6] != "mentee"){
-          return
+        if (user[6] != "mentee") {
+          return;
         }
         const response = await axios
           .post("http://127.0.0.1:5000/model/fetchMentors", {
             careerInterest: user[9],
           })
           .then(async (res) => {
-            console.log(res.data)
+            console.log(res.data);
             setMentorCards(res.data.MentorList);
           });
         console.log("response from the user: ", response.data);
@@ -140,35 +278,6 @@ const MentorProfile = ({ user, setUser }) => {
 
     fetchMentors();
   }, []);
-
-  const menteeRequestsExample = [
-    {
-      id: 1,
-      name: "Alice Smith",
-      requestDate: "2024-10-22",
-    },
-    {
-      id: 2,
-      name: "Bob Johnson",
-      requestDate: "2024-10-23",
-    },
-    {
-      id: 3,
-      name: "Charlie Brown",
-      requestDate: "2024-10-24",
-    },
-    {
-      id: 4,
-      name: "David Williams",
-      requestDate: "2024-10-25",
-    },
-    { id: 5, name: "Eva Green", requestDate: "2024-10-26", status: "Pending" },
-    {
-      id: 6,
-      name: "Frank Miller",
-      requestDate: "2024-10-27",
-    },
-  ];
 
   const updateProfile = () => {
     navigate("/mentor-update-profile");
@@ -221,7 +330,7 @@ const MentorProfile = ({ user, setUser }) => {
                 </p>
               </div>
             </div> */}
-            <button 
+            <button
               onClick={() => updateProfile()}
               className="bg-mocha-color text-white py-2 px-4 rounded-lg hover:bg-darker-nav-color transition"
             >
@@ -234,49 +343,93 @@ const MentorProfile = ({ user, setUser }) => {
               {user[6] == "mentor" ? (
                 <>
                   <h2 className="text-lg font-bold mb-4">Mentee Requests</h2>
-                  {menteeRequests ? 
-                  <div className="grid grid-cols-2 gap-4 ">
-                    {menteeRequests.map((request, index) => (
-                      <div
-                        key={request.id}
-                        className="p-2 border rounded-lg bg-gray-100 shadow"
-                      >
-                        <p>
-                          <strong>Name:</strong> {request[1] + " " + request[2]}
-                        </p>
-                        <p>
-                          <strong>Request Date:</strong> {request[11]}
-                        </p>
-                        <p>
-                          <strong>Bio: </strong> {request[8]}
-                        </p>
-                        <button onClick={() => handleAcceptRequest(request[5], index)}>Accept</button>
-                        <button onClick={() => handleRejectRequest(request[5], index)}>Reject</button>
-                      </div>
-                    ))}
-                  </div>
-                : <h2 className="text-lg font-bold mb-4">Loading Mentee Requests...</h2>} </>
+                  {menteeRequests && !loading ? (
+                    <div className="grid grid-cols-2 gap-4 ">
+                      {menteeRequests.map((request, index) => (
+                        <div
+                          key={request.id}
+                          className="p-2 border rounded-lg bg-gray-100 shadow"
+                        >
+                          <p>
+                            <strong>Name:</strong>{" "}
+                            {request[1] + " " + request[2]}
+                          </p>
+                          <p>
+                            <strong>Request Date:</strong> {request[11]}
+                          </p>
+                          <p>
+                            <strong>Bio: </strong> {request[8]}
+                          </p>
+                          <button
+                            onClick={() =>
+                              handleAcceptRequest(request[5], index)
+                            }
+                          >
+                            Accept
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleRejectRequest(request[5], index)
+                            }
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <h2 className="text-lg font-bold mb-4">
+                      {menteeRequestMessage}
+                    </h2>
+                  )}{" "}
+                </>
               ) : (
                 <>
-                <h2 className="text-lg font-bold mb-4">Mentor Recommendations</h2>
-                {mentorCards ? 
-                  mentorCards.map((mentor, index) => (
-                    <div
-                      key={mentor[0]}
-                      className="p-2 border rounded-lg bg-gray-100 shadow"
-                    >
-                      <p>
-                        <strong>Name:</strong> {mentor[1]} " " {mentor[2]}
-                      </p>
-                      <p>
-                        <strong>Request Date:</strong> {mentor[10]}
-                      </p>
-                      <p>
-                        <strong>Bio: </strong> {mentor[7]}
-                      </p>
-                      <button onClick={() => handleCreateMatch(mentor[5], index)}>Send Match Request</button>
-                    </div>
-                  )) : <h2>Loading Possible Matches...</h2> }
+                  <h2 className="text-lg font-bold mb-4">
+                    Mentor Recommendations
+                  </h2>
+                  {mentorCards && !loading ? (
+                    mentorCards.map((mentor, index) => (
+                      // <MentorCard
+                      //   mentor={mentor}
+                      //   index={index}
+                      //   handleCreateMatch={handleCreateMatch}
+                      // />
+                      <div
+                        key={mentor[0]}
+                        className="p-4 border border-gray-300 rounded-lg bg-white shadow-md 
+             hover:shadow-lg transition-shadow duration-300 
+             w-72 h-80" // Set fixed width and height for uniformity
+                      >
+                        <div className="flex flex-col justify-between h-full">
+                          <div className="mb-4 flex-1">
+                            <p className="text-lg font-semibold text-gray-800">
+                              <strong>Name:</strong> {mentor[1]} {mentor[2]}
+                            </p>
+                          </div>
+                          <div className="mb-4 flex-1">
+                            <p className="text-sm text-gray-600">
+                              <strong>Request Date:</strong> {mentor[10]}
+                            </p>
+                          </div>
+                          <div className="mb-4 flex-1">
+                            <p className="text-sm text-gray-600">
+                              <strong>Bio:</strong> {mentor[7]}
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => handleCreateMatch(mentor[5], index)}
+                            className="w-full py-2 px-4 bg-blue-500 text-white rounded-md 
+                 hover:bg-blue-600 transition-colors duration-300 mt-4"
+                          >
+                            Send Match Request
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <h2>{menteeRequestMessage}</h2>
+                  )}
                 </>
               )}
             </div>
