@@ -221,14 +221,18 @@ def get_mentee_requests():
 def fetch_mentors_from_model():
     data = request.get_json()
     career_interest = data["careerInterest"]
+
+    if career_interest == None or career_interest == "":
+        return {"Response": "No career interest provided"}, 400
     try:
         results = fetch_mentors(career_interest)
-        if len(results) == 0:
+        if results == None or len(results) == 0:
             results = get_mentors()
 
             return {"Response": "Default mentors as backup", "MentorList": results}
         return {"Response": "Mentees gathered successfully", "MentorList": results}
     except Exception as e:
+        print("Error in fetching mentors from model: ", e)
         return {"error": str(e)}, 500
     
 @app.post("/messages/get_rooms")

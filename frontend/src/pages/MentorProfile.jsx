@@ -116,7 +116,19 @@ const MentorProfile = ({ user, setUser }) => {
   const [name, setName] = useState("John Doe");
   const [jobTitle, setJobTitle] = useState("Software Engineer");
   const location = useLocation();
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(() => {
+    if (location.state) {
+      return location.state;
+    } else if (localStorage.getItem("user_data")) {
+      console.log(
+        "User data from local storage: ",
+        localStorage.getItem("user_data")
+      );
+      return JSON.parse(localStorage.getItem("user_data"));
+    } else {
+      return null;
+    }
+  });
   const [error, setError] = useState(null);
   const [menteeRequests, setmenteeRequests] = useState([]);
   const [mentorCards, setMentorCards] = useState();
@@ -260,6 +272,18 @@ const MentorProfile = ({ user, setUser }) => {
             careerInterest: user[9],
           })
           .then(async (res) => {
+            console.log("response from the mentor: ", res.data);
+            if (res.data.Response == "No career interest provided") {
+              console.log("No career interest provided");
+              setMentorCards([]);
+              setMenteeRequestMessage(
+                "Please update your career interest in your profile to get mentor recommendations"
+              );
+              alert(
+                "Please update your career interest in your profile to get mentor recommendations"
+              );
+              return;
+            }
             console.log(res.data);
             setMentorCards(res.data.MentorList);
           });
@@ -267,6 +291,11 @@ const MentorProfile = ({ user, setUser }) => {
       } catch (error) {
         if (error.response) {
           console.error("Response error: ", error.response.data);
+          if (error.response.data.Response == "No career interest provided") {
+            setMentorCards([]);
+            setMenteeRequestMessage(error.response.data.Error);
+            alert("Please update your career interest in your profile");
+          }
         } else if (error.request) {
           console.error("Request error: ", error.request);
         } else {
