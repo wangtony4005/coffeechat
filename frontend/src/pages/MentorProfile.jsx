@@ -11,105 +11,7 @@ import { json } from "react-router-dom";
 import MentorUpdateProfile from "../pages/MentorUpdateProfile";
 import ProfileCard from "../components/ProfileCard";
 
-import {
-  User,
-  Calendar,
-  FileText,
-  Send,
-  CheckCircle,
-  XCircle,
-} from "lucide-react";
-
-const MentorCard = ({ mentor, index, handleCreateMatch }) => {
-  return (
-    <div
-      className="group relative transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl 
-             bg-white border-2 border-transparent hover:border-blue-500 
-             rounded-2xl overflow-hidden 
-             hover:ring-4 hover:ring-blue-500 hover:ring-opacity-20 
-             max-w-sm mx-auto"
-      style={{ width: "300px", height: "400px" }} // Adjust width and height as needed
-    >
-      {/* Subtle gradient background overlay */}
-      <div
-        className="absolute inset-0 opacity-10 bg-gradient-to-br from-blue-200 to-purple-200 
-               transition-opacity group-hover:opacity-30 pointer-events-none h-"
-      />
-
-      {/* Content Container */}
-      <div className="relative z-10 p-6 space-y-4">
-        {/* Header with Name */}
-        <div className="flex items-center space-x-4">
-          <div className="bg-blue-100 p-3 rounded-full">
-            <User className="text-blue-600" size={24} />
-          </div>
-          <h2 className="text-xl font-semibold text-gray-800 tracking-tight">
-            {mentor[1]} {mentor[2]}
-          </h2>
-        </div>
-
-        {/* Metadata Section */}
-        <div className="space-y-3 text-gray-600">
-          {/* Request Date */}
-          <div className="flex items-center space-x-3">
-            <Calendar className="text-gray-400" size={20} />
-            <p className="text-sm">
-              <span className="font-medium text-gray-500">Request Date:</span>{" "}
-              {mentor[10]}
-            </p>
-          </div>
-
-          {/* Bio */}
-          <div className="flex items-start space-x-3">
-            <FileText className="text-gray-400 mt-1" size={20} />
-            <p className="text-sm leading-relaxed text-gray-700 italic">
-              {mentor[7]}
-            </p>
-          </div>
-        </div>
-
-        {/* Action Button */}
-        <button
-          onClick={() => handleCreateMatch(mentor[5], index)}
-          className="w-full flex items-center justify-center 
-                 bg-blue-500 text-white py-3 rounded-lg 
-                 hover:bg-blue-600 transition-colors 
-                 group/button"
-        >
-          <Send size={18} className="mr-2 group-hover/button:animate-pulse" />
-          Send Match Request
-        </button>
-      </div>
-
-      {/* Subtle Animated Border */}
-      <div
-        className="absolute inset-0 border-2 border-transparent 
-               group-hover:border-blue-500 
-               group-hover:animate-pulse-border 
-               pointer-events-none"
-      />
-    </div>
-  );
-};
-
-// Custom CSS for additional animations
-const styles = `
-@keyframes pulse-border {
-  0% {
-    border-color: transparent;
-  }
-  50% {
-    border-color: rgba(59, 130, 246, 0.5);
-  }
-  100% {
-    border-color: transparent;
-  }
-}
-
-.animate-pulse-border {
-  animation: pulse-border 2s infinite;
-}
-`;
+import { Coffee, Bell, Users, Calendar } from "lucide-react";
 
 const MentorProfile = ({ user, setUser }) => {
   // State for form inputs (used for editing)
@@ -312,159 +214,136 @@ const MentorProfile = ({ user, setUser }) => {
     navigate("/mentor-update-profile");
   };
 
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#F6F3EC]">
+        <div className="p-6 bg-white rounded-lg shadow-lg">
+          <h1 className="text-red-600">{error}</h1>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-[#F6F3EC]">
+        <div className="flex items-center space-x-2">
+          <Coffee className="w-6 h-6 text-[#574C3F] animate-pulse" />
+          <span className="text-lg font-medium">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <main className="h-auto w-auto  bg-base-color">
-      <div className="w-full min-h-screen h-auto  flex flex-col md:flex-row items-start bg-base-color text-black justify-center ">
-        {error && <h1>{error}</h1>}
-        {!user ? <h1>Loading</h1> : <Sidebar user_data={user} />}
+    <main className="min-h-screen bg-[#F6F3EC]">
+      <div className="flex">
+        {/* Sidebar */}
+        <Sidebar user_data={user} />
 
-        <div className="flex flex-col md:flex-row justify-center h-screen flex-grow p-5 space-y-4 md:space-y-0 md:space-x-4">
-          <div className="flex-1 h-auto p-5 rounded-lg w-96 ">
-            {user && (
-              <ProfileCard
-                name={user[1] + " " + user[2]}
-                jobTitle={user[8]}
-                bio={user[7]}
-                careerInterest={user[9]}
-                userRole={user[6]}
-              />
-            )}
-
-            {/* <div className="flex items-center justify-center h-full flex-col ">
-              <div className="w-auto h-auto bg-white rounded-lg drop-shadow-lg px-8 py-12">
-                <div className="flex flex-col items-center justify-center text-center mb-4">
-                  <div className="w-24 h-24 bg-gray-300 rounded-full mr-4">
-                    <img
-                      src="https://via.placeholder.com/96"
-                      alt="Profile"
-                      className="w-full h-full rounded-full object-cover"
-                    />
+        {/* Main Content */}
+        <div className="flex-1 p-8">
+          <div className="container mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Profile Card */}
+              <div className="bg-white rounded-lg shadow-md p-6 transform hover:scale-[1.02] transition-transform">
+                <div className="text-center mb-6">
+                  <div className="w-24 h-24 mx-auto bg-[#F6F3EC] rounded-full flex items-center justify-center mb-4">
+                    <Users className="w-12 h-12 text-[#574C3F]" />
                   </div>
-
-                  <div className="text-wrap text-black">
-                    <h2 className="text-xl font-bold mb-2">{firstName + " " + lastName}</h2>
-                    <h3 className="text-md text-gray-600 mb-4">{user_role}</h3>
-                    <h3 className="text-md text-gray-600 mb-4">{job_Title}</h3>
+                  <h2 className="text-2xl font-bold text-[#36302A]">
+                    {user[1]} {user[2]}
+                  </h2>
+                  <p className="text-[#574C3F]">{user[8]}</p>
+                </div>
+                <div className="space-y-4">
+                  <div className="bg-[#F6F3EC] p-4 rounded-lg">
+                    <h3 className="font-semibold text-[#36302A] mb-2">
+                      About Me
+                    </h3>
+                    <p className="text-[#574C3F]">{user[7]}</p>
+                  </div>
+                  <div className="bg-[#F6F3EC] p-4 rounded-lg">
+                    <h3 className="font-semibold text-[#36302A] mb-2">
+                      Career Interests
+                    </h3>
+                    <p className="text-[#574C3F]">{user[9]}</p>
                   </div>
                 </div>
-                <p className="text-sm text-center text-wrap text-gray-700 mb-4">
-                  <strong>Bio: </strong>
-                  {bio_info}
-                </p>
-                <p className="text-sm text-gray-700 mb-4">
-                  <strong>Email:</strong> {user_email}
-                </p>
-                <p className="text-sm text-gray-700 mb-4">
-                  <strong>Career Interest:</strong> {career_Interest}
-                </p>
+                <button
+                  onClick={updateProfile}
+                  className="w-full mt-6 bg-[#574C3F] text-white py-3 px-6 rounded-lg hover:bg-[#36302A] transition-colors flex items-center justify-center space-x-2"
+                >
+                  <Coffee className="w-4 h-4" />
+                  <span>Update Profile</span>
+                </button>
               </div>
-            </div> */}
-            <button
-              onClick={() => updateProfile()}
-              className="bg-mocha-color text-white py-2 px-4 rounded-lg hover:bg-darker-nav-color transition"
-            >
-              Update Profile
-            </button>
-          </div>
 
-          <div className="flex-1 flex flex-col space-y-4 text-black rounded-lg drop-shadow-lg">
-            <div className="flex-1 flex flex-col items-center justify-start p-4 bg-white rounded-lg drop-shadow-lg overflow-auto">
-              {user[6] == "mentor" ? (
-                <>
-                  <h2 className="text-lg font-bold mb-4">Mentee Requests</h2>
-                  {menteeRequests && !loading ? (
-                    <div className="grid grid-cols-2 gap-4 ">
-                      {menteeRequests.map((request, index) => (
-                        <div
-                          key={request.id}
-                          className="p-2 border rounded-lg bg-gray-100 shadow"
-                        >
-                          <p>
-                            <strong>Name:</strong>{" "}
-                            {request[1] + " " + request[2]}
-                          </p>
-                          <p>
-                            <strong>Request Date:</strong> {request[11]}
-                          </p>
-                          <p>
-                            <strong>Bio: </strong> {request[8]}
-                          </p>
-                          <button
-                            onClick={() =>
-                              handleAcceptRequest(request[5], index)
-                            }
-                          >
-                            Accept
-                          </button>
-                          <button
-                            onClick={() =>
-                              handleRejectRequest(request[5], index)
-                            }
-                          >
-                            Reject
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  ) : (
-                    <h2 className="text-lg font-bold mb-4">
-                      {menteeRequestMessage}
-                    </h2>
-                  )}{" "}
-                </>
-              ) : (
-                <>
-                  <h2 className="text-lg font-bold mb-4">
-                    Mentor Recommendations
+              {/* Welcome Card */}
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="flex items-center space-x-3 mb-6">
+                  <Coffee className="w-8 h-8 text-[#574C3F]" />
+                  <h2 className="text-2xl font-bold text-[#36302A]">
+                    Welcome to Mocha Mentors!
                   </h2>
-                  {mentorCards && !loading ? (
-                    mentorCards.map((mentor, index) => (
-                      // <MentorCard
-                      //   mentor={mentor}
-                      //   index={index}
-                      //   handleCreateMatch={handleCreateMatch}
-                      // />
-                      <div
-                        key={mentor[0]}
-                        className="p-4 border border-gray-300 rounded-lg bg-white shadow-md 
-             hover:shadow-lg transition-shadow duration-300 
-             w-72 h-80" // Set fixed width and height for uniformity
-                      >
-                        <div className="flex flex-col justify-between h-full">
-                          <div className="mb-4 flex-1">
-                            <p className="text-lg font-semibold text-gray-800">
-                              <strong>Name:</strong> {mentor[1]} {mentor[2]}
-                            </p>
-                          </div>
-                          <div className="mb-4 flex-1">
-                            <p className="text-sm text-gray-600">
-                              <strong>Request Date:</strong> {mentor[10]}
-                            </p>
-                          </div>
-                          <div className="mb-4 flex-1">
-                            <p className="text-sm text-gray-600">
-                              <strong>Bio:</strong> {mentor[7]}
-                            </p>
-                          </div>
-                          <button
-                            onClick={() => handleCreateMatch(mentor[5], index)}
-                            className="w-full py-2 px-4 bg-blue-500 text-white rounded-md 
-                 hover:bg-blue-600 transition-colors duration-300 mt-4"
-                          >
-                            Send Match Request
-                          </button>
-                        </div>
-                      </div>
-                    ))
-                  ) : (
-                    <h2>{menteeRequestMessage}</h2>
-                  )}
-                </>
-              )}
-            </div>
+                </div>
+                <div className="space-y-4 text-[#574C3F]">
+                  <p>
+                    Brew up success with our mentorship platform! Connect with
+                    mentors or mentees and explore resources carefully curated
+                    to help you reach your career goals.
+                  </p>
+                  <div className="bg-[#F6F3EC] p-4 rounded-lg">
+                    <h3 className="font-semibold text-[#36302A] mb-2">
+                      Quick Tips
+                    </h3>
+                    <ul className="space-y-2">
+                      <li className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-[#574C3F] rounded-full"></div>
+                        <span>Update your profile regularly</span>
+                      </li>
+                      <li className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-[#574C3F] rounded-full"></div>
+                        <span>Schedule regular check-ins</span>
+                      </li>
+                      <li className="flex items-center space-x-2">
+                        <div className="w-2 h-2 bg-[#574C3F] rounded-full"></div>
+                        <span>Set clear mentorship goals</span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
 
-            <div className="flex-1 flex items-start justify-start p-4 bg-white rounded-lg drop-shadow-lg">
-              <MochaChart />
+              {/* Recent Activity Card */}
+              <div className="bg-white rounded-lg shadow-md p-6">
+                <div className="flex items-center space-x-3 mb-6">
+                  <Bell className="w-8 h-8 text-[#574C3F]" />
+                  <h2 className="text-2xl font-bold text-[#36302A]">
+                    Recent Activity
+                  </h2>
+                </div>
+                <div className="space-y-4">
+                  <div className="flex items-center space-x-3 p-3 bg-[#F6F3EC] rounded-lg">
+                    <Users className="w-5 h-5 text-[#574C3F]" />
+                    <p className="text-[#574C3F]">
+                      Connected with Jane Doe, a potential mentor
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-3 p-3 bg-[#F6F3EC] rounded-lg">
+                    <Coffee className="w-5 h-5 text-[#574C3F]" />
+                    <p className="text-[#574C3F]">
+                      Updated career interests to include Data Science
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-3 p-3 bg-[#F6F3EC] rounded-lg">
+                    <Calendar className="w-5 h-5 text-[#574C3F]" />
+                    <p className="text-[#574C3F]">
+                      Scheduled a meeting with John Smith for next week
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

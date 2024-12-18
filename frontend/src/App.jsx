@@ -13,6 +13,8 @@ import MentorProfile from "./pages/MentorProfile";
 import MenteeProfile from "./pages/MenteeProfile";
 import MenteeDashboard from "./pages/MenteeDashboard";
 import MentorUpdateProfile from "./pages/MentorUpdateProfile";
+import Shop from "./pages/Shop";
+import MentorSearch from "./pages/MentorSearch";
 
 import "./App.css";
 
@@ -80,6 +82,24 @@ function App() {
         <Route
           path="/mentor-update-profile"
           element={<MentorUpdateProfile user={user} setUser={setUser} />}
+        />
+
+        <Route
+          path="mentor-search"
+          element={
+            <ProtectedRoute>
+              <MentorSearch />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/shop"
+          element={
+            <ProtectedRoute>
+              <Shop />
+            </ProtectedRoute>
+          }
         />
       </Routes>
     </BrowserRouter>
