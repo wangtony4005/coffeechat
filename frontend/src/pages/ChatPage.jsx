@@ -9,69 +9,6 @@ import axios from "axios";
 
 const socket = io("http://127.0.0.1:5000", { autoConnect: false });
 
-// const chooseChat = [
-//   {
-//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-//     name: "Person 1",
-//     description: "Last Mesage",
-//     user: true,
-//   },
-//   {
-//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-//     name: "Person 2",
-//     description: "This is chat 2",
-//     user: true,
-//   },
-//   {
-//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-//     name: "Person 3",
-//     description: "This is chat 3",
-//     user: true,
-//   },
-//   {
-//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-//     name: "Person 4",
-//     description: "This is chat 4",
-//     user: true,
-//   },
-//   {
-//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-//     name: "Person 5",
-//     description: "This is chat 5",
-//     user: true,
-//   },
-//   {
-//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-//     name: "Person 6",
-//     description: "This is chat 6",
-//     user: true,
-//   },
-//   {
-//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-//     name: "Person 7",
-//     description: "This is chat 7",
-//     user: true,
-//   },
-//   {
-//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-//     name: "Person 8",
-//     description: "This is chat 8",
-//     user: true,
-//   },
-//   {
-//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-//     name: "Person 9",
-//     description: "This is chat 9",
-//     user: true,
-//   },
-//   {
-//     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
-//     name: "Person 10",
-//     description: "This is chat 10",
-//     user: true,
-//   },
-// ];
-
 const ChatApp = ({ user, setUser }) => {
   console.log(user);
   const [username1, setUsername] = useState("");
@@ -91,6 +28,10 @@ const ChatApp = ({ user, setUser }) => {
     username1: "Crosve",
     pfp: "https://www.pngitem.com/pimgs/m/146-1468479_my-profile-icon-blank-profile-picture-circle-hd.png",
   };
+
+  useEffect(() => {
+    console.log(messages);
+  }, [messages]);
 
   useEffect(() => {
     const getMessageRooms = async () => {
