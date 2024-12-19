@@ -74,3 +74,15 @@ def determine_mentor_or_mentee(email):
             role = cursor.fetchone()
     return role
 
+def update_mocha_points(email, points):
+    update_points = ("""
+                    UPDATE mochapoints
+                    SET mochaPoints = mochaPoints + %s
+                    WHERE email = %s
+                    """)
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute(update_points, (points, email))
+            return True
+    return False
+

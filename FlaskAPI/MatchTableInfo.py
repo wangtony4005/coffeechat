@@ -81,7 +81,7 @@ def get_mentee_requests_from_database(mentorEmail):
 
 
 def get_mentors():
-    get_mentors = ("""SELECT * from users WHERE userType = 'mentor' limit 10""")
+    get_mentors = ("""SELECT * from users WHERE userType = 'mentor' limit 20""")
     with connection.cursor() as cursor:
         cursor.execute(get_mentors)
         mentors = cursor.fetchall()

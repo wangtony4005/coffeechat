@@ -6,7 +6,7 @@ from flask_socketio import SocketIO, emit, join_room, leave_room
 import base64
 from UserTableInfo import add_user, get_user, update_user, get_user_preferences, get_user_with_email, get_mentees
 from MatchTableInfo import add_inital_match, update_match_status_accepted, update_match_status_rejected, get_mentee_requests_from_database, get_mentors
-from messagetableinfo import fetch_rooms, add_message_to_table
+from messagetableinfo import fetch_rooms, add_message_to_table, update_mocha_points
 from cryptography.fernet import Fernet
 import jwt
 from model_logic import fetch_mentors
@@ -132,6 +132,7 @@ def signin():
         return {"condition": "success", "token" : token, "user_data" : user}, 200
 
     except Exception as e:
+        print("Error: ", e)
         return {"error": str(e)}, 500
 
 @app.route("/users/reset_password", methods=["GET"])
@@ -184,7 +185,16 @@ def update_match_status_to_accepted():
     try:
         success = update_match_status_accepted(menteeEmail, mentorEmail)
         if success:
-            return {"Response": "Request was made successfully"}
+            #update mocha points for both mentor and mentee
+            mentee_status = update_mocha_points(menteeEmail, 10)
+            mentor_status = update_mocha_points(mentorEmail, 10)
+            if mentee_status and mentor_status:
+                return {"Response": "Request was made successfully"}
+
+            else:
+                return {"Response": "Mocha points not updated, match made"}, 500
+
+        return {"Response": "Request was made successfully"}
     except Exception as e:
         return {"error": str(e)}, 500
     
@@ -233,6 +243,44 @@ def fetch_mentors_from_model():
         return {"Response": "Mentees gathered successfully", "MentorList": results}
     except Exception as e:
         print("Error in fetching mentors from model: ", e)
+        return {"error": str(e)}, 500
+
+@app.post("/users/get_mocha_points")
+def get_mocha_points():
+    data = request.get_json()
+    email = data["email"]
+    if email == None or email == "":
+        return {"Response": "No email provided"}, 400
+    try:
+        
+
+        with connection.cursor() as cursor:
+            cursor.execute("""SELECT points FROM mochapoints WHERE email = %s""", (email,))
+            user = cursor.fetchone()
+            if user == None:
+                return {"Response": "User not found"}, 404
+
+            print("Mocha points for user: ", user[0])
+            return {"Response": "User found", "MochaPoints": user[0]}
+
+    except Exception as e:
+        print("Error in fetching mocha points: ", e)
+        return {"error": str(e)}, 500
+
+
+@app.post("/users/update_mocha_points")
+def update_mocha_points():
+    data = request.get_json()
+    email = data["email"]
+    points = data["points"]
+    if email == None or email == "":
+        return {"Response": "No email provided"}, 400
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("""UPDATE mochapoints SET points = %s WHERE email = %s""", (points, email))
+            return {"Response": "Points updated successfully", "Points": points}
+    except Exception as e:
+        print("Error in updating mocha points: ", e)
         return {"error": str(e)}, 500
     
 @app.post("/messages/get_rooms")

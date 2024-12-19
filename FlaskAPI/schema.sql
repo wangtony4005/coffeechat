@@ -32,3 +32,12 @@ CREATE TABLE IF NOT EXISTS messages (
 	roomID BIGINT, 
     timestamps TIMESTAMP[] DEFAULT ARRAY[]::TIMESTAMP[]
 );
+
+
+CREATE TABLE IF NOT EXISTS mochapoints(
+    id SERIAL PRIMARY KEY,
+    email VARCHAR(100) NOT NULL,
+    points INT NOT NULL
+    
+
+);

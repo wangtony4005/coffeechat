@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import LogggedNavbar from "../components/LogggedNavbar";
 import Sidebar from "../components/Sidebar";
+
+import axios from "axios";
 const Items = [
   {
     id: 1,
@@ -33,7 +35,7 @@ const Items = [
 ];
 
 function Shop() {
-  const [mochaPoints, setMochaPoints] = useState(2000);
+  const [mochaPoints, setMochaPoints] = useState(0);
   const [user, setUser] = useState(() => {
     if (location.state) {
       return location.state;
@@ -48,9 +50,39 @@ function Shop() {
     }
   });
 
+  useEffect(() => {
+    const fetchMochaPoints = async () => {
+      try {
+        const response = await axios
+          .post("http://127.0.0.1:5000/users/get_mocha_points", {
+            email: user[5],
+          })
+          .then((res) => {
+            if (res.data.MochaPoints !== undefined) {
+              console.log(res.data);
+              setMochaPoints(res.data.MochaPoints);
+            }
+            console.log(res.data);
+            setMochaPoints(res.data.MochaPoints);
+          });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    fetchMochaPoints();
+  }, []);
+
   const handlePurchase = (price) => {
     if (mochaPoints >= price) {
       setMochaPoints(mochaPoints - price);
+
+      //Update mocha points in the backend
+      axios.post("http://127.0.0.1:5000/user/update_mocha_points", {
+        email: user[5],
+        mochaPoints: mochaPoints - price,
+      });
+
       alert("Purchase successful! Enjoy your item.");
     } else {
       alert("Insufficient Mocha Points.");
