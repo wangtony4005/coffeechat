@@ -98,6 +98,60 @@ function MentorSearch() {
     fetchMentors();
   }, []);
 
+  const handleCreateMatch = async (mentoremail, indexToRemove) => {
+    setMentorCards((mentorCards) =>
+      mentorCards.filter((_, index) => index !== indexToRemove)
+    );
+    try {
+      const response = await axios
+        .post("http://127.0.0.1:5000/matches/addmatch", {
+          menteeEmail: user[5],
+          mentorEmail: mentoremail,
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleAcceptRequest = async (menteeEmail, indexToRemove) => {
+    setmenteeRequests((menteeRequests) =>
+      menteeRequests.filter((_, index) => index !== indexToRemove)
+    );
+    try {
+      const response = await axios
+        .post("http://127.0.0.1:5000/matches/updatematch/statustoaccepted", {
+          mentorEmail: user[5],
+          menteeEmail: menteeEmail,
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const handleRejectRequest = async (menteeEmail, indexToRemove) => {
+    setmenteeRequests((menteeRequests) =>
+      menteeRequests.filter((_, index) => index !== indexToRemove)
+    );
+    try {
+      const response = await axios
+        .post("http://127.0.0.1:5000/matches/updatematch/statustorejected", {
+          mentorEmail: user[5],
+          menteeEmail: menteeEmail,
+        })
+        .then((res) => {
+          console.log(res.data);
+        });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const [user_data, setUser_data] = useState(() => {
     if (location.state) {
       return location.state;
@@ -124,7 +178,7 @@ function MentorSearch() {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {mentorCards.map((item) => (
+            {mentorCards.map((item, index) => (
               <div
                 key={item.id}
                 className="bg-white rounded-lg shadow-lg p-6 hover:shadow-xl transition"
@@ -146,7 +200,7 @@ function MentorSearch() {
 
                 <p className="text-xl font-extrabold mb-4">{item[8]}</p>
                 <button
-                  onClick={() => handlePurchase(item.price)}
+                  onClick={() => handleCreateMatch(item[5], index)}
                   className="bg-mocha-color text-white py-2 px-4 rounded-lg hover:bg-darker-nav-color transition"
                 >
                   Request Mentorship

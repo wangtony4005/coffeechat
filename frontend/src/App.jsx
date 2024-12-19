@@ -14,6 +14,7 @@ import MenteeDashboard from "./pages/MenteeDashboard";
 import MentorUpdateProfile from "./pages/MentorUpdateProfile";
 import Shop from "./pages/Shop";
 import MentorSearch from "./pages/MentorSearch";
+import MenteeView from "./pages/MenteeView";
 
 import "./App.css";
 
@@ -60,6 +61,11 @@ function App() {
           element={<ChatPage user={user} setUser={setUser} />}
         />
         <Route path="*" element={<Navigate to="/" />} />
+
+        <Route
+          path="/inbox"
+          element={<MenteeView user={user} setUser={setUser} />}
+        />
 
         <Route
           path="/find"

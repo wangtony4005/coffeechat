@@ -112,88 +112,130 @@ const ChatApp = ({ user, setUser }) => {
     }
   };
 
+  const theme = {
+    base: "#F6F3EC",
+    mocha: "#574C3F",
+    footer: "#36302A",
+    nav: "#F6F3EC",
+    darkerNav: "#ECE4DA",
+  };
+
   return (
-    <main className="h-auto w-auto bg-darker-nav-color">
-      <div className="flex p-4 bg-base-color ">
-        <IoArrowBackCircle className="h-8 w-8" onClick={handleBackClick} />
+    <main className="min-h-screen" style={{ backgroundColor: theme.darkerNav }}>
+      <div className="flex p-4" style={{ backgroundColor: theme.base }}>
+        <IoArrowBackCircle
+          className="h-8 w-8 cursor-pointer"
+          style={{ color: theme.mocha }}
+          onClick={handleBackClick}
+        />
       </div>
 
-      <div className="w-screen min-h-screen h-auto overflow-auto flex flex-col md:flex-row items-start bg-base-color">
+      <div
+        className="w-full min-h-screen h-auto overflow-auto flex flex-col md:flex-row items-start"
+        style={{ backgroundColor: theme.base }}
+      >
         {userMessage && (
-          <p className="text-gray-600 text-lg my-2">{userMessage}</p>
+          <p className="text-lg my-2 px-4" style={{ color: theme.mocha }}>
+            {userMessage}
+          </p>
         )}
 
-        <div
-          className="flex-[1] flex-col relative h-full flex pt-4" // Adjusted padding to fit back button
-          style={{ height: "100vh", overflowY: "scroll" }}
-        >
-          {chooseChat &&
-            chooseChat.map((chat, index) => (
-              <div
-                key={index}
-                className="flex items-center border-2 p-4 w-full h-24 rounded-lg m-0 right-0 left-0 relative hover:bg-gray-200 cursor-pointer"
-                onClick={(e) => handleRoomChange(e, chat[1], chat[2], chat[5])}
-              >
-                <img
-                  src={profile_icon}
-                  alt="pfp"
-                  className="w-16 h-12 rounded-full"
-                />
-                <div className="flex flex-col relative left-7 justify-center">
-                  <h1>Mentor: {chat[1]}</h1>
-                  <h1>Mentee: {chat[2]}</h1>
-                </div>
+        <div className="flex-1 flex-col relative h-full flex pt-4 px-4">
+          {chooseChat?.map((chat, index) => (
+            <div
+              key={index}
+              className="flex items-center border-2 p-4 w-96 text-wrap h-24 rounded-lg mb-2 transition-colors duration-200 cursor-pointer"
+              style={{
+                borderColor: theme.mocha,
+                backgroundColor: theme.darkerNav,
+                color: theme.mocha,
+              }}
+              onClick={(e) => handleRoomChange(e, chat[1], chat[2], chat[5])}
+            >
+              <img
+                src={profile_icon}
+                alt="profile"
+                className="w-16 h-12 rounded-full border-2"
+                style={{ borderColor: theme.mocha }}
+              />
+              <div className="flex flex-col relative left-7 justify-center">
+                <h1 style={{ color: theme.footer }}>Mentor: {chat[1]}</h1>
+                <h1 style={{ color: theme.mocha }}>Mentee: {chat[2]}</h1>
               </div>
-            ))}
+            </div>
+          ))}
         </div>
 
-        <div className="flex-[2] h-full w-full flex flex-col items-center justify-center lg:relative lg:translate-y-24 p-2 ">
+        <div className="flex-2 h-full w-full flex flex-col items-center justify-center lg:relative lg:translate-y-24 p-2 border-2 border-amber-900	bg-mocha-color">
           {isChatActive && (
-            <div id="chat" className="h-full w-full">
+            <div id="chat" className="h-full w-full max-w-4xl mx-auto">
               <div
                 id="chat-messages"
-                className="flex flex-col w-full h-full"
+                className="flex flex-col w-full h-full rounded-t-lg p-4"
                 style={{
                   height: "620px",
-                  backgroundColor: "white",
                   overflowY: "scroll",
+                  backgroundColor: theme.base,
                 }}
               >
                 {messages.map((msg, index) => (
-                  <>
+                  <div key={index}>
                     {tempUser && (
-                      <div className="flex items-center" key={index}>
+                      <div className="flex items-center gap-2 mb-1">
                         <img
                           src={tempUser.pfp}
-                          alt="pfp"
-                          className="w-8 h-8 rounded-full"
+                          alt="profile"
+                          className="w-8 h-8 rounded-full border"
+                          style={{ borderColor: theme.mocha }}
                         />
-                        <h1>{msg.username1}</h1>
+                        <h1
+                          className="font-medium"
+                          style={{ color: theme.mocha }}
+                        >
+                          {msg.username1}
+                        </h1>
                       </div>
                     )}
                     <div
-                      key={index}
                       className={`relative max-w-[75%] break-words rounded-2xl p-3 text-base mb-2 ${
                         msg.user
-                          ? "animate-slideInRight ml-auto self-end bg-green-500 text-white shadow-md"
-                          : "animate-slideInLeft mr-auto self-start bg-blue-500 text-white shadow-md"
+                          ? "animate-slideInRight ml-auto self-end shadow-md"
+                          : "animate-slideInLeft mr-auto self-start shadow-md"
                       }`}
+                      style={{
+                        backgroundColor: msg.user ? theme.mocha : theme.footer,
+                        color: theme.base,
+                      }}
                     >
                       {msg}
                     </div>
-                  </>
+                  </div>
                 ))}
               </div>
-              <form className="flex items-center border-t border-gray-300 bg-white p-3 shadow-inner">
+
+              <form
+                className="flex items-center gap-2 p-3 rounded-b-lg"
+                style={{ backgroundColor: theme.darkerNav }}
+              >
                 <input
                   type="text"
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
-                  className="w-full h-full p-2 rounded-lg border-2 border-gray-300"
-                  placeholder="Enter a Message"
+                  className="w-full p-2 rounded-lg border-2 focus:outline-none"
+                  style={{
+                    backgroundColor: theme.base,
+                    borderColor: theme.mocha,
+                    color: theme.mocha,
+                  }}
+                  placeholder="Type your message..."
                 />
                 <button
-                  className="rounded-2xl bg-slate-500 p-3 px-5 text-base font-medium text-white transition-colors duration-300 hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-gray-400"
+                  className="rounded-lg p-3 px-5 text-base font-medium transition-colors duration-200 
+                         disabled:cursor-not-allowed disabled:opacity-50"
+                  style={{
+                    backgroundColor: theme.mocha,
+                    color: theme.base,
+                  }}
                   onClick={(e) => handleSendMessage(e)}
                 >
                   Send

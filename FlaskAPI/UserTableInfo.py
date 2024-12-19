@@ -31,9 +31,15 @@ def add_user(firstname, lastname, username,  email, password, role):
             INSERT INTO users (firstname, lastname, username, password, email, userType)
             VALUES (%s, %s, %s, %s, %s, %s)
         """)
+
+    #create a table for them in mocha points table
+    mochaTable = ("""
+        INSERT INTO mochapoints (email, points) VALUES (%s, %s)
+     """)
     with connection:
         with connection.cursor() as cursor:
             cursor.execute(addUser, (firstname, lastname, username, password,  email, role))
+            cursor.execute(mochaTable, (email,0))
             return True
     return False
 
