@@ -8,9 +8,9 @@ function Navbar({user, setUser}) {
   const [login, setLogin] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    document.body.style.overflow = login ? "hidden" : "auto";
-  }, [login]);
+  // useEffect(() => {
+  //   document.body.style.overflow = login ? "hidden" : "auto";
+  // }, [login]);
 
   const headerVariants = {
     hidden: { opacity: 0, y: -20 },

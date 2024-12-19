@@ -19,12 +19,12 @@ function Home({user, setUser}) {
     visible: { opacity: 1, y: 0 },
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      Navigate("/homepage");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     Navigate("/homepage");
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (inView) {

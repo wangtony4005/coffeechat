@@ -6,7 +6,6 @@ import Home from "./pages/Home";
 import Resources from "./pages/Resources";
 import Faqs from "./pages/Faqs";
 import ChatPage from "./pages/ChatPage";
-import Homepage from "./pages/Homepage";
 import Find from "./pages/Find";
 import { Navigate } from "react-router-dom";
 import MentorProfile from "./pages/MentorProfile";

@@ -7,12 +7,13 @@ import Fade from "../components/Fade";
 import { useNavigate } from "react-router-dom";
 
 function Resources() {
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      Navigate("/mentor-profile");
-    }
-  }, []);
+  const Navigate = useNavigate()
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     Navigate("/mentor-profile");
+  //   }
+  // }, []);
 
   return (
     <main className="h-auto w-auto bg-darker-nav-color">

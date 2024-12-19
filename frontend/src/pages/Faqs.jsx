@@ -40,12 +40,12 @@ const faqs = {
 function Faqs() {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/homepage");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     navigate("/homepage");
+  //   }
+  // }, []);
 
   return (
     <main className="min-h-screen w-screen bg-base-color text-mocha-color">

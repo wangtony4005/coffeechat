@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Select from "react-select";
 
 const MentorUpdateProfile = ({ user, setUser }) => {
   const location = useLocation();
@@ -17,11 +18,25 @@ const MentorUpdateProfile = ({ user, setUser }) => {
     careerInterest: "",
   });
 
+  const options = [
+    { value: "Database Developer", label: "Database Developer" },
+    { value: "Software Developer", label: "Software Developer" },
+    { value: "Software Engineer", label: "Software Engineer" },
+  ];
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
       ...formData,
       [name]: value,
+    });
+  };
+
+  const handleInterestChange = (selectedOption) => {
+    console.log("Selected:", selectedOption);
+    setFormData({
+      ...formData,
+      ["careerInterest"]: selectedOption.label,
     });
   };
 
@@ -94,13 +109,12 @@ const MentorUpdateProfile = ({ user, setUser }) => {
 
         <div style={{ marginBottom: "15px" }}>
           <label htmlFor="careerInterest">Career Interest:</label>
-          <input
-            type="text"
-            id="careerInterest"
-            name="careerInterest"
-            value={formData.careerInterest}
-            onChange={handleChange}
-            style={{ width: "100%", padding: "8px", marginTop: "5px" }}
+          <Select
+      options={options}
+      name="careerInterest"
+      onChange={handleInterestChange}
+      placeholder="Select an option"
+      styles={{ container: (base) => ({ ...base, width: "100%", padding: "8px", marginTop: "5px" }) }}
           />
         </div>
 
