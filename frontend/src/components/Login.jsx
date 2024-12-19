@@ -136,6 +136,7 @@ function Login({ onClose, user, setUser }) {
             onClose();
             const user_info = data.user_data;
             await setUser(user_info);
+            localStorage.setItem("user_data", JSON.stringify(user_info));
             console.log(user);
           }
           if (data.user_data[6] == "mentee") {

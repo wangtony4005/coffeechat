@@ -5,7 +5,7 @@ from flask import Flask, request, jsonify
 from flask_socketio import SocketIO, emit, join_room, leave_room
 import base64
 from UserTableInfo import add_user, get_user, update_user, get_user_preferences, get_user_with_email, get_mentees
-from MatchTableInfo import add_inital_match, update_match_status_accepted, update_match_status_rejected, get_mentee_requests_from_database
+from MatchTableInfo import add_inital_match, update_match_status_accepted, update_match_status_rejected, get_mentee_requests_from_database, get_mentors
 from messagetableinfo import fetch_rooms, add_message_to_table
 from cryptography.fernet import Fernet
 import jwt
@@ -206,32 +206,50 @@ def get_mentee_requests():
     mentorEmail = data["mentorEmail"]
     try:
         menteeEmails = get_mentee_requests_from_database(mentorEmail)
+        if menteeEmails == None or len(menteeEmails) == 0: 
+            return {"Response": "No mentee requests found" , "Success": False}
         emails = [row[0] for row in menteeEmails]
         print(emails)
         menteeList = get_mentees(emails)
         if menteeList:
-            return {"Response": "Mentees gathered successfully", "MenteeList": menteeList}
+            return {"Response": "Mentees gathered successfully", "MenteeList": menteeList, "Success": True}
     except Exception as e:
+        print(f"Error: {e}")
         return {"error": str(e)}, 500
 
 @app.post("/model/fetchMentors")
 def fetch_mentors_from_model():
     data = request.get_json()
     career_interest = data["careerInterest"]
+
+    if career_interest == None or career_interest == "":
+        return {"Response": "No career interest provided"}, 400
     try:
         results = fetch_mentors(career_interest)
+        if results == None or len(results) == 0:
+            results = get_mentors()
+
+            return {"Response": "Default mentors as backup", "MentorList": results}
         return {"Response": "Mentees gathered successfully", "MentorList": results}
     except Exception as e:
+        print("Error in fetching mentors from model: ", e)
         return {"error": str(e)}, 500
     
 @app.post("/messages/get_rooms")
 def get_message_rooms():
     data = request.get_json()
     email = data['email']
+    if email == None or email == "":
+        print("No email provided")
+        return {"Response": "No email provided"}, 400
     try:
         rooms = fetch_rooms(email)
+        if rooms == None or len(rooms) == 0:
+            print("No rooms found")
+            return {"Response": "No rooms found", "RoomList": rooms}
         return {"Response": "Mentees gathered successfully", "RoomList": rooms}
     except Exception as e:
+        print("Error in fetching rooms: ", e)
         return {"error": str(e)}, 500
 
 app.register_blueprint(model_route)

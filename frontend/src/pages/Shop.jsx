@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import LogggedNavbar from "../components/LogggedNavbar";
-
+import Sidebar from "../components/Sidebar";
 const Items = [
   {
     id: 1,
@@ -34,6 +34,19 @@ const Items = [
 
 function Shop() {
   const [mochaPoints, setMochaPoints] = useState(2000);
+  const [user, setUser] = useState(() => {
+    if (location.state) {
+      return location.state;
+    } else if (localStorage.getItem("user_data")) {
+      console.log(
+        "User data from local storage: ",
+        localStorage.getItem("user_data")
+      );
+      return JSON.parse(localStorage.getItem("user_data"));
+    } else {
+      return null;
+    }
+  });
 
   const handlePurchase = (price) => {
     if (mochaPoints >= price) {
@@ -45,9 +58,10 @@ function Shop() {
   };
 
   return (
-    <div className="min-h-screen bg-base-color text-mocha-color">
-      <LogggedNavbar />
-      <div className="container mx-auto py-10">
+    <div className="min-h-screen flex bg-base-color text-mocha-color">
+      <Sidebar user_data={user} />
+
+      <div className=" flex-grow mx-auto py-10">
         <h1 className="text-4xl font-bold text-center mb-6">Mocha Shop</h1>
         <div className="text-center mb-8">
           <p className="text-lg font-semibold">
