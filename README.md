@@ -110,4 +110,4 @@ pip3 install -r requirements.txt
 flask run
 ```
 
-[Download the model needed an insert in backend folder labeled data](https://drive.google.com/uc?export=download&id=1izlE5m5GkFMuVRm-a4BKKgg8i1Vh9gX6)
+[Download the model needed an insert in backend folder labeled model](https://drive.google.com/uc?export=download&id=1izlE5m5GkFMuVRm-a4BKKgg8i1Vh9gX6)
